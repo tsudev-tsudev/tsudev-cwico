@@ -1,0 +1,194 @@
+<div align="center">
+
+<a href="https://tsudev.com">
+  <img src="../assets/brand/tsudev-logo.png" alt="tsudev" width="120" height="151">
+</a>
+
+<h1>
+  <a href="https://tsudev.com" style="text-decoration:none">
+    <span style="color:#2482bd">tsu</span><span style="color:#ef6d18">dev</span>
+  </a>
+  &nbsp;cwico
+</h1>
+
+**Bộ công cụ rà quét và gỡ bỏ phần mềm Windows chuyên sâu**
+
+[tsudev.com](https://tsudev.com) · [Bắt đầu](#bắt-đầu) · [Cơ chế an toàn](#cơ-chế-an-toàn) · [English](../README.md)
+
+</div>
+
+---
+
+## Công cụ này làm gì
+
+Windows giấu phần mềm đã cài ở ít nhất sáu nơi khác nhau. `cwico` đọc tất cả,
+phân loại mọi thứ tìm được, và cho phép bạn gỡ những gì không cần — mà hệ điều
+hành vẫn hoạt động bình thường.
+
+| Lượt quét | Đọc những gì | API Win32 / WinRT |
+|---|---|---|
+| **Chương trình** | `DisplayName`, `DisplayVersion`, `Publisher`, `UninstallString`, `QuietUninstallString`, `InstallLocation`, `EstimatedSize`, `InstallDate` | `RegOpenKeyExW` trên `HKLM`/`HKCU` `…\Uninstall`, **cả hai** chế độ xem 64-bit và `WOW6432Node` |
+| **UWP / AppX** | Tên gói đầy đủ, family name, nhà phát hành, kiến trúc, đường dẫn cài, cờ framework/hệ thống | `Windows.Management.Deployment.PackageManager` |
+| **Gói nạp sẵn** | Các gói nằm trong image, tự cài lại cho mọi tài khoản mới | `FindProvisionedPackages` |
+| **Dịch vụ** | Tên hiển thị, trạng thái, kiểu khởi động, `ImagePath` | `EnumServicesStatusExW`, `QueryServiceConfigW` |
+| **Tác vụ lập lịch** | Đường dẫn đầy đủ, trạng thái bật/tắt, trạng thái chạy | COM `ITaskService` / `ITaskFolder` |
+| **Khởi động cùng máy** | `Run`, `RunOnce` (cả hai hive, cả hai chế độ xem) và thư mục Startup | Registry + hệ thống tệp |
+
+Quy trình gỡ bỏ gồm bốn bước cho mỗi mục:
+
+1. **Tắt tiến trình** của phần mềm — `CreateToolhelp32Snapshot`, `OpenProcess`,
+   `TerminateProcess`. Các tiến trình dùng chung (`svchost.exe`) và tiến trình
+   trọng yếu khi khởi động không bao giờ bị đụng đến.
+2. **Chạy trình gỡ chính thức của nhà phát hành**, ở chế độ im lặng. Ưu tiên
+   `QuietUninstallString`; nếu không có thì suy ra cờ silent cho MSI, Inno Setup
+   và NSIS — và chỉ ba loại đó.
+3. **Gỡ gói** — `RemovePackageWithOptionsAsync` với `RemoveForAllUsers`, rồi
+   `DeprovisionPackageForAllUsersAsync` để nó không quay lại với tài khoản mới.
+4. **Xóa tận gốc** — thư mục và khóa Registry còn sót, mỗi đường dẫn đều phải
+   qua bộ chặn an toàn trước.
+
+---
+
+## Cơ chế an toàn
+
+Sự cố tệ nhất của một công cụ debloat là chiếc máy không khởi động được. Có ba
+lớp bảo vệ độc lập.
+
+### 1. Phân loại — `data/safety-db.json`
+
+Mỗi mục tìm thấy được đối chiếu với bộ **58 quy tắc**:
+
+| Mức | Ý nghĩa | Số lượng | Ví dụ |
+|---|---|---|---|
+| **An toàn** | Không ảnh hưởng chức năng của Windows | 29 | OneDrive, Xbox, Candy Crush, Bing News, Skype, dịch vụ telemetry |
+| **Cẩn trọng** | Gỡ được nhưng mất một tính năng phụ | 11 | Microsoft Edge, Camera, Photos, Media Player, Cortana, Microsoft Store |
+| **Trọng yếu** | Gỡ sẽ hỏng khởi động, đăng nhập, bảo mật hoặc shell | 18 | Defender, File Explorer, Settings, RPC/DCOM/WMI, runtime VC++ và .NET, driver, cấp phép |
+| *Chưa rõ* | Không khớp quy tắc nào | — | Mọi phần mềm bên thứ ba cơ sở dữ liệu chưa biết |
+
+Mục không khớp quy tắc nào sẽ là **`Chưa rõ`, không bao giờ là `An toàn`** — cơ
+sở dữ liệu mặc định về phía an toàn. Khi một mục khớp cả quy tắc `An toàn` lẫn
+`Trọng yếu`, kết quả là `Trọng yếu`: mức nghiêm trọng thắng mức cụ thể.
+
+### 2. Cổng lập kế hoạch — `RemovalPlan::build`
+
+* Mục **Trọng yếu không thể đưa vào kế hoạch.** Không bằng cờ, không bằng xác
+  nhận, không từ dòng lệnh. Hàm khởi tạo loại chúng ra và ghi rõ lý do; bộ máy
+  kiểm tra lại bất biến này ngay trước khi thực thi.
+* Mục **Cẩn trọng và Chưa rõ cần xác nhận riêng cho từng mục.** Thao tác chọn
+  hàng loạt "chọn tất cả mục An toàn" không thể tạo ra xác nhận đó.
+* Mọi thứ bị từ chối đều được báo lại kèm lý do. Không có gì bị bỏ qua âm thầm.
+
+### 3. Bộ chặn xóa — `cwico_core::guard`
+
+Từ chối thẳng: gốc ổ đĩa, `C:\Windows`, `System32`, `WinSxS`, `Program Files`,
+`ProgramData`; thư mục gốc hồ sơ người dùng và dữ liệu cá nhân (`Documents`,
+`Desktop`, `Downloads`, `OneDrive`); các thư mục chứa dùng chung (`AppData`,
+`Packages`, `Temp`); mọi gốc hive Registry và cơ sở dữ liệu dịch vụ; và bất kỳ
+đường dẫn nào còn `%BIẾN%` chưa mở rộng, có `..` hoặc ký tự đại diện.
+
+Điểm phân biệt quan trọng: `C:\Users\tôi\OneDrive` là tệp đồng bộ của người
+dùng — tuyệt đối không đụng; còn
+`C:\Users\tôi\AppData\Local\Microsoft\OneDrive` là thư mục trạng thái của ứng
+dụng — đúng là thứ cần dọn.
+
+### Sao lưu và khôi phục
+
+Trước bước gây thay đổi đầu tiên của mọi phiên chạy:
+
+* **Điểm khôi phục hệ thống** qua `SRSetRestorePointW`. Nếu không tạo được,
+  phiên chạy **bị hủy** thay vì tiếp tục mà không có bảo vệ — một cơ chế hoàn
+  tác mà bạn không thực hiện được thì không phải là cơ chế hoàn tác.
+* **Bản xuất `.reg`** của mọi khóa sẽ can thiệp, ở cả hai chế độ xem, kèm file
+  `restore-registry.cmd` để nhập lại mà không cần công cụ này.
+* **Nhật ký giao dịch** (JSON) ghi từng bước, kết quả và các đối tượng đã đụng.
+
+Chi tiết đầy đủ: [SAFETY.md](SAFETY.md).
+
+---
+
+## Bắt đầu
+
+### Cài đặt
+
+```powershell
+winget install tsudev.cwico
+```
+
+Chạy với quyền Administrator. Không có quyền quản trị thì kết quả quét sẽ thiếu
+và không gỡ được gì.
+
+### Tự build
+
+```bash
+git clone https://github.com/tsudev-tsudev/tsudev-cwico
+cd tsudev-cwico
+
+# Test bộ máy — chạy được trên mọi hệ điều hành
+cargo test
+
+# Kiểm tra kiểu cho tầng Windows ngay từ Linux/macOS
+rustup target add x86_64-pc-windows-gnu
+cargo check -p cwico-win --target x86_64-pc-windows-gnu
+
+# Ứng dụng desktop (trên Windows)
+npm --prefix ui install
+cargo tauri dev
+cargo tauri build          # -> bộ cài MSI + NSIS
+```
+
+### Dòng lệnh
+
+```bash
+cwico info                                   # nền tảng, quyền, số quy tắc
+cwico scan --safety safe                     # những gì an toàn để gỡ
+cwico scan --json > inventory.json           # xuất dữ liệu để kiểm toán
+cwico plan --safe-only --deep-clean          # xem trước điều sẽ xảy ra
+cwico remove --name OneDrive --deep-clean --apply
+```
+
+Mọi thứ chỉ là chạy thử cho đến khi có `--apply`. `--name` khớp theo ranh giới
+từ, nên `--name Edge` chọn *Microsoft Edge* chứ không chọn nhầm
+*Acme Ledger Desktop*.
+
+---
+
+## Đóng góp cho cơ sở dữ liệu an toàn
+
+`data/safety-db.json` là file có giá trị nhất trong kho mã này, và cũng dễ đóng
+góp nhất. Một quy tắc trông như sau:
+
+```json
+{
+  "id": "vendor.product",
+  "class": "safe",
+  "match": { "exact": ["tên sản phẩm"], "kinds": ["registry_uninstall"] },
+  "reason": { "en": "Why it is this class.", "vi": "Lý do bằng tiếng Việt." },
+  "processes": ["Product.exe"],
+  "leftovers": {
+    "paths": ["%LOCALAPPDATA%\\Vendor\\Product"],
+    "registry": ["HKCU\\Software\\Vendor\\Product"]
+  }
+}
+```
+
+Bắt buộc có cả hai bản dịch `reason` — đã có test kiểm tra. Hãy phân loại theo
+hướng thận trọng: phân loại nhầm thành `Cẩn trọng` chỉ tốn của người dùng một
+cú nhấp, còn phân loại nhầm thành `An toàn` khiến họ mất một tính năng mà họ
+không hề đồng ý đánh đổi.
+
+---
+
+## Giấy phép
+
+MIT © [tsudev](https://tsudev.com)
+
+<div align="center">
+<br>
+<a href="https://tsudev.com">
+  <img src="../assets/brand/tsudev-logo.png" alt="tsudev" width="48" height="61">
+</a>
+<br>
+<a href="https://tsudev.com" style="text-decoration:none">
+  <b><span style="color:#2482bd">tsu</span><span style="color:#ef6d18">dev</span></b>
+</a>
+</div>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  MSIX package manifest for Microsoft Store submission.
+
+  Two things about this manifest are unusual and deliberate:
+
+  * `runFullTrust` and `allowElevation`. A debloater has to read HKLM,
+    reconfigure services and call SRSetRestorePointW. None of that is possible
+    from the AppContainer sandbox, so this is a full-trust desktop package
+    rather than a UWP app. Store submissions using these capabilities go
+    through a manual review; the review notes in packaging/msix/README.md
+    explain the justification.
+  * No `backgroundTasks` and no network capability beyond what the WebView2
+    runtime needs. The tool never phones home, and the manifest is where that
+    claim has to be verifiable.
+-->
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+  xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10"
+  IgnorableNamespaces="uap rescap desktop">
+
+  <Identity
+    Name="tsudev.cwico"
+    Publisher="CN=tsudev"
+    Version="1.0.0.0"
+    ProcessorArchitecture="x64" />
+
+  <Properties>
+    <DisplayName>tsudev-cwico</DisplayName>
+    <PublisherDisplayName>tsudev</PublisherDisplayName>
+    <Description>Deep Windows debloater and software removal toolkit. Scan installed programs, UWP packages, services, scheduled tasks and autostart entries, then remove what you do not need — with a safety database that hard-blocks critical system components, a System Restore Point before every run, and .reg backups you can re-import yourself.</Description>
+    <Logo>Assets\StoreLogo.png</Logo>
+  </Properties>
+
+  <Dependencies>
+    <!-- Windows 10 2004 (19041) is the floor: earlier builds lack the AppX
+         removal behaviour and the WebView2 evergreen runtime this app needs. -->
+    <TargetDeviceFamily
+      Name="Windows.Desktop"
+      MinVersion="10.0.19041.0"
+      MaxVersionTested="10.0.26100.0" />
+  </Dependencies>
+
+  <Resources>
+    <Resource Language="vi-VN" />
+    <Resource Language="en-US" />
+  </Resources>
+
+  <Applications>
+    <Application Id="cwico" Executable="cwico.exe" EntryPoint="Windows.FullTrustApplication">
+      <uap:VisualElements
+        DisplayName="tsudev-cwico"
+        Description="Deep Windows debloater and software removal toolkit"
+        BackgroundColor="transparent"
+        Square150x150Logo="Assets\Square150x150Logo.png"
+        Square44x44Logo="Assets\Square44x44Logo.png">
+        <uap:DefaultTile
+          Wide310x150Logo="Assets\Square310x310Logo.png"
+          Square310x310Logo="Assets\Square310x310Logo.png"
+          Square71x71Logo="Assets\Square71x71Logo.png" />
+        <uap:SplashScreen Image="Assets\Square310x310Logo.png" BackgroundColor="transparent" />
+      </uap:VisualElements>
+    </Application>
+  </Applications>
+
+  <Capabilities>
+    <!-- Required to read HKLM, reconfigure services and create restore points. -->
+    <rescap:Capability Name="runFullTrust" />
+    <!-- Required so the app can relaunch itself with a UAC prompt. -->
+    <rescap:Capability Name="allowElevation" />
+  </Capabilities>
+</Package>

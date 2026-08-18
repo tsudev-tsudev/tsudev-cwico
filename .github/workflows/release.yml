@@ -1,0 +1,62 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build installers
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: ui/package-lock.json
+
+      - run: npm --prefix ui ci
+
+      - name: Build MSI and NSIS installers
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Set these to sign the installers. Unsigned builds still work but
+          # SmartScreen will warn on first run, which for a tool that asks for
+          # Administrator is a bad first impression.
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        with:
+          projectPath: app/src-tauri
+          tagName: ${{ github.ref_name }}
+          releaseName: tsudev-cwico ${{ github.ref_name }}
+          releaseDraft: true
+          args: --verbose
+
+      - name: Build the CLI
+        run: cargo build -p cwico-cli --release
+
+      - name: Record installer hashes for the winget manifest
+        shell: pwsh
+        run: |
+          Get-ChildItem -Recurse -Include *.msi,*.exe `
+            app/src-tauri/target/release/bundle |
+            ForEach-Object {
+              "{0}  {1}" -f (Get-FileHash $_ -Algorithm SHA256).Hash, $_.Name
+            } | Tee-Object -FilePath sha256sums.txt
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: installers
+          path: |
+            app/src-tauri/target/release/bundle/**/*.msi
+            app/src-tauri/target/release/bundle/**/*.exe
+            target/release/cwico.exe
+            sha256sums.txt

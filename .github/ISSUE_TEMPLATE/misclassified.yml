@@ -1,0 +1,65 @@
+name: Misclassified software
+description: Something is marked Safe that costs a feature, or is over-classified and cannot be removed when it should be.
+title: "[safety-db] "
+labels: ["safety-database"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This is the most useful kind of report. `data/safety-db.json` is what
+        stands between a user and a broken machine, and it only improves with
+        reports from real machines.
+
+  - type: input
+    id: item-id
+    attributes:
+      label: Item id
+      description: From `cwico scan --json`, or the Details pane in the app.
+      placeholder: appx:Microsoft.YourPhone_8wekyb3d8bbwe
+    validations:
+      required: true
+
+  - type: input
+    id: display-name
+    attributes:
+      label: Display name
+      placeholder: Phone Link
+    validations:
+      required: true
+
+  - type: dropdown
+    id: current
+    attributes:
+      label: Currently classified as
+      options: [Safe, Caution, Unknown, Critical]
+    validations:
+      required: true
+
+  - type: dropdown
+    id: proposed
+    attributes:
+      label: Should be
+      options: [Safe, Caution, Unknown, Critical]
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: What actually happened
+      description: |
+        If it is over-classified: what did you expect to be able to remove?
+        If it is under-classified: what broke after removing it, and how did
+        you notice? Concrete symptoms are far more useful than "it seems
+        risky".
+    validations:
+      required: true
+
+  - type: input
+    id: windows
+    attributes:
+      label: Windows version
+      description: "`winver`, or `cwico info`"
+      placeholder: Windows 11 Pro 23H2 (build 22631.3007)
+    validations:
+      required: true

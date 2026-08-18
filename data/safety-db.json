@@ -1,0 +1,1696 @@
+{
+  "schemaVersion": 1,
+  "version": "1.0.1",
+  "updated": "2026-08-19",
+  "sourceNotes": [
+    "Classification reflects Windows 10 22H2 and Windows 11 23H2/24H2 behaviour.",
+    "critical = removal breaks boot, logon, security or the shell. The engine hard-blocks these; the UI cannot override.",
+    "caution = removal succeeds and Windows still boots, but a secondary feature is lost.",
+    "safe = no functional impact on the operating system.",
+    "Anything not listed resolves to `unknown`, which requires per-item confirmation."
+  ],
+  "rules": [
+    {
+      "id": "ms.onedrive",
+      "class": "safe",
+      "match": {
+        "exact": [
+          "microsoft onedrive",
+          "onedrive",
+          "onedrive.exe"
+        ],
+        "contains": [
+          "onedrivesetup"
+        ],
+        "regex": [
+          "^microsoft\\.onedrive"
+        ]
+      },
+      "label": {
+        "en": "Microsoft OneDrive",
+        "vi": "Microsoft OneDrive"
+      },
+      "reason": {
+        "en": "Cloud file sync. Windows boots and runs normally without it; local files are untouched.",
+        "vi": "Đồng bộ tệp đám mây. Windows vẫn khởi động và chạy bình thường khi gỡ; tệp cục bộ không bị ảnh hưởng."
+      },
+      "description": {
+        "en": "Syncs Documents, Pictures and Desktop to Microsoft's cloud storage.",
+        "vi": "Đồng bộ Documents, Pictures và Desktop lên kho đám mây của Microsoft."
+      },
+      "tags": [
+        "cloud",
+        "preinstalled",
+        "sync"
+      ],
+      "processes": [
+        "OneDrive.exe",
+        "FileCoAuth.exe",
+        "FileSyncHelper.exe",
+        "OneDriveStandaloneUpdater.exe"
+      ],
+      "tasks": [
+        "\\OneDrive Standalone Update Task*",
+        "\\OneDrive Reporting Task*"
+      ],
+      "leftovers": {
+        "paths": [
+          "%LOCALAPPDATA%\\Microsoft\\OneDrive",
+          "%PROGRAMDATA%\\Microsoft OneDrive",
+          "%LOCALAPPDATA%\\OneDrive",
+          "%APPDATA%\\Microsoft\\Windows\\Start Menu\\Programs\\OneDrive.lnk"
+        ],
+        "registry": [
+          "HKCU\\Software\\Microsoft\\OneDrive",
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\OneDriveSetup.exe",
+          "HKLM\\SOFTWARE\\Microsoft\\OneDrive"
+        ],
+        "registryValues": [
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run::OneDrive"
+        ]
+      }
+    },
+    {
+      "id": "ms.skype",
+      "class": "safe",
+      "match": {
+        "exact": [
+          "skype",
+          "microsoft.skypeapp"
+        ],
+        "contains": [
+          "skypeapp",
+          "skype for desktop"
+        ]
+      },
+      "reason": {
+        "en": "Consumer chat client. No operating-system component depends on it.",
+        "vi": "Ứng dụng chat cá nhân. Không có thành phần hệ điều hành nào phụ thuộc vào nó."
+      },
+      "tags": [
+        "bloatware",
+        "communication",
+        "preinstalled"
+      ],
+      "processes": [
+        "Skype.exe",
+        "SkypeApp.exe",
+        "SkypeBackgroundHost.exe"
+      ],
+      "leftovers": {
+        "paths": [
+          "%APPDATA%\\Skype",
+          "%LOCALAPPDATA%\\Packages\\Microsoft.SkypeApp_kzf8qxf38zg5c"
+        ],
+        "registry": [
+          "HKCU\\Software\\Skype"
+        ]
+      }
+    },
+    {
+      "id": "ms.xbox.suite",
+      "class": "safe",
+      "match": {
+        "contains": [
+          "xboxapp",
+          "xbox.tcui",
+          "xboxspeechtotextoverlay",
+          "gamingapp",
+          "xbox game bar",
+          "xboxgameoverlay"
+        ],
+        "regex": [
+          "^microsoft\\.xbox(app|gameoverlay|gamingoverlay|speechtotextoverlay)",
+          "^microsoft\\.gamingapp"
+        ]
+      },
+      "label": {
+        "en": "Xbox app & Game Bar",
+        "vi": "Ứng dụng Xbox & Game Bar"
+      },
+      "reason": {
+        "en": "Gaming social layer and screen-recording overlay. Removing it does not affect games that do not use Xbox Live.",
+        "vi": "Lớp mạng xã hội chơi game và overlay quay màn hình. Gỡ không ảnh hưởng các game không dùng Xbox Live."
+      },
+      "tags": [
+        "gaming",
+        "bloatware",
+        "preinstalled"
+      ],
+      "processes": [
+        "XboxApp.exe",
+        "GameBar.exe",
+        "GameBarFTServer.exe",
+        "XboxPcApp.exe"
+      ],
+      "services": [
+        "XblAuthManager",
+        "XblGameSave",
+        "XboxNetApiSvc",
+        "XboxGipSvc"
+      ],
+      "leftovers": {
+        "registry": [
+          "HKCU\\Software\\Microsoft\\GameBar"
+        ],
+        "registryValues": [
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\GameDVR::AppCaptureEnabled"
+        ]
+      }
+    },
+    {
+      "id": "ms.xbox.identity",
+      "class": "caution",
+      "match": {
+        "contains": [
+          "xboxidentityprovider"
+        ],
+        "regex": [
+          "^microsoft\\.xboxidentityprovider"
+        ]
+      },
+      "reason": {
+        "en": "Handles Xbox Live sign-in. PC games bought from the Microsoft Store or using Xbox Live accounts will fail to authenticate without it.",
+        "vi": "Xử lý đăng nhập Xbox Live. Các game PC mua từ Microsoft Store hoặc dùng tài khoản Xbox Live sẽ không đăng nhập được nếu gỡ."
+      },
+      "tags": [
+        "gaming",
+        "authentication"
+      ]
+    },
+    {
+      "id": "ms.bing.apps",
+      "class": "safe",
+      "match": {
+        "regex": [
+          "^microsoft\\.bing(news|weather|finance|sports|search|translator|foodanddrink|health)"
+        ],
+        "contains": [
+          "bingnews",
+          "bingweather",
+          "bingfinance",
+          "bingsports",
+          "bingsearch"
+        ]
+      },
+      "label": {
+        "en": "Bing apps (News, Weather, Finance, Sports)",
+        "vi": "Bộ ứng dụng Bing (Tin tức, Thời tiết, Tài chính, Thể thao)"
+      },
+      "reason": {
+        "en": "Content apps that feed the taskbar widgets. Purely optional.",
+        "vi": "Ứng dụng nội dung cung cấp dữ liệu cho widget trên thanh tác vụ. Hoàn toàn tùy chọn."
+      },
+      "tags": [
+        "bloatware",
+        "advertising",
+        "preinstalled"
+      ]
+    },
+    {
+      "id": "ms.solitaire",
+      "class": "safe",
+      "match": {
+        "contains": [
+          "solitairecollection",
+          "microsoft solitaire"
+        ]
+      },
+      "reason": {
+        "en": "Bundled game with advertising. No system dependency.",
+        "vi": "Trò chơi kèm quảng cáo được cài sẵn. Không có phụ thuộc hệ thống."
+      },
+      "tags": [
+        "bloatware",
+        "games",
+        "advertising"
+      ]
+    },
+    {
+      "id": "thirdparty.game.bloat",
+      "class": "safe",
+      "match": {
+        "contains": [
+          "candy crush",
+          "candycrush",
+          "bubble witch",
+          "march of empires",
+          "royal revolt",
+          "asphalt",
+          "disney magic kingdoms",
+          "farmville",
+          "dolby access",
+          "spotifyab.spotifymusic",
+          "hidden city",
+          "cooking fever",
+          "gardenscapes",
+          "empires and puzzles"
+        ],
+        "regex": [
+          "^king\\.com",
+          "^(4d0dcac1|89006a2e|a278ab0d|d5ea27b7|d52a8d61|e0b3a1a9)\\."
+        ]
+      },
+      "label": {
+        "en": "Preinstalled third-party games & trials",
+        "vi": "Game và bản dùng thử của bên thứ ba cài sẵn"
+      },
+      "reason": {
+        "en": "Promotional software delivered by Windows' Consumer Experience. Not part of Windows.",
+        "vi": "Phần mềm quảng bá do Consumer Experience của Windows tải về. Không thuộc Windows."
+      },
+      "tags": [
+        "bloatware",
+        "games",
+        "advertising",
+        "preinstalled"
+      ]
+    },
+    {
+      "id": "ms.phonelink",
+      "class": "safe",
+      "match": {
+        "contains": [
+          "yourphone",
+          "phone link",
+          "phonelink"
+        ],
+        "regex": [
+          "^microsoft\\.yourphone"
+        ]
+      },
+      "reason": {
+        "en": "Android/iPhone companion. Nothing else uses it.",
+        "vi": "Ứng dụng liên kết điện thoại Android/iPhone. Không có thành phần nào khác dùng đến."
+      },
+      "tags": [
+        "bloatware",
+        "preinstalled"
+      ],
+      "processes": [
+        "PhoneExperienceHost.exe",
+        "YourPhone.exe"
+      ]
+    },
+    {
+      "id": "ms.teams.consumer",
+      "class": "safe",
+      "match": {
+        "contains": [
+          "microsoftteams",
+          "teams machine-wide installer",
+          "microsoft teams classic"
+        ],
+        "regex": [
+          "^microsoftteams$",
+          "^msteams$"
+        ]
+      },
+      "label": {
+        "en": "Microsoft Teams (personal)",
+        "vi": "Microsoft Teams (cá nhân)"
+      },
+      "reason": {
+        "en": "Consumer chat client pinned to the taskbar. Safe unless your organisation requires Teams.",
+        "vi": "Ứng dụng chat cá nhân ghim trên thanh tác vụ. An toàn trừ khi công ty bạn bắt buộc dùng Teams."
+      },
+      "tags": [
+        "bloatware",
+        "communication",
+        "preinstalled"
+      ],
+      "processes": [
+        "Teams.exe",
+        "ms-teams.exe"
+      ],
+      "leftovers": {
+        "paths": [
+          "%LOCALAPPDATA%\\Microsoft\\Teams",
+          "%APPDATA%\\Microsoft\\Teams"
+        ]
+      }
+    },
+    {
+      "id": "ms.zune",
+      "class": "safe",
+      "match": {
+        "contains": [
+          "zunemusic",
+          "zunevideo",
+          "groove music",
+          "films & tv",
+          "movies & tv"
+        ],
+        "regex": [
+          "^microsoft\\.zune"
+        ]
+      },
+      "label": {
+        "en": "Groove Music / Films & TV",
+        "vi": "Groove Music / Phim & TV"
+      },
+      "reason": {
+        "en": "Optional media players. File associations fall back to any other installed player.",
+        "vi": "Trình phát media tùy chọn. Liên kết tệp sẽ tự chuyển sang trình phát khác đã cài."
+      },
+      "tags": [
+        "media",
+        "preinstalled"
+      ]
+    },
+    {
+      "id": "ms.people",
+      "class": "safe",
+      "match": {
+        "contains": [
+          "microsoft.people"
+        ],
+        "regex": [
+          "^microsoft\\.people$"
+        ]
+      },
+      "reason": {
+        "en": "Contacts app for the Mail client. Removing it does not affect Outlook or third-party mail.",
+        "vi": "Ứng dụng danh bạ cho Mail. Gỡ không ảnh hưởng Outlook hay ứng dụng mail bên thứ ba."
+      },
+      "tags": [
+        "preinstalled"
+      ]
+    },
+    {
+      "id": "ms.feedbackhub",
+      "class": "safe",
+      "match": {
+        "contains": [
+          "windowsfeedbackhub",
+          "feedback hub"
+        ]
+      },
+      "reason": {
+        "en": "Sends diagnostic feedback to Microsoft. Purely optional.",
+        "vi": "Gửi phản hồi chẩn đoán về Microsoft. Hoàn toàn tùy chọn."
+      },
+      "tags": [
+        "telemetry",
+        "preinstalled"
+      ]
+    },
+    {
+      "id": "ms.3dviewer",
+      "class": "safe",
+      "match": {
+        "contains": [
+          "microsoft3dviewer",
+          "print3d",
+          "paint 3d",
+          "paint3d",
+          "mixedreality.portal"
+        ]
+      },
+      "label": {
+        "en": "3D Viewer / Paint 3D / Mixed Reality Portal",
+        "vi": "3D Viewer / Paint 3D / Mixed Reality Portal"
+      },
+      "reason": {
+        "en": "Discontinued 3D tools. Microsoft removed them from new Windows images.",
+        "vi": "Các công cụ 3D đã ngừng phát triển. Microsoft đã bỏ khỏi bản Windows mới."
+      },
+      "tags": [
+        "bloatware",
+        "deprecated",
+        "preinstalled"
+      ]
+    },
+    {
+      "id": "ms.maps",
+      "class": "safe",
+      "match": {
+        "contains": [
+          "windowsmaps"
+        ],
+        "regex": [
+          "^microsoft\\.windowsmaps"
+        ]
+      },
+      "reason": {
+        "en": "Offline maps app, retired by Microsoft in 2025.",
+        "vi": "Ứng dụng bản đồ ngoại tuyến, Microsoft đã khai tử năm 2025."
+      },
+      "tags": [
+        "bloatware",
+        "deprecated"
+      ],
+      "services": [
+        "MapsBroker"
+      ]
+    },
+    {
+      "id": "ms.officehub",
+      "class": "safe",
+      "match": {
+        "contains": [
+          "microsoftofficehub",
+          "office.onenote",
+          "microsoft 365 (office)"
+        ]
+      },
+      "label": {
+        "en": "Office Hub / OneNote (Store)",
+        "vi": "Office Hub / OneNote (bản Store)"
+      },
+      "reason": {
+        "en": "Shortcut shell that advertises Microsoft 365. Does not remove an installed Office suite.",
+        "vi": "Vỏ lối tắt quảng cáo Microsoft 365. Không gỡ bộ Office đã cài đặt."
+      },
+      "tags": [
+        "bloatware",
+        "advertising",
+        "preinstalled"
+      ]
+    },
+    {
+      "id": "ms.todos",
+      "class": "safe",
+      "match": {
+        "contains": [
+          "microsoft.todos",
+          "microsoft to do"
+        ]
+      },
+      "reason": {
+        "en": "Task list app. Data lives in the cloud and survives removal.",
+        "vi": "Ứng dụng danh sách việc cần làm. Dữ liệu nằm trên đám mây và không mất khi gỡ."
+      },
+      "tags": [
+        "preinstalled"
+      ]
+    },
+    {
+      "id": "ms.powerautomate",
+      "class": "safe",
+      "match": {
+        "contains": [
+          "powerautomatedesktop",
+          "power automate"
+        ]
+      },
+      "reason": {
+        "en": "RPA authoring tool preinstalled on Windows 11. Optional.",
+        "vi": "Công cụ tự động hóa RPA cài sẵn trên Windows 11. Tùy chọn."
+      },
+      "tags": [
+        "bloatware",
+        "preinstalled"
+      ]
+    },
+    {
+      "id": "ms.gethelp",
+      "class": "safe",
+      "match": {
+        "contains": [
+          "gethelp",
+          "getstarted",
+          "windows tips"
+        ],
+        "regex": [
+          "^microsoft\\.get(help|started)"
+        ]
+      },
+      "label": {
+        "en": "Get Help / Tips",
+        "vi": "Get Help / Tips"
+      },
+      "reason": {
+        "en": "Support-chat and onboarding tours. Nothing depends on them.",
+        "vi": "Chat hỗ trợ và hướng dẫn làm quen. Không có gì phụ thuộc vào chúng."
+      },
+      "tags": [
+        "bloatware",
+        "preinstalled"
+      ]
+    },
+    {
+      "id": "ms.clipchamp",
+      "class": "safe",
+      "match": {
+        "contains": [
+          "clipchamp"
+        ]
+      },
+      "reason": {
+        "en": "Video editor added to Windows 11 images. Optional.",
+        "vi": "Trình biên tập video được thêm vào bản Windows 11. Tùy chọn."
+      },
+      "tags": [
+        "bloatware",
+        "preinstalled"
+      ]
+    },
+    {
+      "id": "ms.family",
+      "class": "safe",
+      "match": {
+        "contains": [
+          "microsoft.windows.devhome",
+          "microsoftfamily",
+          "microsoft family"
+        ]
+      },
+      "label": {
+        "en": "Family Safety / Dev Home",
+        "vi": "Family Safety / Dev Home"
+      },
+      "reason": {
+        "en": "Optional companion apps. Parental controls can be managed from account.microsoft.com instead.",
+        "vi": "Ứng dụng đồng hành tùy chọn. Kiểm soát của phụ huynh vẫn quản lý được tại account.microsoft.com."
+      },
+      "tags": [
+        "preinstalled"
+      ]
+    },
+    {
+      "id": "ms.messaging",
+      "class": "safe",
+      "match": {
+        "contains": [
+          "microsoft.messaging",
+          "microsoft.oneconnect",
+          "microsoft.wallet",
+          "microsoft.print3d",
+          "microsoft.microsoftstickynotes",
+          "windowsalarms",
+          "windowssoundrecorder"
+        ]
+      },
+      "label": {
+        "en": "Messaging / Wallet / Alarms / Sound Recorder",
+        "vi": "Messaging / Wallet / Báo thức / Ghi âm"
+      },
+      "reason": {
+        "en": "Small utility apps with no system role. Reinstallable from the Store at any time.",
+        "vi": "Các tiện ích nhỏ không giữ vai trò hệ thống. Có thể cài lại từ Store bất kỳ lúc nào."
+      },
+      "tags": [
+        "preinstalled"
+      ]
+    },
+    {
+      "id": "ms.whiteboard",
+      "class": "safe",
+      "match": {
+        "contains": [
+          "microsoft.whiteboard"
+        ]
+      },
+      "reason": {
+        "en": "Collaborative whiteboard app. Optional.",
+        "vi": "Ứng dụng bảng trắng cộng tác. Tùy chọn."
+      },
+      "tags": [
+        "preinstalled"
+      ]
+    },
+    {
+      "id": "ms.quickassist",
+      "class": "safe",
+      "match": {
+        "contains": [
+          "quickassist",
+          "microsoft.remotedesktop"
+        ]
+      },
+      "label": {
+        "en": "Quick Assist / Remote Desktop app",
+        "vi": "Quick Assist / Ứng dụng Remote Desktop"
+      },
+      "reason": {
+        "en": "Remote-help clients. Removing them does not disable inbound RDP (that is a separate Windows feature).",
+        "vi": "Ứng dụng hỗ trợ từ xa. Gỡ không tắt RDP đến máy (đó là tính năng Windows riêng biệt)."
+      },
+      "tags": [
+        "preinstalled"
+      ]
+    },
+    {
+      "id": "ms.widgets",
+      "class": "safe",
+      "match": {
+        "contains": [
+          "webexperience",
+          "windowswebexperiencepack",
+          "widgets"
+        ]
+      },
+      "label": {
+        "en": "Widgets (Web Experience Pack)",
+        "vi": "Widgets (Web Experience Pack)"
+      },
+      "reason": {
+        "en": "Taskbar news-and-interests panel. Removing it only removes the widgets button.",
+        "vi": "Bảng tin tức trên thanh tác vụ. Gỡ chỉ làm mất nút widgets."
+      },
+      "tags": [
+        "bloatware",
+        "advertising"
+      ]
+    },
+    {
+      "id": "ms.copilot",
+      "class": "safe",
+      "match": {
+        "contains": [
+          "microsoft.copilot",
+          "windows.copilot",
+          "microsoft.windows.ai.copilot",
+          "bingchat"
+        ]
+      },
+      "reason": {
+        "en": "AI assistant panel. No operating-system feature depends on it.",
+        "vi": "Bảng trợ lý AI. Không có tính năng hệ điều hành nào phụ thuộc vào nó."
+      },
+      "tags": [
+        "ai",
+        "preinstalled"
+      ]
+    },
+    {
+      "id": "ms.cortana",
+      "class": "caution",
+      "match": {
+        "contains": [
+          "cortana",
+          "microsoft.549981c3f5f10"
+        ]
+      },
+      "reason": {
+        "en": "Voice assistant. Removing it also removes voice activation; Windows Search itself keeps working.",
+        "vi": "Trợ lý giọng nói. Gỡ sẽ mất kích hoạt bằng giọng nói; Windows Search vẫn hoạt động bình thường."
+      },
+      "tags": [
+        "assistant",
+        "deprecated"
+      ],
+      "processes": [
+        "Cortana.exe",
+        "SearchUI.exe"
+      ]
+    },
+    {
+      "id": "oem.security.trials",
+      "class": "safe",
+      "match": {
+        "contains": [
+          "mcafee livesafe",
+          "mcafee webadvisor",
+          "mcafee security",
+          "norton security ultra",
+          "norton 360 trial",
+          "avast free antivirus",
+          "avg antivirus free"
+        ],
+        "regex": [
+          "mcafee.*(trial|livesafe|webadvisor)"
+        ]
+      },
+      "label": {
+        "en": "OEM antivirus trials",
+        "vi": "Bản dùng thử diệt virus của hãng máy"
+      },
+      "reason": {
+        "en": "Expired or trial security suites shipped by the PC vendor. Microsoft Defender re-enables itself automatically once they are gone.",
+        "vi": "Bộ bảo mật dùng thử hoặc hết hạn do hãng máy cài sẵn. Microsoft Defender sẽ tự bật lại sau khi gỡ."
+      },
+      "tags": [
+        "oem",
+        "bloatware",
+        "security"
+      ],
+      "processes": [
+        "McUICnt.exe",
+        "mcshield.exe",
+        "AvastUI.exe",
+        "AVGUI.exe"
+      ]
+    },
+    {
+      "id": "oem.vendor.bloat",
+      "class": "safe",
+      "match": {
+        "contains": [
+          "hp jumpstart",
+          "hp support assistant",
+          "hp documentation",
+          "dell customer connect",
+          "dell digital delivery",
+          "dell supportassist os recovery",
+          "lenovo vantage service",
+          "lenovo now",
+          "lenovo utility",
+          "acer jumpstart",
+          "asus giftbox",
+          "asus product register"
+        ],
+        "regex": [
+          "^(hp|dell|lenovo|acer|asus)\\s+(jumpstart|welcome|registration|giftbox)"
+        ]
+      },
+      "label": {
+        "en": "OEM vendor bloatware",
+        "vi": "Phần mềm rác của hãng máy"
+      },
+      "reason": {
+        "en": "Marketing and registration utilities from the PC vendor. Drivers and firmware updaters are classified separately.",
+        "vi": "Tiện ích tiếp thị và đăng ký của hãng máy. Trình cập nhật driver và firmware được phân loại riêng."
+      },
+      "tags": [
+        "oem",
+        "bloatware"
+      ]
+    },
+    {
+      "id": "ms.telemetry.tasks",
+      "class": "safe",
+      "match": {
+        "kinds": [
+          "scheduled_task"
+        ],
+        "contains": [
+          "customer experience improvement program",
+          "\\application experience\\",
+          "\\autochk\\proxy",
+          "\\dusmtask",
+          "\\feedback\\siuf",
+          "consolidator",
+          "kernelceiptask",
+          "usbceip"
+        ]
+      },
+      "label": {
+        "en": "Telemetry scheduled tasks",
+        "vi": "Tác vụ lập lịch thu thập dữ liệu"
+      },
+      "reason": {
+        "en": "Scheduled uploads of usage statistics to Microsoft. Disabling them has no functional cost.",
+        "vi": "Các tác vụ định kỳ gửi thống kê sử dụng về Microsoft. Tắt đi không mất tính năng nào."
+      },
+      "tags": [
+        "telemetry",
+        "privacy"
+      ]
+    },
+    {
+      "id": "ms.telemetry.services",
+      "class": "safe",
+      "match": {
+        "kinds": [
+          "windows_service"
+        ],
+        "exact": [
+          "diagtrack",
+          "dmwappushservice",
+          "wersvc",
+          "retaildemo",
+          "mapsbroker",
+          "wisvc"
+        ]
+      },
+      "label": {
+        "en": "Telemetry & demo services",
+        "vi": "Dịch vụ thu thập dữ liệu & demo"
+      },
+      "reason": {
+        "en": "Connected User Experiences and Telemetry, WAP push routing, error reporting, retail demo. None are required to run Windows.",
+        "vi": "Dịch vụ trải nghiệm người dùng & telemetry, định tuyến WAP push, báo lỗi, demo cửa hàng. Không cái nào cần thiết để Windows chạy."
+      },
+      "tags": [
+        "telemetry",
+        "privacy"
+      ]
+    },
+    {
+      "id": "ms.fax.service",
+      "class": "safe",
+      "match": {
+        "kinds": [
+          "windows_service"
+        ],
+        "exact": [
+          "fax",
+          "wmpnetworksvc",
+          "sharedaccess",
+          "icssvc",
+          "remoteregistry"
+        ]
+      },
+      "label": {
+        "en": "Legacy optional services",
+        "vi": "Dịch vụ tùy chọn cũ"
+      },
+      "reason": {
+        "en": "Fax, Media Player network sharing, Internet Connection Sharing, Mobile Hotspot, Remote Registry. Off by default on most systems anyway.",
+        "vi": "Fax, chia sẻ mạng Media Player, Internet Connection Sharing, Mobile Hotspot, Remote Registry. Vốn đã tắt mặc định trên hầu hết hệ thống."
+      },
+      "tags": [
+        "legacy"
+      ]
+    },
+    {
+      "id": "ms.camera",
+      "class": "caution",
+      "match": {
+        "contains": [
+          "windowscamera"
+        ],
+        "regex": [
+          "^microsoft\\.windowscamera"
+        ]
+      },
+      "reason": {
+        "en": "Default camera app. Removing it leaves other apps able to use the webcam, but Windows Hello enrolment and the 'Take a photo' shell action stop working.",
+        "vi": "Ứng dụng camera mặc định. Gỡ xong các app khác vẫn dùng được webcam, nhưng đăng ký Windows Hello và chức năng 'Chụp ảnh' trong shell sẽ ngừng hoạt động."
+      },
+      "tags": [
+        "hardware",
+        "preinstalled"
+      ]
+    },
+    {
+      "id": "ms.edge",
+      "class": "caution",
+      "match": {
+        "exact": [
+          "microsoft edge",
+          "microsoft edge update"
+        ],
+        "contains": [
+          "microsoftedge"
+        ],
+        "regex": [
+          "^microsoft\\.microsoftedge(\\.stable)?$"
+        ]
+      },
+      "reason": {
+        "en": "Windows uses Edge to render help pages, PDF previews, sign-in prompts and some Settings panes. Removing it can break those flows and Windows Update may reinstall it.",
+        "vi": "Windows dùng Edge để hiển thị trang trợ giúp, xem trước PDF, hộp đăng nhập và một số trang Settings. Gỡ có thể làm hỏng các luồng này và Windows Update có thể tự cài lại."
+      },
+      "tags": [
+        "browser",
+        "system-integrated"
+      ],
+      "processes": [
+        "msedge.exe",
+        "MicrosoftEdgeUpdate.exe"
+      ]
+    },
+    {
+      "id": "ms.wmp",
+      "class": "caution",
+      "match": {
+        "contains": [
+          "windows media player",
+          "windowsmediaplayer"
+        ]
+      },
+      "reason": {
+        "en": "Legacy media stack. A few older applications and codecs still call into it for playback.",
+        "vi": "Bộ media cũ. Một số ứng dụng và codec đời cũ vẫn gọi đến nó để phát nội dung."
+      },
+      "tags": [
+        "media",
+        "legacy"
+      ]
+    },
+    {
+      "id": "ms.photos",
+      "class": "caution",
+      "match": {
+        "contains": [
+          "windows.photos",
+          "microsoft.photos"
+        ]
+      },
+      "reason": {
+        "en": "Default image viewer and the handler for most picture file types. Removing it leaves images with no default viewer until you set another one.",
+        "vi": "Trình xem ảnh mặc định và trình xử lý hầu hết định dạng ảnh. Gỡ xong ảnh sẽ không có trình xem mặc định cho đến khi bạn chỉ định app khác."
+      },
+      "tags": [
+        "media",
+        "preinstalled"
+      ]
+    },
+    {
+      "id": "ms.store",
+      "class": "caution",
+      "match": {
+        "contains": [
+          "windowsstore",
+          "microsoft store",
+          "desktopappinstaller",
+          "app installer"
+        ],
+        "regex": [
+          "^microsoft\\.windowsstore$"
+        ]
+      },
+      "label": {
+        "en": "Microsoft Store / App Installer",
+        "vi": "Microsoft Store / App Installer"
+      },
+      "reason": {
+        "en": "Removing the Store also removes updates for every Store app and breaks `winget`. It is difficult to reinstall cleanly. Disable rather than remove.",
+        "vi": "Gỡ Store sẽ mất cập nhật cho toàn bộ ứng dụng Store và làm hỏng `winget`. Rất khó cài lại sạch sẽ. Nên vô hiệu hóa thay vì gỡ."
+      },
+      "tags": [
+        "system-integrated",
+        "package-manager"
+      ]
+    },
+    {
+      "id": "ms.notepad.terminal",
+      "class": "caution",
+      "match": {
+        "contains": [
+          "windowsnotepad",
+          "microsoft.windowsterminal",
+          "windowscalculator",
+          "screensketch",
+          "snipping tool"
+        ]
+      },
+      "label": {
+        "en": "Notepad / Terminal / Calculator / Snipping Tool",
+        "vi": "Notepad / Terminal / Máy tính / Snipping Tool"
+      },
+      "reason": {
+        "en": "Everyday tools with no system dependency, but their absence is noticed immediately — Notepad in particular is the fallback handler for .txt and .log.",
+        "vi": "Công cụ dùng hằng ngày, không có phụ thuộc hệ thống, nhưng sẽ thấy thiếu ngay — riêng Notepad là trình xử lý dự phòng cho .txt và .log."
+      },
+      "tags": [
+        "utility",
+        "preinstalled"
+      ]
+    },
+    {
+      "id": "ms.mailcalendar",
+      "class": "caution",
+      "match": {
+        "contains": [
+          "windowscommunicationsapps",
+          "microsoft.outlookforwindows"
+        ]
+      },
+      "label": {
+        "en": "Mail & Calendar / new Outlook",
+        "vi": "Mail & Lịch / Outlook mới"
+      },
+      "reason": {
+        "en": "Removing them deletes locally cached mail and the calendar store. Export anything you need first.",
+        "vi": "Gỡ sẽ xóa thư đã lưu cục bộ và kho lịch. Hãy xuất dữ liệu cần thiết trước."
+      },
+      "tags": [
+        "communication",
+        "data-loss-risk"
+      ]
+    },
+    {
+      "id": "ms.search.service",
+      "class": "caution",
+      "match": {
+        "kinds": [
+          "windows_service"
+        ],
+        "exact": [
+          "wsearch",
+          "sysmain",
+          "wbiosrvc",
+          "pcasvc",
+          "tabletinputservice",
+          "spooler"
+        ]
+      },
+      "label": {
+        "en": "Search / SysMain / Biometrics / Print Spooler",
+        "vi": "Search / SysMain / Sinh trắc học / Print Spooler"
+      },
+      "reason": {
+        "en": "Windows keeps running, but you lose Start-menu file search, prefetch tuning, Windows Hello fingerprint, the touch keyboard or printing respectively.",
+        "vi": "Windows vẫn chạy, nhưng sẽ mất lần lượt: tìm kiếm tệp trong Start, tối ưu prefetch, vân tay Windows Hello, bàn phím cảm ứng, hoặc chức năng in."
+      },
+      "tags": [
+        "system-feature"
+      ]
+    },
+    {
+      "id": "ms.hyperv.feature",
+      "class": "caution",
+      "match": {
+        "kinds": [
+          "optional_feature"
+        ],
+        "contains": [
+          "hyper-v",
+          "virtualmachineplatform",
+          "subsystem-linux",
+          "containers",
+          "windows-defender-applicationguard"
+        ]
+      },
+      "label": {
+        "en": "Virtualisation features",
+        "vi": "Tính năng ảo hóa"
+      },
+      "reason": {
+        "en": "Disabling these breaks WSL2, Docker Desktop, Windows Sandbox and Android emulators.",
+        "vi": "Tắt các tính năng này sẽ làm hỏng WSL2, Docker Desktop, Windows Sandbox và trình giả lập Android."
+      },
+      "tags": [
+        "virtualisation",
+        "developer"
+      ]
+    },
+    {
+      "id": "ms.defender",
+      "class": "critical",
+      "match": {
+        "exact": [
+          "windows defender",
+          "microsoft defender antivirus",
+          "windefend",
+          "wdnissvc",
+          "sense",
+          "wscsvc",
+          "securityhealthservice",
+          "mpssvc"
+        ],
+        "contains": [
+          "windows security",
+          "microsoft defender",
+          "sechealthui",
+          "windowsdefender"
+        ],
+        "regex": [
+          "^microsoft\\.sec(health|urity)"
+        ]
+      },
+      "label": {
+        "en": "Microsoft Defender & Windows Security",
+        "vi": "Microsoft Defender & Windows Security"
+      },
+      "reason": {
+        "en": "The operating system's antivirus, firewall and security centre. Removing it leaves the machine unprotected and Windows Update will fight to restore it. Use a third-party antivirus to displace it instead.",
+        "vi": "Chương trình diệt virus, tường lửa và trung tâm bảo mật của hệ điều hành. Gỡ bỏ khiến máy không được bảo vệ và Windows Update sẽ liên tục khôi phục lại. Hãy cài phần mềm diệt virus bên thứ ba để thay thế thay vì gỡ."
+      },
+      "tags": [
+        "security",
+        "protected"
+      ]
+    },
+    {
+      "id": "ms.shell",
+      "class": "critical",
+      "match": {
+        "exact": [
+          "windows explorer",
+          "file explorer",
+          "explorer.exe"
+        ],
+        "contains": [
+          "shellexperiencehost",
+          "startmenuexperiencehost",
+          "windows.immersivecontrolpanel",
+          "windows.cbspreview",
+          "microsoft.ui.xaml",
+          "microsoft.vclibs",
+          "microsoft.net.native",
+          "windows.client.cbs",
+          "microsoft.windows.shellexperiencehost",
+          "microsoft.windows.startmenuexperiencehost",
+          "microsoft.windows.search",
+          "microsoft.windows.contentdeliverymanager"
+        ],
+        "regex": [
+          "^windows\\.immersivecontrolpanel$",
+          "^microsoft\\.windows\\.(shell|start|search|cloudexperiencehost)"
+        ]
+      },
+      "label": {
+        "en": "Windows shell, Start menu & Settings",
+        "vi": "Shell Windows, Start menu & Cài đặt"
+      },
+      "reason": {
+        "en": "The desktop, taskbar, Start menu, Settings app and the XAML/VCLibs frameworks every Store app links against. Removing any of these leaves you with a black screen and no way to launch anything.",
+        "vi": "Màn hình desktop, thanh tác vụ, Start menu, ứng dụng Cài đặt và các framework XAML/VCLibs mà mọi ứng dụng Store đều liên kết tới. Gỡ bất kỳ thành phần nào sẽ khiến bạn chỉ còn màn hình đen và không mở được gì."
+      },
+      "tags": [
+        "shell",
+        "protected"
+      ]
+    },
+    {
+      "id": "ms.core.services",
+      "class": "critical",
+      "match": {
+        "kinds": [
+          "windows_service"
+        ],
+        "exact": [
+          "rpcss",
+          "dcomlaunch",
+          "rpceptmapper",
+          "lsm",
+          "winmgmt",
+          "power",
+          "plugplay",
+          "profsvc",
+          "usermanager",
+          "samss",
+          "gpsvc",
+          "cryptsvc",
+          "bfe",
+          "dhcp",
+          "dnscache",
+          "eventlog",
+          "schedule",
+          "themes",
+          "audiosrv",
+          "audioendpointbuilder",
+          "nsi",
+          "lanmanworkstation",
+          "lanmanserver",
+          "trustedinstaller",
+          "msiserver",
+          "wuauserv",
+          "brokerinfrastructure",
+          "systemeventsbroker",
+          "coremessagingregistrar",
+          "statecmodel",
+          "camsvc",
+          "keyiso",
+          "netlogon",
+          "sspisrv",
+          "termservice",
+          "wlansvc",
+          "ndu",
+          "storsvc"
+        ]
+      },
+      "label": {
+        "en": "Core Windows services",
+        "vi": "Dịch vụ lõi của Windows"
+      },
+      "reason": {
+        "en": "RPC, DCOM, WMI, session management, user profiles, group policy, cryptography, networking, event logging and the installer engine. Disabling any of these prevents Windows from booting or from letting you log in.",
+        "vi": "RPC, DCOM, WMI, quản lý phiên, hồ sơ người dùng, group policy, mã hóa, mạng, ghi nhật ký sự kiện và bộ máy cài đặt. Tắt bất kỳ dịch vụ nào sẽ khiến Windows không khởi động được hoặc không đăng nhập được."
+      },
+      "tags": [
+        "core",
+        "protected",
+        "boot-critical"
+      ]
+    },
+    {
+      "id": "ms.runtimes",
+      "class": "critical",
+      "match": {
+        "contains": [
+          "visual c++ 20",
+          "visual c++ redistributable",
+          ".net framework",
+          ".net runtime",
+          ".net desktop runtime",
+          "asp.net core",
+          "microsoft edge webview2 runtime",
+          "directx",
+          "windows software development kit",
+          "universal crt",
+          "windows universal runtime"
+        ],
+        "regex": [
+          "microsoft\\s+\\.net\\s",
+          "visual\\s+c\\+\\+\\s+\\d{4}"
+        ]
+      },
+      "label": {
+        "en": "Shared runtimes (VC++, .NET, WebView2, DirectX)",
+        "vi": "Runtime dùng chung (VC++, .NET, WebView2, DirectX)"
+      },
+      "reason": {
+        "en": "Shared libraries that hundreds of installed applications link against at load time. Removing one silently breaks every program that depends on it, usually with a missing-DLL error at startup.",
+        "vi": "Thư viện dùng chung mà hàng trăm ứng dụng đã cài liên kết đến khi khởi chạy. Gỡ một cái sẽ âm thầm làm hỏng mọi chương trình phụ thuộc, thường báo lỗi thiếu DLL khi mở."
+      },
+      "tags": [
+        "runtime",
+        "protected",
+        "dependency"
+      ]
+    },
+    {
+      "id": "hardware.drivers",
+      "class": "critical",
+      "match": {
+        "contains": [
+          "nvidia graphics driver",
+          "nvidia display driver",
+          "amd software",
+          "amd chipset software",
+          "intel(r) chipset device software",
+          "intel(r) management engine",
+          "intel graphics driver",
+          "realtek high definition audio driver",
+          "realtek audio driver",
+          "intel(r) wireless",
+          "qualcomm atheros",
+          "synaptics pointing device",
+          "thunderbolt",
+          "sound blaster"
+        ],
+        "regex": [
+          "(nvidia|amd|intel|realtek).*(driver|chipset)"
+        ]
+      },
+      "label": {
+        "en": "Device drivers",
+        "vi": "Driver thiết bị"
+      },
+      "reason": {
+        "en": "Graphics, chipset, audio, network and touchpad drivers. Removing them costs you display resolution, sound, Wi-Fi or the ability to use the trackpad, and recovery may require another machine. Use Device Manager or the vendor's own tool instead.",
+        "vi": "Driver đồ họa, chipset, âm thanh, mạng và touchpad. Gỡ sẽ mất độ phân giải màn hình, âm thanh, Wi-Fi hoặc khả năng dùng touchpad, và có thể phải dùng máy khác để khôi phục. Hãy dùng Device Manager hoặc công cụ của hãng thay vì gỡ ở đây."
+      },
+      "tags": [
+        "driver",
+        "protected",
+        "hardware"
+      ]
+    },
+    {
+      "id": "ms.update.stack",
+      "class": "critical",
+      "match": {
+        "exact": [
+          "windows update",
+          "update assistant"
+        ],
+        "contains": [
+          "servicing stack update",
+          "cumulative update for windows",
+          "security update for windows",
+          "update for microsoft windows"
+        ],
+        "regex": [
+          "^kb\\d{6,7}$"
+        ]
+      },
+      "label": {
+        "en": "Windows Update & servicing stack",
+        "vi": "Windows Update & servicing stack"
+      },
+      "reason": {
+        "en": "Installed updates and the servicing stack that applies them. Removing a servicing component can corrupt the component store and leave the machine unable to install any future update. Uninstall individual updates from Settings if you must.",
+        "vi": "Các bản cập nhật đã cài và servicing stack áp dụng chúng. Gỡ một thành phần servicing có thể làm hỏng component store và khiến máy không cài được bất kỳ bản cập nhật nào sau này. Nếu cần, hãy gỡ từng bản cập nhật trong Settings."
+      },
+      "tags": [
+        "servicing",
+        "protected"
+      ]
+    },
+    {
+      "id": "ms.boot.tasks",
+      "class": "critical",
+      "match": {
+        "kinds": [
+          "scheduled_task"
+        ],
+        "contains": [
+          "\\windows\\sysmain\\",
+          "\\windows\\bitlocker\\",
+          "\\windows\\windowsupdate\\scheduled start",
+          "\\windows\\tpm\\",
+          "\\windows\\certificateservicesclient\\",
+          "\\windows\\ras\\",
+          "\\windows\\shell\\createobjecttask",
+          "\\windows\\servicing\\",
+          "\\windows\\componentsetup"
+        ]
+      },
+      "label": {
+        "en": "Boot & servicing scheduled tasks",
+        "vi": "Tác vụ lập lịch khởi động & servicing"
+      },
+      "reason": {
+        "en": "Tasks that maintain BitLocker keys, TPM state, certificate enrolment and component servicing. Disabling them can lock you out of an encrypted drive.",
+        "vi": "Các tác vụ duy trì khóa BitLocker, trạng thái TPM, đăng ký chứng chỉ và servicing thành phần. Tắt chúng có thể khiến bạn không truy cập được ổ đĩa đã mã hóa."
+      },
+      "tags": [
+        "core",
+        "protected"
+      ]
+    },
+    {
+      "id": "ms.credential.stack",
+      "class": "critical",
+      "match": {
+        "contains": [
+          "microsoft.aad.brokerplugin",
+          "microsoft.accountscontrol",
+          "windows.cloudexperiencehost",
+          "microsoft.credentialdialoghost",
+          "microsoft.lockapp",
+          "microsoft.windows.cloudexperiencehost",
+          "windows.printdialog",
+          "microsoft.ecapp",
+          "microsoft.bioenrollment"
+        ]
+      },
+      "label": {
+        "en": "Sign-in, account & credential UI",
+        "vi": "Giao diện đăng nhập, tài khoản & thông tin xác thực"
+      },
+      "reason": {
+        "en": "The lock screen, credential prompts, work-account broker and Windows Hello enrolment UI. Removing these can leave you unable to log in at all.",
+        "vi": "Màn hình khóa, hộp thoại nhập thông tin đăng nhập, broker tài khoản công ty và giao diện đăng ký Windows Hello. Gỡ có thể khiến bạn hoàn toàn không đăng nhập được."
+      },
+      "tags": [
+        "authentication",
+        "protected"
+      ]
+    },
+    {
+      "id": "ms.system.component",
+      "class": "critical",
+      "match": {
+        "contains": [
+          "microsoft.windows.apprep.chxapp",
+          "microsoft.windows.assignedaccesslockapp",
+          "microsoft.windows.narratorquickstart",
+          "microsoft.windows.parentalcontrols",
+          "microsoft.windows.peopleexperiencehost",
+          "microsoft.windows.pinningconfirmationdialog",
+          "microsoft.windows.securehealthapp",
+          "microsoft.win32webviewhost",
+          "microsoft.xboxgamecallableui",
+          "microsoft.asyncTextService",
+          "microsoft.inputapp",
+          "microsoft.mspaint.core"
+        ]
+      },
+      "label": {
+        "en": "Non-removable system UI hosts",
+        "vi": "Thành phần giao diện hệ thống không thể gỡ"
+      },
+      "reason": {
+        "en": "Framework packages the shell activates on demand — SmartScreen prompts, pin dialogs, the input host, kiosk lock app. They are marked non-removable by Windows for good reason.",
+        "vi": "Các gói framework mà shell kích hoạt khi cần — hộp thoại SmartScreen, hộp thoại ghim, input host, ứng dụng khóa kiosk. Windows đánh dấu không thể gỡ là có lý do."
+      },
+      "tags": [
+        "framework",
+        "protected"
+      ]
+    },
+    {
+      "id": "ms.filesystem.critical",
+      "class": "critical",
+      "match": {
+        "kinds": [
+          "windows_service"
+        ],
+        "exact": [
+          "volsnap",
+          "vss",
+          "swprv",
+          "sr",
+          "srservice",
+          "filecrypt",
+          "fltmgr",
+          "ntfs",
+          "mountmgr",
+          "partmgr",
+          "disk",
+          "volmgr",
+          "storahci",
+          "pci",
+          "acpi"
+        ]
+      },
+      "label": {
+        "en": "Storage & kernel drivers",
+        "vi": "Driver lưu trữ & kernel"
+      },
+      "reason": {
+        "en": "Filesystem, volume, snapshot and bus drivers loaded during boot. Disabling any of them produces an unbootable system with an INACCESSIBLE_BOOT_DEVICE stop error.",
+        "vi": "Driver hệ thống tệp, ổ đĩa, snapshot và bus được nạp khi khởi động. Tắt bất kỳ cái nào sẽ khiến máy không khởi động được với lỗi INACCESSIBLE_BOOT_DEVICE."
+      },
+      "tags": [
+        "kernel",
+        "protected",
+        "boot-critical"
+      ]
+    },
+    {
+      "id": "ms.restore.service",
+      "class": "critical",
+      "match": {
+        "kinds": [
+          "windows_service"
+        ],
+        "exact": [
+          "swprv",
+          "vss",
+          "sdrsvc",
+          "wbengine"
+        ]
+      },
+      "label": {
+        "en": "Backup & System Restore services",
+        "vi": "Dịch vụ sao lưu & System Restore"
+      },
+      "reason": {
+        "en": "Volume Shadow Copy and the backup engine. This tool itself needs them to create the restore point that protects your machine before every removal.",
+        "vi": "Volume Shadow Copy và bộ máy sao lưu. Chính công cụ này cần chúng để tạo điểm khôi phục bảo vệ máy bạn trước mỗi lần gỡ."
+      },
+      "tags": [
+        "backup",
+        "protected",
+        "self-dependency"
+      ]
+    },
+    {
+      "id": "ms.security.baseline",
+      "class": "critical",
+      "match": {
+        "kinds": [
+          "windows_service"
+        ],
+        "exact": [
+          "securityhealthservice",
+          "wdnissvc",
+          "webthreatdefsvc",
+          "mdcoresvc",
+          "wdfilter",
+          "wdboot",
+          "wdnisdrv"
+        ]
+      },
+      "label": {
+        "en": "Defender platform services",
+        "vi": "Dịch vụ nền tảng Defender"
+      },
+      "reason": {
+        "en": "The Defender engine, filter driver and network inspection service. Disabling them silently turns off real-time protection.",
+        "vi": "Bộ máy Defender, driver lọc và dịch vụ kiểm tra mạng. Tắt chúng sẽ âm thầm vô hiệu hóa bảo vệ theo thời gian thực."
+      },
+      "tags": [
+        "security",
+        "protected"
+      ]
+    },
+    {
+      "id": "ms.tcpip.stack",
+      "class": "critical",
+      "match": {
+        "kinds": [
+          "windows_service"
+        ],
+        "exact": [
+          "tcpip",
+          "afd",
+          "netbt",
+          "http",
+          "winhttpautoproxysvc",
+          "iphlpsvc",
+          "netprofm",
+          "nlasvc",
+          "wcmsvc"
+        ]
+      },
+      "label": {
+        "en": "Networking stack",
+        "vi": "Ngăn xếp mạng"
+      },
+      "reason": {
+        "en": "TCP/IP, socket, HTTP and network-awareness components. Disabling them removes all network connectivity, including the connection you would need to fix it.",
+        "vi": "Các thành phần TCP/IP, socket, HTTP và nhận biết mạng. Tắt chúng sẽ mất toàn bộ kết nối mạng, kể cả kết nối bạn cần để khắc phục."
+      },
+      "tags": [
+        "network",
+        "protected",
+        "boot-critical"
+      ]
+    },
+    {
+      "id": "ms.appmodel",
+      "class": "critical",
+      "match": {
+        "kinds": [
+          "windows_service"
+        ],
+        "exact": [
+          "appxsvc",
+          "staterepository",
+          "clipsvc",
+          "installservice",
+          "appreadiness",
+          "tokenbroker",
+          "appidsvc",
+          "embeddedmode"
+        ]
+      },
+      "label": {
+        "en": "App model & packaging services",
+        "vi": "Dịch vụ mô hình ứng dụng & đóng gói"
+      },
+      "reason": {
+        "en": "AppX deployment, the state repository and the licensing broker. Disabling them breaks every Store app, the Settings app and the Start menu, and this tool loses its ability to remove AppX packages at all.",
+        "vi": "Triển khai AppX, kho trạng thái và broker cấp phép. Tắt chúng sẽ làm hỏng mọi ứng dụng Store, ứng dụng Settings và Start menu, đồng thời chính công cụ này mất khả năng gỡ gói AppX."
+      },
+      "tags": [
+        "appmodel",
+        "protected",
+        "self-dependency"
+      ]
+    },
+    {
+      "id": "ms.licensing",
+      "class": "critical",
+      "match": {
+        "exact": [
+          "sppsvc",
+          "licensemanager",
+          "wlidsvc",
+          "clipsvc",
+          "keyiso"
+        ],
+        "contains": [
+          "software protection",
+          "windows license manager",
+          "microsoft account sign-in assistant"
+        ]
+      },
+      "label": {
+        "en": "Activation & licensing",
+        "vi": "Kích hoạt & cấp phép"
+      },
+      "reason": {
+        "en": "Software Protection, the license manager and the Microsoft account sign-in assistant. Disabling them deactivates Windows, disables Store app licences and can lock you out of Microsoft-account logins.",
+        "vi": "Software Protection, trình quản lý giấy phép và trợ lý đăng nhập tài khoản Microsoft. Tắt chúng sẽ khiến Windows mất kích hoạt, vô hiệu giấy phép ứng dụng Store và có thể khiến bạn không đăng nhập được tài khoản Microsoft."
+      },
+      "tags": [
+        "licensing",
+        "protected"
+      ]
+    },
+    {
+      "id": "ms.input.stack",
+      "class": "critical",
+      "match": {
+        "kinds": [
+          "windows_service"
+        ],
+        "exact": [
+          "textinputmanagementservice",
+          "ctfmon",
+          "tabletinputservice_core",
+          "i8042prt",
+          "kbdclass",
+          "mouclass",
+          "hidserv"
+        ]
+      },
+      "label": {
+        "en": "Keyboard, mouse & text input stack",
+        "vi": "Ngăn xếp bàn phím, chuột & nhập liệu"
+      },
+      "reason": {
+        "en": "The PS/2, HID and text-input services that carry your keystrokes and mouse clicks. Disabling any of them can leave you with no working keyboard or mouse at the logon screen.",
+        "vi": "Các dịch vụ PS/2, HID và nhập văn bản truyền phím gõ và click chuột. Tắt bất kỳ cái nào có thể khiến bạn không còn bàn phím hay chuột hoạt động ở màn hình đăng nhập."
+      },
+      "tags": [
+        "input",
+        "protected",
+        "boot-critical"
+      ]
+    },
+    {
+      "id": "ms.boot.recovery",
+      "class": "critical",
+      "match": {
+        "contains": [
+          "windows boot manager",
+          "windows recovery environment",
+          "winre",
+          "boot configuration data",
+          "windows setup remediations",
+          "uefi firmware"
+        ],
+        "regex": [
+          "^(bootmgr|bcd|winload)"
+        ]
+      },
+      "label": {
+        "en": "Boot manager & recovery environment",
+        "vi": "Boot manager & môi trường khôi phục"
+      },
+      "reason": {
+        "en": "The boot loader and the recovery partition tooling. Damaging these produces a machine that will not start and cannot repair itself — recovery requires external installation media.",
+        "vi": "Bộ nạp khởi động và công cụ phân vùng khôi phục. Làm hỏng chúng sẽ khiến máy không khởi động được và không tự sửa được — phải dùng USB/đĩa cài đặt bên ngoài để khôi phục."
+      },
+      "tags": [
+        "boot",
+        "protected",
+        "boot-critical"
+      ]
+    },
+    {
+      "id": "ms.pki",
+      "class": "critical",
+      "match": {
+        "kinds": [
+          "windows_service"
+        ],
+        "exact": [
+          "certpropsvc",
+          "scardsvr",
+          "scdeviceenum",
+          "seclogon",
+          "vaultsvc",
+          "wdigest",
+          "kdc",
+          "kpssvc"
+        ]
+      },
+      "label": {
+        "en": "Certificate & credential vault services",
+        "vi": "Dịch vụ chứng chỉ & kho thông tin xác thực"
+      },
+      "reason": {
+        "en": "Certificate propagation, smart cards and Credential Manager. Disabling them breaks saved credentials, VPN and enterprise sign-in, and HTTPS validation in some applications.",
+        "vi": "Truyền bá chứng chỉ, thẻ thông minh và Credential Manager. Tắt chúng sẽ làm hỏng thông tin đăng nhập đã lưu, VPN và đăng nhập doanh nghiệp, cùng việc xác thực HTTPS ở một số ứng dụng."
+      },
+      "tags": [
+        "security",
+        "pki",
+        "protected"
+      ]
+    }
+  ]
+}

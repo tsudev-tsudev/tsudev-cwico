@@ -1,0 +1,67 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "tsudev-cwico",
+  "version": "1.0.0",
+  "identifier": "com.tsudev.cwico",
+  "build": {
+    "frontendDist": "../../ui/dist",
+    "devUrl": "http://localhost:5173",
+    "beforeDevCommand": "npm --prefix ../../ui run dev",
+    "beforeBuildCommand": "npm --prefix ../../ui run build"
+  },
+  "app": {
+    "withGlobalTauri": false,
+    "windows": [
+      {
+        "title": "tsudev-cwico — Windows Debloater",
+        "width": 1280,
+        "height": 820,
+        "minWidth": 940,
+        "minHeight": 620,
+        "resizable": true,
+        "center": true,
+        "decorations": true,
+        "theme": null,
+        "dragDropEnabled": false
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; img-src 'self' asset: data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self' ipc: http://ipc.localhost",
+      "assetProtocol": {
+        "enable": true,
+        "scope": ["$RESOURCE/**"]
+      }
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["msi", "nsis"],
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.ico"
+    ],
+    "resources": {
+      "../../data/safety-db.json": "data/safety-db.json",
+      "../../data/tweaks.json": "data/tweaks.json"
+    },
+    "copyright": "© 2026 tsudev — https://tsudev.com",
+    "category": "Utility",
+    "shortDescription": "Deep Windows debloater and software removal toolkit",
+    "longDescription": "Scan every corner of Windows — installed programs, UWP/AppX packages, services, scheduled tasks and autostart entries — then remove what you do not need, safely. Every item is classified Safe, Caution or Critical; critical system components cannot be removed at all. A System Restore Point and .reg backups are taken before anything changes.",
+    "publisher": "tsudev",
+    "homepage": "https://tsudev.com",
+    "windows": {
+      "digestAlgorithm": "sha256",
+      "nsis": {
+        "installMode": "perMachine",
+        "languages": ["English", "Vietnamese"],
+        "displayLanguageSelector": true
+      },
+      "wix": {
+        "language": ["en-US"]
+      }
+    }
+  }
+}

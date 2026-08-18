@@ -1,0 +1,24 @@
+[package]
+name        = "cwico-core"
+description = "Platform-agnostic engine for tsudev-cwico: scanning, safety classification, uninstall planning."
+version.workspace      = true
+edition.workspace      = true
+rust-version.workspace = true
+authors.workspace      = true
+homepage.workspace     = true
+repository.workspace   = true
+license.workspace      = true
+
+[dependencies]
+serde       = { workspace = true }
+serde_json  = { workspace = true }
+thiserror   = { workspace = true }
+tracing     = { workspace = true }
+time        = { workspace = true }
+regex       = { workspace = true }
+
+[features]
+default = []
+# Deterministic in-memory backend: lets the UI and the engine be developed and
+# tested on non-Windows hosts. Never enabled in release Windows builds.
+mock = []

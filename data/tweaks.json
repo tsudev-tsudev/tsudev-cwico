@@ -1,0 +1,1609 @@
+{
+  "schemaVersion": 1,
+  "version": "1.0.0",
+  "tweaks": [
+    {
+      "id": "privacy.telemetry.off",
+      "category": "privacy",
+      "title": {
+        "en": "Turn off diagnostic data collection",
+        "vi": "Tắt thu thập dữ liệu chẩn đoán"
+      },
+      "description": {
+        "en": "Sets the telemetry policy to the lowest level so Windows stops uploading usage statistics. Security updates are unaffected.",
+        "vi": "Đặt chính sách telemetry về mức thấp nhất để Windows ngừng gửi thống kê sử dụng. Không ảnh hưởng đến bản cập nhật bảo mật."
+      },
+      "safety": "safe",
+      "apply": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection",
+          "name": "AllowTelemetry",
+          "kind": "dword",
+          "value": "0"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\DataCollection",
+          "name": "AllowTelemetry",
+          "kind": "dword",
+          "value": "0"
+        }
+      ],
+      "revert": [
+        {
+          "op": "deleteRegistryValue",
+          "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection",
+          "name": "AllowTelemetry"
+        },
+        {
+          "op": "deleteRegistryValue",
+          "key": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\DataCollection",
+          "name": "AllowTelemetry"
+        }
+      ],
+      "recommended": true,
+      "tags": [
+        "telemetry"
+      ]
+    },
+    {
+      "id": "privacy.telemetry.services.off",
+      "category": "privacy",
+      "title": {
+        "en": "Disable the telemetry services",
+        "vi": "Tắt các dịch vụ telemetry"
+      },
+      "description": {
+        "en": "Stops and disables DiagTrack and dmwappushservice, the two services that queue and upload diagnostic data.",
+        "vi": "Dừng và vô hiệu hóa DiagTrack cùng dmwappushservice — hai dịch vụ xếp hàng và tải dữ liệu chẩn đoán lên."
+      },
+      "safety": "safe",
+      "apply": [
+        {
+          "op": "setServiceStartup",
+          "service": "DiagTrack",
+          "startType": "disabled"
+        },
+        {
+          "op": "setServiceStartup",
+          "service": "dmwappushservice",
+          "startType": "disabled"
+        }
+      ],
+      "revert": [
+        {
+          "op": "setServiceStartup",
+          "service": "DiagTrack",
+          "startType": "automatic"
+        },
+        {
+          "op": "setServiceStartup",
+          "service": "dmwappushservice",
+          "startType": "manual"
+        }
+      ],
+      "recommended": true,
+      "tags": [
+        "telemetry",
+        "services"
+      ]
+    },
+    {
+      "id": "privacy.activity-history.off",
+      "category": "privacy",
+      "title": {
+        "en": "Turn off activity history",
+        "vi": "Tắt lịch sử hoạt động"
+      },
+      "description": {
+        "en": "Stops Windows recording which apps and documents you open and syncing that timeline to your Microsoft account.",
+        "vi": "Ngừng việc Windows ghi lại các ứng dụng và tài liệu bạn mở, và ngừng đồng bộ dòng thời gian đó lên tài khoản Microsoft."
+      },
+      "safety": "safe",
+      "apply": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\System",
+          "name": "EnableActivityFeed",
+          "kind": "dword",
+          "value": "0"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\System",
+          "name": "PublishUserActivities",
+          "kind": "dword",
+          "value": "0"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\System",
+          "name": "UploadUserActivities",
+          "kind": "dword",
+          "value": "0"
+        }
+      ],
+      "revert": [
+        {
+          "op": "deleteRegistryValue",
+          "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\System",
+          "name": "EnableActivityFeed"
+        },
+        {
+          "op": "deleteRegistryValue",
+          "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\System",
+          "name": "PublishUserActivities"
+        },
+        {
+          "op": "deleteRegistryValue",
+          "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\System",
+          "name": "UploadUserActivities"
+        }
+      ],
+      "recommended": true,
+      "tags": [
+        "telemetry",
+        "privacy"
+      ]
+    },
+    {
+      "id": "privacy.advertising-id.off",
+      "category": "privacy",
+      "title": {
+        "en": "Disable the advertising ID",
+        "vi": "Tắt ID quảng cáo"
+      },
+      "description": {
+        "en": "Removes the per-user identifier apps use to profile you across the system. Ads still appear, but are no longer personalised.",
+        "vi": "Xóa mã định danh theo người dùng mà các ứng dụng dùng để lập hồ sơ bạn trên toàn hệ thống. Quảng cáo vẫn hiển thị nhưng không còn được cá nhân hóa."
+      },
+      "safety": "safe",
+      "apply": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\AdvertisingInfo",
+          "name": "Enabled",
+          "kind": "dword",
+          "value": "0"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\AdvertisingInfo",
+          "name": "DisabledByGroupPolicy",
+          "kind": "dword",
+          "value": "1"
+        }
+      ],
+      "revert": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\AdvertisingInfo",
+          "name": "Enabled",
+          "kind": "dword",
+          "value": "1"
+        },
+        {
+          "op": "deleteRegistryValue",
+          "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\AdvertisingInfo",
+          "name": "DisabledByGroupPolicy"
+        }
+      ],
+      "recommended": true,
+      "tags": [
+        "advertising",
+        "privacy"
+      ]
+    },
+    {
+      "id": "privacy.ceip.off",
+      "category": "privacy",
+      "title": {
+        "en": "Leave the Customer Experience Improvement Program",
+        "vi": "Rời khỏi chương trình cải thiện trải nghiệm khách hàng"
+      },
+      "description": {
+        "en": "Opts out of the CEIP survey pipeline and its scheduled upload tasks.",
+        "vi": "Từ chối tham gia luồng khảo sát CEIP và các tác vụ lập lịch tải dữ liệu lên của nó."
+      },
+      "safety": "safe",
+      "apply": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\SQMClient\\Windows",
+          "name": "CEIPEnable",
+          "kind": "dword",
+          "value": "0"
+        }
+      ],
+      "revert": [
+        {
+          "op": "deleteRegistryValue",
+          "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\SQMClient\\Windows",
+          "name": "CEIPEnable"
+        }
+      ],
+      "recommended": true,
+      "tags": [
+        "telemetry"
+      ]
+    },
+    {
+      "id": "privacy.error-reporting.off",
+      "category": "privacy",
+      "title": {
+        "en": "Turn off Windows Error Reporting",
+        "vi": "Tắt Windows Error Reporting"
+      },
+      "description": {
+        "en": "Stops crash dumps being uploaded to Microsoft. Crashes are still logged locally in Event Viewer.",
+        "vi": "Ngừng gửi crash dump về Microsoft. Sự cố vẫn được ghi cục bộ trong Event Viewer."
+      },
+      "safety": "safe",
+      "apply": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKLM\\SOFTWARE\\Microsoft\\Windows\\Windows Error Reporting",
+          "name": "Disabled",
+          "kind": "dword",
+          "value": "1"
+        }
+      ],
+      "revert": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKLM\\SOFTWARE\\Microsoft\\Windows\\Windows Error Reporting",
+          "name": "Disabled",
+          "kind": "dword",
+          "value": "0"
+        }
+      ],
+      "tags": [
+        "telemetry"
+      ]
+    },
+    {
+      "id": "privacy.location.off",
+      "category": "privacy",
+      "title": {
+        "en": "Disable location tracking",
+        "vi": "Tắt theo dõi vị trí"
+      },
+      "description": {
+        "en": "Blocks the location service system-wide. Weather, Maps, 'Find my device' and any app that asks for your position will stop working.",
+        "vi": "Chặn dịch vụ vị trí trên toàn hệ thống. Thời tiết, Maps, 'Tìm thiết bị của tôi' và mọi ứng dụng cần vị trí sẽ ngừng hoạt động."
+      },
+      "safety": "caution",
+      "apply": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\LocationAndSensors",
+          "name": "DisableLocation",
+          "kind": "dword",
+          "value": "1"
+        }
+      ],
+      "revert": [
+        {
+          "op": "deleteRegistryValue",
+          "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\LocationAndSensors",
+          "name": "DisableLocation"
+        }
+      ],
+      "tags": [
+        "privacy",
+        "location"
+      ]
+    },
+    {
+      "id": "privacy.suggested-content.off",
+      "category": "privacy",
+      "title": {
+        "en": "Turn off suggested content and lock-screen ads",
+        "vi": "Tắt nội dung gợi ý và quảng cáo màn hình khóa"
+      },
+      "description": {
+        "en": "Disables the Content Delivery Manager feeds that push app suggestions into Start, Settings and the lock screen, and that silently install promoted apps.",
+        "vi": "Vô hiệu hóa các nguồn cấp của Content Delivery Manager — thứ đẩy ứng dụng gợi ý vào Start, Cài đặt và màn hình khóa, đồng thời âm thầm cài các ứng dụng được quảng bá."
+      },
+      "safety": "safe",
+      "apply": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SubscribedContent-338387Enabled",
+          "kind": "dword",
+          "value": "0"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SubscribedContent-338388Enabled",
+          "kind": "dword",
+          "value": "0"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SubscribedContent-338389Enabled",
+          "kind": "dword",
+          "value": "0"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SubscribedContent-353694Enabled",
+          "kind": "dword",
+          "value": "0"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SubscribedContent-353696Enabled",
+          "kind": "dword",
+          "value": "0"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SilentInstalledAppsEnabled",
+          "kind": "dword",
+          "value": "0"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SystemPaneSuggestionsEnabled",
+          "kind": "dword",
+          "value": "0"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SoftLandingEnabled",
+          "kind": "dword",
+          "value": "0"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "RotatingLockScreenOverlayEnabled",
+          "kind": "dword",
+          "value": "0"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "OemPreInstalledAppsEnabled",
+          "kind": "dword",
+          "value": "0"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "PreInstalledAppsEnabled",
+          "kind": "dword",
+          "value": "0"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "ContentDeliveryAllowed",
+          "kind": "dword",
+          "value": "0"
+        }
+      ],
+      "revert": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SubscribedContent-338387Enabled",
+          "kind": "dword",
+          "value": "1"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SubscribedContent-338388Enabled",
+          "kind": "dword",
+          "value": "1"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SubscribedContent-338389Enabled",
+          "kind": "dword",
+          "value": "1"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SubscribedContent-353694Enabled",
+          "kind": "dword",
+          "value": "1"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SubscribedContent-353696Enabled",
+          "kind": "dword",
+          "value": "1"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SilentInstalledAppsEnabled",
+          "kind": "dword",
+          "value": "1"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SystemPaneSuggestionsEnabled",
+          "kind": "dword",
+          "value": "1"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SoftLandingEnabled",
+          "kind": "dword",
+          "value": "1"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "RotatingLockScreenOverlayEnabled",
+          "kind": "dword",
+          "value": "1"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "OemPreInstalledAppsEnabled",
+          "kind": "dword",
+          "value": "1"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "PreInstalledAppsEnabled",
+          "kind": "dword",
+          "value": "1"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "ContentDeliveryAllowed",
+          "kind": "dword",
+          "value": "1"
+        }
+      ],
+      "recommended": true,
+      "tags": [
+        "advertising",
+        "bloatware"
+      ]
+    },
+    {
+      "id": "privacy.copilot.off",
+      "category": "privacy",
+      "title": {
+        "en": "Turn off Windows Copilot",
+        "vi": "Tắt Windows Copilot"
+      },
+      "description": {
+        "en": "Removes the Copilot button and disables the assistant panel via policy.",
+        "vi": "Bỏ nút Copilot và vô hiệu hóa bảng trợ lý thông qua chính sách."
+      },
+      "safety": "safe",
+      "apply": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Policies\\Microsoft\\Windows\\WindowsCopilot",
+          "name": "TurnOffWindowsCopilot",
+          "kind": "dword",
+          "value": "1"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsCopilot",
+          "name": "TurnOffWindowsCopilot",
+          "kind": "dword",
+          "value": "1"
+        }
+      ],
+      "revert": [
+        {
+          "op": "deleteRegistryValue",
+          "key": "HKCU\\Software\\Policies\\Microsoft\\Windows\\WindowsCopilot",
+          "name": "TurnOffWindowsCopilot"
+        },
+        {
+          "op": "deleteRegistryValue",
+          "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsCopilot",
+          "name": "TurnOffWindowsCopilot"
+        }
+      ],
+      "recommended": true,
+      "tags": [
+        "ai"
+      ]
+    },
+    {
+      "id": "privacy.search-highlights.off",
+      "category": "privacy",
+      "title": {
+        "en": "Turn off search highlights",
+        "vi": "Tắt điểm nhấn tìm kiếm"
+      },
+      "description": {
+        "en": "Stops the search box pulling web content, trending topics and illustrations from Bing.",
+        "vi": "Ngừng việc ô tìm kiếm kéo nội dung web, chủ đề thịnh hành và hình minh họa từ Bing."
+      },
+      "safety": "safe",
+      "apply": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SearchSettings",
+          "name": "IsDynamicSearchBoxEnabled",
+          "kind": "dword",
+          "value": "0"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Feeds\\DSB",
+          "name": "ShowDynamicContent",
+          "kind": "dword",
+          "value": "0"
+        }
+      ],
+      "revert": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SearchSettings",
+          "name": "IsDynamicSearchBoxEnabled",
+          "kind": "dword",
+          "value": "1"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Feeds\\DSB",
+          "name": "ShowDynamicContent",
+          "kind": "dword",
+          "value": "1"
+        }
+      ],
+      "recommended": true,
+      "tags": [
+        "search",
+        "advertising"
+      ]
+    },
+    {
+      "id": "perf.fast-startup.off",
+      "category": "performance",
+      "title": {
+        "en": "Disable Fast Startup",
+        "vi": "Tắt Fast Startup"
+      },
+      "description": {
+        "en": "Makes shutdown a real shutdown instead of a partial hibernate. Fixes stale filesystem state that breaks WSL2, Docker, dual-boot and some drivers.",
+        "vi": "Biến shutdown thành tắt máy thật thay vì ngủ đông một phần. Khắc phục trạng thái hệ thống tệp cũ gây lỗi WSL2, Docker, dual-boot và một số driver."
+      },
+      "safety": "safe",
+      "apply": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Power",
+          "name": "HiberbootEnabled",
+          "kind": "dword",
+          "value": "0"
+        }
+      ],
+      "revert": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Power",
+          "name": "HiberbootEnabled",
+          "kind": "dword",
+          "value": "1"
+        }
+      ],
+      "requiresRestart": true,
+      "recommended": true,
+      "tags": [
+        "boot",
+        "developer"
+      ]
+    },
+    {
+      "id": "perf.hibernation.off",
+      "category": "performance",
+      "title": {
+        "en": "Turn off hibernation",
+        "vi": "Tắt chế độ ngủ đông"
+      },
+      "description": {
+        "en": "Deletes hiberfil.sys and frees disk space equal to a large share of your RAM. You lose hibernate and, on laptops, hybrid sleep.",
+        "vi": "Xóa hiberfil.sys và giải phóng dung lượng đĩa tương đương phần lớn dung lượng RAM. Bạn sẽ mất chế độ ngủ đông và, trên laptop, mất cả hybrid sleep."
+      },
+      "safety": "caution",
+      "apply": [
+        {
+          "op": "runCommand",
+          "program": "powercfg",
+          "args": [
+            "/hibernate",
+            "off"
+          ]
+        }
+      ],
+      "revert": [
+        {
+          "op": "runCommand",
+          "program": "powercfg",
+          "args": [
+            "/hibernate",
+            "on"
+          ]
+        }
+      ],
+      "tags": [
+        "disk-space",
+        "power"
+      ]
+    },
+    {
+      "id": "perf.visual-effects.performance",
+      "category": "performance",
+      "title": {
+        "en": "Prefer performance over animations",
+        "vi": "Ưu tiên hiệu năng thay vì hiệu ứng"
+      },
+      "description": {
+        "en": "Switches the visual-effects setting to 'best performance', removing window animations and shadows.",
+        "vi": "Chuyển thiết lập hiệu ứng hình ảnh sang 'hiệu năng tốt nhất', bỏ hiệu ứng động và bóng đổ của cửa sổ."
+      },
+      "safety": "safe",
+      "apply": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects",
+          "name": "VisualFXSetting",
+          "kind": "dword",
+          "value": "2"
+        }
+      ],
+      "revert": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects",
+          "name": "VisualFXSetting",
+          "kind": "dword",
+          "value": "0"
+        }
+      ],
+      "tags": [
+        "ui",
+        "performance"
+      ]
+    },
+    {
+      "id": "perf.transparency.off",
+      "category": "performance",
+      "title": {
+        "en": "Disable transparency effects",
+        "vi": "Tắt hiệu ứng trong suốt"
+      },
+      "description": {
+        "en": "Turns off acrylic and mica blur in the taskbar, Start and Settings. Noticeably cheaper on integrated graphics.",
+        "vi": "Tắt hiệu ứng mờ acrylic và mica ở thanh tác vụ, Start và Cài đặt. Tiết kiệm đáng kể trên card đồ họa tích hợp."
+      },
+      "safety": "safe",
+      "apply": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
+          "name": "EnableTransparency",
+          "kind": "dword",
+          "value": "0"
+        }
+      ],
+      "revert": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
+          "name": "EnableTransparency",
+          "kind": "dword",
+          "value": "1"
+        }
+      ],
+      "tags": [
+        "ui",
+        "performance"
+      ]
+    },
+    {
+      "id": "perf.power-scheme.high",
+      "category": "performance",
+      "title": {
+        "en": "Switch to the High Performance power plan",
+        "vi": "Chuyển sang gói nguồn High Performance"
+      },
+      "description": {
+        "en": "Keeps the CPU at higher clocks instead of favouring efficiency. On a laptop this measurably shortens battery life.",
+        "vi": "Giữ CPU ở xung nhịp cao thay vì ưu tiên tiết kiệm điện. Trên laptop, điều này rút ngắn thời lượng pin một cách rõ rệt."
+      },
+      "safety": "caution",
+      "apply": [
+        {
+          "op": "setPowerScheme",
+          "scheme": "SCHEME_MIN"
+        }
+      ],
+      "revert": [
+        {
+          "op": "setPowerScheme",
+          "scheme": "SCHEME_BALANCED"
+        }
+      ],
+      "tags": [
+        "power"
+      ]
+    },
+    {
+      "id": "perf.sysmain.off",
+      "category": "performance",
+      "title": {
+        "en": "Disable SysMain (Superfetch)",
+        "vi": "Tắt SysMain (Superfetch)"
+      },
+      "description": {
+        "en": "Stops the prefetch service. Helpful against sustained 100% disk usage on older machines; on a modern SSD it usually makes no difference and can slightly slow app launches.",
+        "vi": "Dừng dịch vụ prefetch. Hữu ích khi ổ đĩa liên tục 100% trên máy cũ; trên SSD hiện đại thường không khác biệt và có thể làm ứng dụng mở chậm hơn đôi chút."
+      },
+      "safety": "caution",
+      "apply": [
+        {
+          "op": "setServiceStartup",
+          "service": "SysMain",
+          "startType": "disabled"
+        }
+      ],
+      "revert": [
+        {
+          "op": "setServiceStartup",
+          "service": "SysMain",
+          "startType": "automatic"
+        }
+      ],
+      "tags": [
+        "disk",
+        "services"
+      ]
+    },
+    {
+      "id": "explorer.show-file-extensions",
+      "category": "explorer",
+      "title": {
+        "en": "Always show file extensions",
+        "vi": "Luôn hiện phần mở rộng của tệp"
+      },
+      "description": {
+        "en": "Reveals .exe, .scr and .js suffixes that Windows hides by default — the single most useful anti-phishing setting on the system.",
+        "vi": "Hiện rõ đuôi .exe, .scr, .js mà Windows ẩn mặc định — thiết lập chống lừa đảo hữu ích nhất trên hệ thống."
+      },
+      "safety": "safe",
+      "apply": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "name": "HideFileExt",
+          "kind": "dword",
+          "value": "0"
+        }
+      ],
+      "revert": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "name": "HideFileExt",
+          "kind": "dword",
+          "value": "1"
+        }
+      ],
+      "recommended": true,
+      "tags": [
+        "security",
+        "usability"
+      ]
+    },
+    {
+      "id": "explorer.show-hidden-files",
+      "category": "explorer",
+      "title": {
+        "en": "Show hidden and system files",
+        "vi": "Hiện tệp ẩn và tệp hệ thống"
+      },
+      "description": {
+        "en": "Makes hidden items and protected operating-system files visible in File Explorer.",
+        "vi": "Hiển thị các mục ẩn và tệp hệ điều hành được bảo vệ trong File Explorer."
+      },
+      "safety": "safe",
+      "apply": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "name": "Hidden",
+          "kind": "dword",
+          "value": "1"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "name": "ShowSuperHidden",
+          "kind": "dword",
+          "value": "1"
+        }
+      ],
+      "revert": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "name": "Hidden",
+          "kind": "dword",
+          "value": "2"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "name": "ShowSuperHidden",
+          "kind": "dword",
+          "value": "0"
+        }
+      ],
+      "tags": [
+        "usability"
+      ]
+    },
+    {
+      "id": "explorer.launch-to-this-pc",
+      "category": "explorer",
+      "title": {
+        "en": "Open File Explorer to This PC",
+        "vi": "Mở File Explorer vào This PC"
+      },
+      "description": {
+        "en": "Starts File Explorer on the drive list instead of Quick Access.",
+        "vi": "Khởi động File Explorer ở danh sách ổ đĩa thay vì Quick Access."
+      },
+      "safety": "safe",
+      "apply": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "name": "LaunchTo",
+          "kind": "dword",
+          "value": "1"
+        }
+      ],
+      "revert": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "name": "LaunchTo",
+          "kind": "dword",
+          "value": "2"
+        }
+      ],
+      "tags": [
+        "usability"
+      ]
+    },
+    {
+      "id": "explorer.snap-assist.off",
+      "category": "explorer",
+      "title": {
+        "en": "Turn off Snap Assist",
+        "vi": "Tắt Snap Assist"
+      },
+      "description": {
+        "en": "Stops the pop-up that offers to fill the other half of the screen after you snap a window.",
+        "vi": "Ngừng cửa sổ gợi ý lấp nửa màn hình còn lại sau khi bạn snap một cửa sổ."
+      },
+      "safety": "safe",
+      "apply": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "name": "SnapAssist",
+          "kind": "dword",
+          "value": "0"
+        }
+      ],
+      "revert": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "name": "SnapAssist",
+          "kind": "dword",
+          "value": "1"
+        }
+      ],
+      "tags": [
+        "ui"
+      ]
+    },
+    {
+      "id": "explorer.start-recommendations.off",
+      "category": "explorer",
+      "title": {
+        "en": "Hide the Start menu recommendations",
+        "vi": "Ẩn mục gợi ý trong Start menu"
+      },
+      "description": {
+        "en": "Removes the 'Recommended' strip of recent files and promoted apps from the Start menu.",
+        "vi": "Bỏ dải 'Recommended' chứa tệp gần đây và ứng dụng được quảng bá khỏi Start menu."
+      },
+      "safety": "safe",
+      "apply": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "name": "Start_IrisRecommendations",
+          "kind": "dword",
+          "value": "0"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Explorer",
+          "name": "HideRecommendedSection",
+          "kind": "dword",
+          "value": "1"
+        }
+      ],
+      "revert": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "name": "Start_IrisRecommendations",
+          "kind": "dword",
+          "value": "1"
+        },
+        {
+          "op": "deleteRegistryValue",
+          "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Explorer",
+          "name": "HideRecommendedSection"
+        }
+      ],
+      "recommended": true,
+      "tags": [
+        "ui",
+        "advertising"
+      ]
+    },
+    {
+      "id": "explorer.autoplay.off",
+      "category": "explorer",
+      "title": {
+        "en": "Disable AutoPlay",
+        "vi": "Tắt AutoPlay"
+      },
+      "description": {
+        "en": "Stops Windows acting on removable media as soon as it is inserted — a long-standing malware entry point.",
+        "vi": "Ngừng việc Windows tự hành động với thiết bị lưu trữ rời ngay khi cắm vào — một lối xâm nhập mã độc lâu đời."
+      },
+      "safety": "safe",
+      "apply": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\AutoplayHandlers",
+          "name": "DisableAutoplay",
+          "kind": "dword",
+          "value": "1"
+        }
+      ],
+      "revert": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\AutoplayHandlers",
+          "name": "DisableAutoplay",
+          "kind": "dword",
+          "value": "0"
+        }
+      ],
+      "recommended": true,
+      "tags": [
+        "security"
+      ]
+    },
+    {
+      "id": "explorer.meet-now.hide",
+      "category": "explorer",
+      "title": {
+        "en": "Hide the Meet Now button",
+        "vi": "Ẩn nút Meet Now"
+      },
+      "description": {
+        "en": "Removes the Skype Meet Now icon from the notification area.",
+        "vi": "Bỏ biểu tượng Skype Meet Now khỏi khay thông báo."
+      },
+      "safety": "safe",
+      "apply": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer",
+          "name": "HideSCAMeetNow",
+          "kind": "dword",
+          "value": "1"
+        }
+      ],
+      "revert": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer",
+          "name": "HideSCAMeetNow",
+          "kind": "dword",
+          "value": "0"
+        }
+      ],
+      "tags": [
+        "ui"
+      ]
+    },
+    {
+      "id": "gaming.gamedvr.off",
+      "category": "gaming",
+      "title": {
+        "en": "Turn off Game DVR background recording",
+        "vi": "Tắt ghi hình nền Game DVR"
+      },
+      "description": {
+        "en": "Stops the always-on capture buffer that costs frames in every game. Win+G recording on demand is disabled too.",
+        "vi": "Dừng bộ đệm quay màn hình luôn bật vốn làm giảm FPS trong mọi game. Chức năng quay theo yêu cầu bằng Win+G cũng bị tắt."
+      },
+      "safety": "safe",
+      "apply": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\GameDVR",
+          "name": "AppCaptureEnabled",
+          "kind": "dword",
+          "value": "0"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\GameDVR",
+          "name": "GameDVR_Enabled",
+          "kind": "dword",
+          "value": "0"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\GameDVR",
+          "name": "AllowGameDVR",
+          "kind": "dword",
+          "value": "0"
+        }
+      ],
+      "revert": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\GameDVR",
+          "name": "AppCaptureEnabled",
+          "kind": "dword",
+          "value": "1"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\GameDVR",
+          "name": "GameDVR_Enabled",
+          "kind": "dword",
+          "value": "1"
+        },
+        {
+          "op": "deleteRegistryValue",
+          "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\GameDVR",
+          "name": "AllowGameDVR"
+        }
+      ],
+      "recommended": true,
+      "tags": [
+        "gaming",
+        "performance"
+      ]
+    },
+    {
+      "id": "gaming.game-mode.off",
+      "category": "gaming",
+      "title": {
+        "en": "Turn off Game Mode",
+        "vi": "Tắt Game Mode"
+      },
+      "description": {
+        "en": "Disables the scheduler tweak Windows applies when it detects a game. Helps on some systems, hurts on others — measure before keeping it.",
+        "vi": "Vô hiệu hóa tinh chỉnh bộ lập lịch mà Windows áp dụng khi phát hiện game. Có máy tốt lên, có máy tệ đi — hãy đo hiệu năng trước khi giữ."
+      },
+      "safety": "caution",
+      "apply": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\GameBar",
+          "name": "AllowAutoGameMode",
+          "kind": "dword",
+          "value": "0"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\GameBar",
+          "name": "AutoGameModeEnabled",
+          "kind": "dword",
+          "value": "0"
+        }
+      ],
+      "revert": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\GameBar",
+          "name": "AllowAutoGameMode",
+          "kind": "dword",
+          "value": "1"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\GameBar",
+          "name": "AutoGameModeEnabled",
+          "kind": "dword",
+          "value": "1"
+        }
+      ],
+      "tags": [
+        "gaming"
+      ]
+    },
+    {
+      "id": "gaming.xbox-services.off",
+      "category": "gaming",
+      "title": {
+        "en": "Disable the Xbox Live services",
+        "vi": "Tắt các dịch vụ Xbox Live"
+      },
+      "description": {
+        "en": "Disables Xbox authentication, save sync and networking. Games that sign in through Xbox Live — including Game Pass titles — will stop working until you re-enable these.",
+        "vi": "Vô hiệu hóa xác thực, đồng bộ save và mạng của Xbox. Các game đăng nhập qua Xbox Live — kể cả game Game Pass — sẽ ngừng hoạt động cho đến khi bạn bật lại."
+      },
+      "safety": "caution",
+      "apply": [
+        {
+          "op": "setServiceStartup",
+          "service": "XblAuthManager",
+          "startType": "disabled"
+        },
+        {
+          "op": "setServiceStartup",
+          "service": "XblGameSave",
+          "startType": "disabled"
+        },
+        {
+          "op": "setServiceStartup",
+          "service": "XboxNetApiSvc",
+          "startType": "disabled"
+        },
+        {
+          "op": "setServiceStartup",
+          "service": "XboxGipSvc",
+          "startType": "disabled"
+        }
+      ],
+      "revert": [
+        {
+          "op": "setServiceStartup",
+          "service": "XblAuthManager",
+          "startType": "manual"
+        },
+        {
+          "op": "setServiceStartup",
+          "service": "XblGameSave",
+          "startType": "manual"
+        },
+        {
+          "op": "setServiceStartup",
+          "service": "XboxNetApiSvc",
+          "startType": "manual"
+        },
+        {
+          "op": "setServiceStartup",
+          "service": "XboxGipSvc",
+          "startType": "manual"
+        }
+      ],
+      "tags": [
+        "gaming",
+        "services"
+      ]
+    },
+    {
+      "id": "dev.developer-mode.on",
+      "category": "developer",
+      "title": {
+        "en": "Enable Developer Mode",
+        "vi": "Bật Developer Mode"
+      },
+      "description": {
+        "en": "Allows sideloading unsigned app packages and running unpackaged apps without a developer licence.",
+        "vi": "Cho phép cài đặt gói ứng dụng chưa ký và chạy ứng dụng không đóng gói mà không cần giấy phép nhà phát triển."
+      },
+      "safety": "safe",
+      "apply": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppModelUnlock",
+          "name": "AllowDevelopmentWithoutDevLicense",
+          "kind": "dword",
+          "value": "1"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppModelUnlock",
+          "name": "AllowAllTrustedApps",
+          "kind": "dword",
+          "value": "1"
+        }
+      ],
+      "revert": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppModelUnlock",
+          "name": "AllowDevelopmentWithoutDevLicense",
+          "kind": "dword",
+          "value": "0"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppModelUnlock",
+          "name": "AllowAllTrustedApps",
+          "kind": "dword",
+          "value": "0"
+        }
+      ],
+      "recommended": true,
+      "tags": [
+        "developer"
+      ]
+    },
+    {
+      "id": "dev.long-paths.on",
+      "category": "developer",
+      "title": {
+        "en": "Enable long path support",
+        "vi": "Bật hỗ trợ đường dẫn dài"
+      },
+      "description": {
+        "en": "Lifts the 260-character MAX_PATH limit for applications that opt in. Fixes deep node_modules and Git checkout failures.",
+        "vi": "Gỡ giới hạn 260 ký tự MAX_PATH cho các ứng dụng hỗ trợ. Khắc phục lỗi node_modules quá sâu và lỗi checkout của Git."
+      },
+      "safety": "safe",
+      "apply": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem",
+          "name": "LongPathsEnabled",
+          "kind": "dword",
+          "value": "1"
+        }
+      ],
+      "revert": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem",
+          "name": "LongPathsEnabled",
+          "kind": "dword",
+          "value": "0"
+        }
+      ],
+      "requiresRestart": true,
+      "recommended": true,
+      "tags": [
+        "developer"
+      ]
+    },
+    {
+      "id": "dev.clipboard-history.on",
+      "category": "developer",
+      "title": {
+        "en": "Enable clipboard history (Win+V)",
+        "vi": "Bật lịch sử clipboard (Win+V)"
+      },
+      "description": {
+        "en": "Keeps the last 25 clipboard entries available through Win+V. History is local unless you also turn on cloud sync.",
+        "vi": "Giữ 25 mục clipboard gần nhất, truy cập bằng Win+V. Lịch sử chỉ lưu cục bộ trừ khi bạn bật thêm đồng bộ đám mây."
+      },
+      "safety": "safe",
+      "apply": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Clipboard",
+          "name": "EnableClipboardHistory",
+          "kind": "dword",
+          "value": "1"
+        }
+      ],
+      "revert": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Clipboard",
+          "name": "EnableClipboardHistory",
+          "kind": "dword",
+          "value": "0"
+        }
+      ],
+      "tags": [
+        "developer",
+        "usability"
+      ]
+    },
+    {
+      "id": "dev.taskbar-end-task.on",
+      "category": "developer",
+      "title": {
+        "en": "Add 'End task' to the taskbar right-click menu",
+        "vi": "Thêm 'End task' vào menu chuột phải trên thanh tác vụ"
+      },
+      "description": {
+        "en": "Lets you kill a hung application straight from its taskbar button, without opening Task Manager.",
+        "vi": "Cho phép tắt ứng dụng bị treo ngay từ nút trên thanh tác vụ mà không cần mở Task Manager."
+      },
+      "safety": "safe",
+      "apply": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\\TaskbarDeveloperSettings",
+          "name": "TaskbarEndTask",
+          "kind": "dword",
+          "value": "1"
+        }
+      ],
+      "revert": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\\TaskbarDeveloperSettings",
+          "name": "TaskbarEndTask",
+          "kind": "dword",
+          "value": "0"
+        }
+      ],
+      "recommended": true,
+      "tags": [
+        "developer",
+        "usability"
+      ]
+    },
+    {
+      "id": "network.delivery-optimization.lan",
+      "category": "network",
+      "title": {
+        "en": "Limit Windows Update sharing to the local network",
+        "vi": "Giới hạn chia sẻ Windows Update trong mạng nội bộ"
+      },
+      "description": {
+        "en": "Stops your machine uploading update chunks to strangers on the internet while keeping fast peer downloads inside your own LAN.",
+        "vi": "Ngừng việc máy bạn tải các phần cập nhật lên cho người lạ trên Internet, trong khi vẫn giữ tốc độ tải ngang hàng nhanh trong mạng LAN của bạn."
+      },
+      "safety": "safe",
+      "apply": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DeliveryOptimization",
+          "name": "DODownloadMode",
+          "kind": "dword",
+          "value": "1"
+        }
+      ],
+      "revert": [
+        {
+          "op": "deleteRegistryValue",
+          "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DeliveryOptimization",
+          "name": "DODownloadMode"
+        }
+      ],
+      "recommended": true,
+      "tags": [
+        "network",
+        "bandwidth"
+      ]
+    },
+    {
+      "id": "network.doh.auto",
+      "category": "network",
+      "title": {
+        "en": "Enable DNS over HTTPS when available",
+        "vi": "Bật DNS over HTTPS khi khả dụng"
+      },
+      "description": {
+        "en": "Encrypts DNS lookups to any resolver that supports DoH, so your queries are not readable on the local network.",
+        "vi": "Mã hóa truy vấn DNS tới mọi resolver hỗ trợ DoH, để truy vấn của bạn không bị đọc trên mạng nội bộ."
+      },
+      "safety": "safe",
+      "apply": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Dnscache\\Parameters",
+          "name": "EnableAutoDoh",
+          "kind": "dword",
+          "value": "2"
+        }
+      ],
+      "revert": [
+        {
+          "op": "deleteRegistryValue",
+          "key": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Dnscache\\Parameters",
+          "name": "EnableAutoDoh"
+        }
+      ],
+      "requiresRestart": true,
+      "tags": [
+        "network",
+        "privacy"
+      ]
+    },
+    {
+      "id": "ui.sticky-keys.off",
+      "category": "interface",
+      "title": {
+        "en": "Disable Sticky, Filter and Toggle Keys",
+        "vi": "Tắt Sticky Keys, Filter Keys và Toggle Keys"
+      },
+      "description": {
+        "en": "Stops the accessibility prompts that interrupt you after five Shift presses or a held-down key — a common annoyance while gaming or typing fast.",
+        "vi": "Ngừng các hộp thoại trợ năng làm gián đoạn khi bạn nhấn Shift năm lần hoặc giữ phím — phiền toái phổ biến khi chơi game hoặc gõ nhanh."
+      },
+      "safety": "safe",
+      "apply": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Control Panel\\Accessibility\\StickyKeys",
+          "name": "Flags",
+          "kind": "string",
+          "value": "506"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Control Panel\\Accessibility\\Keyboard Response",
+          "name": "Flags",
+          "kind": "string",
+          "value": "122"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Control Panel\\Accessibility\\ToggleKeys",
+          "name": "Flags",
+          "kind": "string",
+          "value": "58"
+        }
+      ],
+      "revert": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Control Panel\\Accessibility\\StickyKeys",
+          "name": "Flags",
+          "kind": "string",
+          "value": "510"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Control Panel\\Accessibility\\Keyboard Response",
+          "name": "Flags",
+          "kind": "string",
+          "value": "126"
+        },
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Control Panel\\Accessibility\\ToggleKeys",
+          "name": "Flags",
+          "kind": "string",
+          "value": "62"
+        }
+      ],
+      "recommended": true,
+      "tags": [
+        "accessibility",
+        "usability"
+      ]
+    },
+    {
+      "id": "ui.taskbar-animations.off",
+      "category": "interface",
+      "title": {
+        "en": "Disable taskbar animations",
+        "vi": "Tắt hiệu ứng động của thanh tác vụ"
+      },
+      "description": {
+        "en": "Removes the slide and fade transitions on taskbar buttons and previews.",
+        "vi": "Bỏ hiệu ứng trượt và mờ dần trên các nút và bản xem trước của thanh tác vụ."
+      },
+      "safety": "safe",
+      "apply": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "name": "TaskbarAnimations",
+          "kind": "dword",
+          "value": "0"
+        }
+      ],
+      "revert": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "name": "TaskbarAnimations",
+          "kind": "dword",
+          "value": "1"
+        }
+      ],
+      "tags": [
+        "ui",
+        "performance"
+      ]
+    },
+    {
+      "id": "ui.balloon-tips.off",
+      "category": "interface",
+      "title": {
+        "en": "Disable balloon tips",
+        "vi": "Tắt bong bóng nhắc"
+      },
+      "description": {
+        "en": "Suppresses the legacy notification-area pop-ups.",
+        "vi": "Chặn các bong bóng thông báo kiểu cũ ở khay hệ thống."
+      },
+      "safety": "safe",
+      "apply": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "name": "EnableBalloonTips",
+          "kind": "dword",
+          "value": "0"
+        }
+      ],
+      "revert": [
+        {
+          "op": "setRegistryValue",
+          "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "name": "EnableBalloonTips",
+          "kind": "dword",
+          "value": "1"
+        }
+      ],
+      "tags": [
+        "ui"
+      ]
+    },
+    {
+      "id": "cleanup.temp-files",
+      "category": "cleanup",
+      "title": {
+        "en": "Empty the temporary file folders",
+        "vi": "Dọn các thư mục tệp tạm"
+      },
+      "description": {
+        "en": "Deletes the contents of the user and system TEMP directories. Files currently in use are skipped. This action cannot be undone.",
+        "vi": "Xóa nội dung thư mục TEMP của người dùng và hệ thống. Các tệp đang được sử dụng sẽ bị bỏ qua. Hành động này không thể hoàn tác."
+      },
+      "safety": "caution",
+      "apply": [
+        {
+          "op": "runCommand",
+          "program": "cwico:clean-temp",
+          "args": []
+        }
+      ],
+      "revert": [],
+      "tags": [
+        "disk-space",
+        "one-way"
+      ]
+    }
+  ]
+}

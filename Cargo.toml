@@ -1,0 +1,56 @@
+# =============================================================================
+#  tsudev-cwico -- Cargo workspace
+#  Deep Windows debloater & software removal toolkit
+#  https://tsudev.com
+# =============================================================================
+[workspace]
+resolver = "2"
+members = [
+    "crates/cwico-core",
+    "crates/cwico-win",
+    "crates/cwico-cli",
+    "app/src-tauri",
+]
+
+# The desktop app needs a webview toolkit to build — WebView2 on Windows,
+# webkit2gtk on Linux — which a contributor working on the engine has no
+# reason to install. Leaving it out of the default set means a bare
+# `cargo test` works on any host; `cargo build -p cwico-app` opts in.
+default-members = [
+    "crates/cwico-core",
+    "crates/cwico-win",
+    "crates/cwico-cli",
+]
+
+[workspace.package]
+version      = "1.0.0"
+edition      = "2021"
+# 1.82 for `Option::is_none_or`, which the path and command-line
+# parsers read far better with than `map_or(true, ..)`.
+rust-version = "1.82"
+authors      = ["tsudev <contact@tsudev.com>"]
+homepage     = "https://tsudev.com"
+repository   = "https://github.com/tsudev-tsudev/tsudev-cwico"
+license      = "MIT"
+
+[workspace.dependencies]
+cwico-core = { path = "crates/cwico-core" }
+cwico-win  = { path = "crates/cwico-win" }
+
+serde       = { version = "1", features = ["derive"] }
+serde_json  = "1"
+thiserror   = "2"
+anyhow      = "1"
+tracing     = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+time        = { version = "0.3", features = ["formatting", "macros"] }
+rayon       = "1.10"
+walkdir     = "2"
+regex       = "1"
+
+[profile.release]
+opt-level     = "z"
+lto           = true
+codegen-units = 1
+panic         = "abort"
+strip         = true

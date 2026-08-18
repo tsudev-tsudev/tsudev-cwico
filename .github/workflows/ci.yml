@@ -1,0 +1,92 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  # The engine carries the safety logic and makes no OS calls, so its whole
+  # test suite runs on the cheapest runner available.
+  engine:
+    name: Engine tests (Linux)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Formatting
+        run: cargo fmt --all -- --check
+
+      - name: Clippy
+        run: cargo clippy --all-targets -- -D warnings
+
+      - name: Tests
+        run: cargo test
+
+      # The Windows backend cannot run here, but it can be type-checked, which
+      # catches the great majority of mistakes without paying for a Windows
+      # runner on every push.
+      - name: Type-check the Windows backend
+        run: |
+          rustup target add x86_64-pc-windows-gnu
+          cargo check -p cwico-win --target x86_64-pc-windows-gnu
+
+      - name: Host-independent Windows-crate tests
+        run: cargo test -p cwico-win
+
+  # `data/safety-db.json` is the most consequential file in the repository.
+  # These checks fail the build rather than trusting review to catch a typo.
+  safety-database:
+    name: Safety database
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Validate rules, translations and the Critical list
+        run: "cargo test -p cwico-core --features mock safety::"
+
+  ui:
+    name: Front end
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: ui/package-lock.json
+      - run: npm --prefix ui ci
+      - name: Type-check
+        run: npm --prefix ui run typecheck
+      - name: Build
+        run: npm --prefix ui run build
+
+  windows:
+    name: Windows build
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: ui/package-lock.json
+
+      - run: npm --prefix ui ci
+      - name: Build the front end
+        # tauri-build needs `ui/dist` to exist before the Rust crate compiles.
+        run: npm --prefix ui run build
+      - name: Build the whole workspace
+        run: cargo build --workspace --release
+      - name: Windows-only tests
+        run: cargo test -p cwico-win --release

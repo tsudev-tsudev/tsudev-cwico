@@ -1,0 +1,33 @@
+{
+  "name": "tsudev-cwico-ui",
+  "version": "1.0.0",
+  "description": "Front end for tsudev-cwico \u2014 deep Windows debloater and software removal toolkit.",
+  "homepage": "https://tsudev.com",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "sync:data": "node -e \"require('fs').copyFileSync('../data/tweaks.json','public/tweaks.json')\"",
+    "predev": "npm run sync:data",
+    "prebuild": "npm run sync:data"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2.11.1",
+    "@tauri-apps/plugin-opener": "^2.5.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^5.1.0",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.9.0",
+    "vite": "^8.2.1"
+  }
+}

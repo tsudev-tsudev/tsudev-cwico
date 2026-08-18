@@ -1,0 +1,153 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Brand tokens.
+
+   The palette is sampled from tsudev-logo.png: the circuit-board blues of the
+   owl, and the amber of its eyes. `tsu` is blue and `dev` is orange in the
+   wordmark, and those same two hues carry through the whole interface —
+   blue for structure, orange for the moments that need attention.
+--------------------------------------------------------------------------- */
+@theme {
+  --color-tsu-50: #eef7fd;
+  --color-tsu-100: #d5ecfa;
+  --color-tsu-200: #aedaf5;
+  --color-tsu-300: #78c0d8;
+  --color-tsu-400: #3f9fd0;
+  --color-tsu-500: #2482bd;
+  --color-tsu-600: #1a6aa0;
+  --color-tsu-700: #185480;
+  --color-tsu-800: #184878;
+  --color-tsu-900: #0f3155;
+  --color-tsu-950: #071c33;
+
+  --color-dev-50: #fff5ed;
+  --color-dev-100: #ffe7d2;
+  --color-dev-200: #ffcaa4;
+  --color-dev-300: #ffa76b;
+  --color-dev-400: #fb8a41;
+  --color-dev-500: #ef6d18;
+  --color-dev-600: #d2540e;
+  --color-dev-700: #ae3f0f;
+  --color-dev-800: #8b3413;
+  --color-dev-900: #712d13;
+
+  --font-sans: "Segoe UI Variable Text", "Segoe UI", Inter, system-ui,
+    -apple-system, "Noto Sans", sans-serif;
+  --font-mono: "Cascadia Code", "Cascadia Mono", Consolas, ui-monospace,
+    monospace;
+}
+
+/* ---------------------------------------------------------------------------
+   Semantic surface tokens, defined light-first and swapped under
+   `.dark`. Every colour has a definition on `:root`, so nothing renders
+   transparent if a theme class is missing.
+--------------------------------------------------------------------------- */
+:root {
+  --surface-app: #f4f7fa;
+  --surface-panel: #ffffff;
+  --surface-raised: #ffffff;
+  --surface-sunken: #eef2f7;
+  --surface-hover: #e8eff7;
+  --border-subtle: #dbe3ec;
+  --border-strong: #c3d0de;
+  --text-primary: #10202f;
+  --text-secondary: #4a5b6d;
+  --text-muted: #778999;
+  --shadow-panel: 0 1px 2px rgb(16 32 47 / 0.06), 0 8px 24px rgb(16 32 47 / 0.06);
+
+  --tsu-word: var(--color-tsu-600);
+  --dev-word: var(--color-dev-600);
+
+  color-scheme: light;
+}
+
+.dark {
+  --surface-app: #0a141f;
+  --surface-panel: #101d2b;
+  --surface-raised: #16283a;
+  --surface-sunken: #0d1927;
+  --surface-hover: #1b3145;
+  --border-subtle: #1e3549;
+  --border-strong: #2b4a64;
+  --text-primary: #e6eef6;
+  --text-secondary: #a6bacd;
+  --text-muted: #6c8299;
+  --shadow-panel: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px rgb(0 0 0 / 0.32);
+
+  --tsu-word: var(--color-tsu-300);
+  --dev-word: var(--color-dev-300);
+
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--surface-app);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  /* A debloater is a tool, not a document: text selection on chrome elements
+     only produces accidental highlights while dragging across rows. */
+  user-select: none;
+}
+
+/* Anything that is genuinely content the user may want to copy — registry
+   keys, paths, error text — opts back in. */
+.selectable {
+  user-select: text;
+  cursor: text;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 999px;
+  border: 2px solid var(--surface-app);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-tsu-400);
+}
+
+/* Focus rings must survive both themes; the brand blue reads on either. */
+:focus-visible {
+  outline: 2px solid var(--color-tsu-400);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@keyframes cwico-sweep {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(400%);
+  }
+}
+.animate-sweep {
+  animation: cwico-sweep 1.4s ease-in-out infinite;
+}

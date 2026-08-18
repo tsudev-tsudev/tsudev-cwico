@@ -1,0 +1,43 @@
+[package]
+name        = "cwico-app"
+description = "tsudev-cwico desktop application."
+version.workspace      = true
+edition.workspace      = true
+rust-version.workspace = true
+authors.workspace      = true
+homepage.workspace     = true
+repository.workspace   = true
+license.workspace      = true
+
+[lib]
+name       = "cwico_app_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[[bin]]
+name = "cwico"
+path = "src/main.rs"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+cwico-core = { workspace = true }
+tauri      = { version = "2", features = ["protocol-asset"] }
+tauri-plugin-opener = "2"
+serde      = { workspace = true }
+serde_json = { workspace = true }
+tracing    = { workspace = true }
+tracing-subscriber = { workspace = true }
+
+[target.'cfg(windows)'.dependencies]
+cwico-win = { workspace = true }
+
+# See cwico-cli: a non-Windows build always uses the fixture backend.
+[target.'cfg(not(windows))'.dependencies]
+cwico-core = { workspace = true, features = ["mock"] }
+
+[features]
+default = []
+# Force the fixture backend on Windows too, for developing the UI without
+# touching the machine.
+mock = ["cwico-core/mock"]

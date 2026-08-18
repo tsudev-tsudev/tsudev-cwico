@@ -1,0 +1,37 @@
+# ---- Rust ----
+/target
+**/target/
+Cargo.lock.bak
+
+# ---- Node / UI ----
+node_modules/
+dist/
+dist-ssr/
+.vite/
+*.local
+
+# ---- Tauri ----
+/app/src-tauri/target/
+/app/src-tauri/gen/
+
+# ---- Build output ----
+/build/
+/out/
+*.msi
+*.exe.bak
+
+# ---- Editor / OS ----
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+
+# ---- Runtime artifacts (never commit user machine data) ----
+/logs/
+*.cwico-transaction.json
+*.reg.bak
+
+# Generated from data/tweaks.json by `npm run sync:data`
+/ui/public/tweaks.json

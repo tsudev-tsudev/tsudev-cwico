@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/tsudev-tsudev/tsudev-cwico/security/advisories/new
+    about: A way to remove a Critical item, bypass the deletion guard, or execute arbitrary code. Please report privately, not as a public issue.
+  - name: tsudev.com
+    url: https://tsudev.com
+    about: Project homepage.
