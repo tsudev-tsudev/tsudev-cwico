@@ -1,4 +1,13 @@
 # yaml-language-server: $schema=https://aka.ms/winget-manifest.installer.1.6.0.schema.json
+#
+# PLACEHOLDER. Do not fill the hash or the ProductCode in by hand.
+#
+# Tauri's builds are not reproducible, so both values change with every build:
+# two runs of the same commit produced different MSI hashes and different
+# ProductCodes. The release workflow therefore generates this file from the
+# MSI it just built (tools/winget-manifest.ps1) and attaches it to the run's
+# artefacts as `winget-installer-manifest.yaml`. Copy that over this file when
+# submitting to microsoft/winget-pkgs.
 PackageIdentifier: tsudev.cwico
 PackageVersion: 1.0.0
 MinimumOSVersion: 10.0.19041.0
