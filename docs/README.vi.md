@@ -202,6 +202,42 @@ từ, nên `--name Edge` chọn *Microsoft Edge* chứ không chọn nhầm
 
 ---
 
+## Lộ trình
+
+- [x] Rà quét Registry, AppX, gói nạp sẵn, dịch vụ, tác vụ lập lịch, khởi động cùng máy
+- [x] Cơ sở dữ liệu an toàn với lớp Trọng yếu bị chặn cứng
+- [x] Điểm khôi phục + hoàn tác `.reg` + nhật ký giao dịch
+- [x] Xóa tận gốc có bộ chặn an toàn
+- [x] Ứng dụng desktop song ngữ (Việt / Anh)
+- [x] CLI headless
+- [x] Bộ cài MSI và NSIS, đã build và kiểm chứng trên runner Windows
+- [x] Manifest MSIX kèm ghi chú nộp Store
+- [x] Manifest `winget` tự sinh khi phát hành
+
+Đã sẵn sàng, chờ điều chỉ bạn cung cấp được:
+
+- [ ] **Chạy thử trên Windows thật.** Mọi thứ compile và test pass trên runner
+      Windows, nhưng chưa phiên bản nào thực sự gọi `SRSetRestorePointW` hay
+      service control manager trên máy sống. Hãy bắt đầu bằng `cwico plan` —
+      lệnh này không thay đổi gì.
+- [ ] **Ký số.** Bộ cài chưa ký vẫn chạy được, nhưng SmartScreen sẽ cảnh báo ở
+      lần mở đầu — ấn tượng không tốt với công cụ đòi quyền Administrator.
+      Đặt `TAURI_SIGNING_PRIVATE_KEY` trong repository secrets.
+- [ ] **Nộp Microsoft Store.** Cần tài khoản Partner Center; manifest và ghi
+      chú cho người duyệt nằm ở [`packaging/msix/`](../packaging/msix/).
+- [ ] **Đăng lên `winget`.** Cần một bản phát hành có tag, rồi gửi pull request
+      sang `microsoft/winget-pkgs` kèm manifest đã sinh.
+
+Việc thực sự còn ở tương lai:
+
+- [ ] Port sang Linux (`cwico-linux`: liệt kê apt/dnf/flatpak/snap)
+- [ ] Port sang macOS
+
+Trait `PlatformBackend` chính là chỗ để các nền tảng khác cắm vào; bộ máy, mô
+hình an toàn và toàn bộ giao diện vốn đã sẵn sàng đa nền tảng.
+
+---
+
 ## Đóng góp cho cơ sở dữ liệu an toàn
 
 `data/safety-db.json` là file có giá trị nhất trong kho mã này, và cũng dễ đóng

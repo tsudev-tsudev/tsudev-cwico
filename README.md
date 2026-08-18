@@ -296,8 +296,26 @@ cargo test
 - [x] Deep clean with guard rails
 - [x] Bilingual desktop app (Vietnamese / English)
 - [x] Headless CLI
-- [ ] Microsoft Store submission (MSIX)
-- [ ] `winget` manifest publication
+- [x] MSI and NSIS installers, built and verified on a Windows runner
+- [x] MSIX manifest and Store submission notes
+- [x] `winget` manifest generated automatically at release time
+
+Ready, but waiting on something only a human can supply:
+
+- [ ] **Runtime testing on real Windows.** Everything compiles and its tests
+      pass on a Windows runner, but no version of this has yet driven
+      `SRSetRestorePointW` or the service control manager on a live machine.
+      Start with `cwico plan`, which changes nothing.
+- [ ] **Code signing.** Unsigned installers work, but SmartScreen warns on
+      first run — a poor first impression for a tool that asks for
+      Administrator. Set `TAURI_SIGNING_PRIVATE_KEY` in the repository secrets.
+- [ ] **Microsoft Store submission.** Needs a Partner Center account; the
+      manifest and the reviewer notes are in [`packaging/msix/`](packaging/msix/).
+- [ ] **`winget` publication.** Needs a tagged release, then a pull request to
+      `microsoft/winget-pkgs` with the generated manifest.
+
+Genuinely future work:
+
 - [ ] Linux port (`cwico-linux`: apt/dnf/flatpak/snap inventory)
 - [ ] macOS port
 
