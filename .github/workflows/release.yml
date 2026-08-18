@@ -4,6 +4,11 @@ on:
   push:
     tags: ["v*"]
   workflow_dispatch:
+    inputs:
+      publish:
+        description: "Create a draft GitHub release (tag pushes always do)"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -24,12 +29,16 @@ jobs:
 
       - run: npm --prefix ui ci
 
-      - name: Build MSI and NSIS installers
+      # A tag push publishes a draft release; a manual run just produces the
+      # artefacts, so the packaging pipeline can be exercised without leaving a
+      # half-finished release behind.
+      - name: Build installers and draft the release
+        if: startsWith(github.ref, 'refs/tags/v') || inputs.publish
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # Set these to sign the installers. Unsigned builds still work but
-          # SmartScreen will warn on first run, which for a tool that asks for
+          # SmartScreen warns on first run, which for a tool that asks for
           # Administrator is a bad first impression.
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
@@ -40,14 +49,24 @@ jobs:
           releaseDraft: true
           args: --verbose
 
+      - name: Build installers only
+        if: "!(startsWith(github.ref, 'refs/tags/v') || inputs.publish)"
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          projectPath: app/src-tauri
+          args: --verbose
+
       - name: Build the CLI
         run: cargo build -p cwico-cli --release
 
       - name: Record installer hashes for the winget manifest
         shell: pwsh
         run: |
-          Get-ChildItem -Recurse -Include *.msi,*.exe `
-            app/src-tauri/target/release/bundle |
+          $bundle = "app/src-tauri/target/release/bundle"
+          if (-not (Test-Path $bundle)) { $bundle = "target/release/bundle" }
+          Get-ChildItem -Recurse -Include *.msi,*.exe $bundle |
             ForEach-Object {
               "{0}  {1}" -f (Get-FileHash $_ -Algorithm SHA256).Hash, $_.Name
             } | Tee-Object -FilePath sha256sums.txt
@@ -55,8 +74,11 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: installers
+          if-no-files-found: error
           path: |
             app/src-tauri/target/release/bundle/**/*.msi
             app/src-tauri/target/release/bundle/**/*.exe
+            target/release/bundle/**/*.msi
+            target/release/bundle/**/*.exe
             target/release/cwico.exe
             sha256sums.txt
