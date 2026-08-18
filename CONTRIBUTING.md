@@ -3,7 +3,7 @@
 
 # Contributing
 
-<a href="https://tsudev.com"><b><span style="color:#2482bd">tsu</span><span style="color:#ef6d18">dev</span></b></a> · <a href="https://tsudev.com">tsudev.com</a>
+<a href="https://tsudev.com"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/brand/tsudev-wordmark-dark.png"><img src="assets/brand/tsudev-wordmark.png" alt="tsudev" height="24"></picture></a> · <a href="https://tsudev.com">tsudev.com</a>
 </div>
 
 ---

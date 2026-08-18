@@ -1,15 +1,13 @@
 <div align="center">
 
 <a href="https://tsudev.com">
-  <img src="../assets/brand/tsudev-logo.png" alt="tsudev" width="120" height="151">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="../assets/brand/tsudev-wordmark-dark.png">
+    <img src="../assets/brand/tsudev-wordmark.png" alt="tsudev" width="320">
+  </picture>
 </a>
 
-<h1>
-  <a href="https://tsudev.com" style="text-decoration:none">
-    <span style="color:#2482bd">tsu</span><span style="color:#ef6d18">dev</span>
-  </a>
-  &nbsp;cwico
-</h1>
+<h1>cwico</h1>
 
 **Bộ công cụ rà quét và gỡ bỏ phần mềm Windows chuyên sâu**
 
@@ -232,10 +230,9 @@ MIT © [tsudev](https://tsudev.com)
 <div align="center">
 <br>
 <a href="https://tsudev.com">
-  <img src="../assets/brand/tsudev-logo.png" alt="tsudev" width="48" height="61">
-</a>
-<br>
-<a href="https://tsudev.com" style="text-decoration:none">
-  <b><span style="color:#2482bd">tsu</span><span style="color:#ef6d18">dev</span></b>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="../assets/brand/tsudev-wordmark-dark.png">
+    <img src="../assets/brand/tsudev-wordmark.png" alt="tsudev" width="180">
+  </picture>
 </a>
 </div>
