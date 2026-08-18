@@ -11,6 +11,11 @@
 
 **Bộ công cụ rà quét và gỡ bỏ phần mềm Windows chuyên sâu**
 
+[![CI](https://github.com/tsudev-tsudev/tsudev-cwico/actions/workflows/ci.yml/badge.svg)](https://github.com/tsudev-tsudev/tsudev-cwico/actions/workflows/ci.yml)
+[![Giấy phép: MIT](https://img.shields.io/badge/gi%E1%BA%A5y%20ph%C3%A9p-MIT-2482bd)](../LICENSE)
+[![Rust](https://img.shields.io/badge/rust-1.82%2B-ef6d18)](https://www.rust-lang.org)
+[![Quy tắc an toàn](https://img.shields.io/badge/quy%20t%E1%BA%AFc%20an%20to%C3%A0n-58-2482bd)](../data/safety-db.json)
+
 [tsudev.com](https://tsudev.com) · [Bắt đầu](#bắt-đầu) · [Cơ chế an toàn](#cơ-chế-an-toàn) · [English](../README.md)
 
 </div>

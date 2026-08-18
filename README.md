@@ -12,6 +12,12 @@
 **Deep Windows debloater &amp; software removal toolkit**<br>
 *Bộ công cụ rà quét và gỡ bỏ phần mềm Windows chuyên sâu*
 
+[![CI](https://github.com/tsudev-tsudev/tsudev-cwico/actions/workflows/ci.yml/badge.svg)](https://github.com/tsudev-tsudev/tsudev-cwico/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-2482bd)](LICENSE)
+[![Rust](https://img.shields.io/badge/rust-1.82%2B-ef6d18)](https://www.rust-lang.org)
+[![Safety rules](https://img.shields.io/badge/safety%20rules-58-2482bd)](data/safety-db.json)
+[![Tests](https://img.shields.io/badge/tests-128-2482bd)](#tests)
+
 [tsudev.com](https://tsudev.com) · [Quick start](#quick-start) · [Safety model](#the-safety-model) · [Tiếng Việt](docs/README.vi.md)
 
 </div>
