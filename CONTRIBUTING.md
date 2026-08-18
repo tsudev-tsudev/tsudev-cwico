@@ -118,6 +118,15 @@ instead of only type-checking them.
 
 ## Working on the front end
 
+> **Paths in `tauri.conf.json` have two different bases.** `frontendDist` is
+> relative to `tauri.conf.json` itself (`app/src-tauri/`), while the
+> `beforeDevCommand` and `beforeBuildCommand` hooks run from the *app
+> directory* one level up (`app/`). That is why one says `../../ui/dist` and
+> the other says `../ui`. Getting this wrong fails only in `cargo tauri
+> build`, not in `cargo build`, so CI's Windows job will not catch it — the
+> release workflow will.
+
+
 ```bash
 npm --prefix ui install
 npm --prefix ui run dev     # opens in a browser against src/fixtures.ts
