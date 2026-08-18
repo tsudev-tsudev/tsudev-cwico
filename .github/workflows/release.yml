@@ -34,7 +34,7 @@ jobs:
       # half-finished release behind.
       - name: Build installers and draft the release
         if: startsWith(github.ref, 'refs/tags/v') || inputs.publish
-        uses: tauri-apps/tauri-action@v0
+        uses: tauri-apps/tauri-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # Set these to sign the installers. Unsigned builds still work but
@@ -51,7 +51,7 @@ jobs:
 
       - name: Build installers only
         if: "!(startsWith(github.ref, 'refs/tags/v') || inputs.publish)"
-        uses: tauri-apps/tauri-action@v0
+        uses: tauri-apps/tauri-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
