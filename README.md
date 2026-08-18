@@ -51,6 +51,54 @@ Removal runs a four-step flow per item:
 
 ---
 
+## What it looks like
+
+<div align="center">
+
+<img src="docs/screenshots/scan-light-vi.png" alt="The inventory, showing each item's safety class and the reason for it" width="820">
+
+*Every row carries its classification and **why**. A user deciding about
+Microsoft Edge should not have to hover to learn that Windows renders PDF
+previews with it.*
+
+<br>
+
+<img src="docs/screenshots/plan-light-en.png" alt="The removal plan, listing the backup steps and the exact steps per item" width="820">
+
+*Nothing happens until you have seen the plan: the restore point and `.reg`
+export that run first, then the exact steps for each item — and anything the
+engine refused, with the reason.*
+
+<br>
+
+<img src="docs/screenshots/caution-dark-vi.png" alt="The per-item confirmation dialog for a Caution item" width="820">
+
+*Ticking a checkbox is not the acknowledgement. `Caution` and `Unknown` items
+open this, and it is the only thing in the interface that sets the `confirmed`
+flag the engine requires.*
+
+<br>
+
+<img src="docs/screenshots/tweaks-dark-vi.png" alt="The tweaks catalogue" width="820">
+
+*The old PowerShell script's twelve fixed steps, now 36 individually
+selectable changes — each with a safety class, a revert path and an
+explanation of what it costs.*
+
+<br>
+
+<img src="docs/screenshots/about-light-en.png" alt="The about panel showing safety database rule counts" width="820">
+
+*How much protection is actually loaded, and where your rollback artefacts go.*
+
+<sub>Rendered from the fixture backend (`cwico-core`'s `MockBackend`), not a
+live scan — which is also how the interface is developed and reviewed without a
+Windows machine in the loop.</sub>
+
+</div>
+
+---
+
 ## The safety model
 
 A debloater's failure mode is an unbootable machine, so three independent

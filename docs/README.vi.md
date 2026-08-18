@@ -49,6 +49,53 @@ Quy trình gỡ bỏ gồm bốn bước cho mỗi mục:
 
 ---
 
+## Giao diện
+
+<div align="center">
+
+<img src="screenshots/scan-light-vi.png" alt="Danh sách phần mềm kèm mức an toàn và lý do" width="820">
+
+*Mỗi dòng đều hiện mức phân loại và **lý do**. Người dùng đang cân nhắc gỡ
+Microsoft Edge không phải rê chuột mới biết Windows dùng nó để xem trước PDF.*
+
+<br>
+
+<img src="screenshots/plan-light-en.png" alt="Kế hoạch gỡ bỏ với các bước sao lưu và từng bước cho mỗi mục" width="820">
+
+*Không có gì xảy ra trước khi bạn xem kế hoạch: điểm khôi phục và bản xuất
+`.reg` chạy trước, rồi đến từng bước cụ thể cho mỗi mục — kèm những gì bộ máy
+đã từ chối và lý do.*
+
+<br>
+
+<img src="screenshots/caution-dark-vi.png" alt="Hộp thoại xác nhận riêng cho mục Cẩn trọng" width="820">
+
+*Tích ô không phải là xác nhận. Mục `Cẩn trọng` và `Chưa rõ` sẽ mở hộp thoại
+này, và đây là thứ duy nhất trong giao diện đặt cờ `confirmed` mà bộ máy yêu
+cầu.*
+
+<br>
+
+<img src="screenshots/tweaks-dark-vi.png" alt="Danh mục tinh chỉnh hệ thống" width="820">
+
+*Mười hai bước cố định của script PowerShell cũ, nay thành 36 thay đổi chọn
+riêng được — mỗi thay đổi có mức an toàn, đường hoàn tác và giải thích cái giá
+phải trả.*
+
+<br>
+
+<img src="screenshots/about-light-en.png" alt="Bảng giới thiệu hiển thị số quy tắc an toàn" width="820">
+
+*Mức bảo vệ thực sự đang được nạp, và nơi lưu các bản sao lưu để khôi phục.*
+
+<sub>Ảnh render từ fixture backend (`MockBackend` của `cwico-core`), không phải
+kết quả quét máy thật — đây cũng là cách giao diện được phát triển và kiểm tra
+mà không cần máy Windows.</sub>
+
+</div>
+
+---
+
 ## Cơ chế an toàn
 
 Sự cố tệ nhất của một công cụ debloat là chiếc máy không khởi động được. Có ba
