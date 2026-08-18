@@ -53,6 +53,12 @@ jobs:
       - name: Validate rules, translations and the Critical list
         run: "cargo test -p cwico-core --features mock safety::"
 
+      - name: Check the documentation still matches the project
+        # "58 safety rules" stays in the README long after someone adds the
+        # 59th, and the first person to notice is a reader who then distrusts
+        # everything else on the page.
+        run: python3 tools/check_docs.py
+
   ui:
     name: Front end
     runs-on: ubuntu-latest

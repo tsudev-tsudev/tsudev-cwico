@@ -165,6 +165,7 @@ cargo fmt --all
 cargo clippy --all-targets
 cargo test
 npm --prefix ui run build
+python3 tools/check_docs.py   # if you changed a rule or tweak count
 ```
 
 ## Releasing
