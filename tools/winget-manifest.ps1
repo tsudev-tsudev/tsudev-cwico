@@ -62,7 +62,13 @@ $record = $view.GetType().InvokeMember("Fetch", "InvokeMethod", $null, $view, $n
 if (-not $record) { throw "the MSI has no ProductCode property" }
 $productCode = $record.GetType().InvokeMember("StringData", "GetProperty", $null, $record, 1)
 
-if (-not $Version) {
+# `github.ref_name` is the tag on a tag push but the *branch* name on a manual
+# run, so an emptiness check is not enough — "main" is a non-empty value that
+# is not a version. Fall back unless it actually looks like one.
+if ($Version -notmatch '^v?\d+\.\d+') {
+    if ($Version) {
+        Write-Host "ref '$Version' is not a version; reading tauri.conf.json instead"
+    }
     $conf = Get-Content "app/src-tauri/tauri.conf.json" -Raw | ConvertFrom-Json
     $Version = $conf.version
 }
