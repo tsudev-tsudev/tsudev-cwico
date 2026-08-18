@@ -34,7 +34,7 @@ jobs:
       # half-finished release behind.
       - name: Build installers and draft the release
         if: startsWith(github.ref, 'refs/tags/v') || inputs.publish
-        uses: tauri-apps/tauri-action@v0
+        uses: tauri-apps/tauri-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # Set these to sign the installers. Unsigned builds still work but
@@ -51,7 +51,7 @@ jobs:
 
       - name: Build installers only
         if: "!(startsWith(github.ref, 'refs/tags/v') || inputs.publish)"
-        uses: tauri-apps/tauri-action@v0
+        uses: tauri-apps/tauri-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -61,7 +61,7 @@ jobs:
       - name: Build the CLI
         run: cargo build -p cwico-cli --release
 
-      - name: Record installer hashes for the winget manifest
+      - name: Record installer hashes
         shell: pwsh
         run: |
           $bundle = "app/src-tauri/target/release/bundle"
@@ -70,6 +70,15 @@ jobs:
             ForEach-Object {
               "{0}  {1}" -f (Get-FileHash $_ -Algorithm SHA256).Hash, $_.Name
             } | Tee-Object -FilePath sha256sums.txt
+
+      - name: Generate the winget installer manifest
+        shell: pwsh
+        # The SHA256 and ProductCode change with every build, so the manifest
+        # is generated rather than hand-edited at release time.
+        run: >
+          ./tools/winget-manifest.ps1
+          -Repository "${{ github.repository }}"
+          -Version "${{ github.ref_name }}"
 
       - uses: actions/upload-artifact@v7
         with:
@@ -82,3 +91,4 @@ jobs:
             target/release/bundle/**/*.exe
             target/release/cwico.exe
             sha256sums.txt
+            winget-installer-manifest.yaml

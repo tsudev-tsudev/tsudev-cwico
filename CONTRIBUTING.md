@@ -167,6 +167,23 @@ cargo test
 npm --prefix ui run build
 ```
 
+## Releasing
+
+```bash
+git tag v1.0.1 && git push origin v1.0.1
+```
+
+That runs `.github/workflows/release.yml`, which builds the MSI and NSIS
+installers on a Windows runner, drafts a GitHub release, and generates
+`winget-installer-manifest.yaml` with the real SHA256 and ProductCode —
+both change with every build, so neither is ever copied by hand. Paste that
+file over `packaging/winget/manifests/.../tsudev.cwico.installer.yaml` when
+submitting to winget.
+
+Running the workflow manually (`gh workflow run release.yml`) builds the same
+installers and uploads them as artefacts without drafting a release, which is
+how to check the packaging still works without cutting a version.
+
 ## Commit style
 
 Present tense, describe the effect rather than the mechanism:
