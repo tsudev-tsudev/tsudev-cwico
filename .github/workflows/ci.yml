@@ -59,6 +59,11 @@ jobs:
         # everything else on the page.
         run: python3 tools/check_docs.py
 
+      - name: Check the version encoding and that every manifest agrees
+        # The updater compares versions to decide whether a user is out of
+        # date, so a mapping that sorts wrongly stops deliveries silently.
+        run: python3 tools/test_version.py
+
   ui:
     name: Front end
     runs-on: ubuntu-latest

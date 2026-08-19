@@ -1,10 +1,30 @@
 # Changelog
 
-All notable changes to this project are documented here.
-Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/);
-versioning follows [SemVer](https://semver.org/spec/v2.0.0.html).
+All notable changes to this project are documented here, following
+[Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [1.0.0] — 2026-08-19
+## Versioning
+
+Releases are named by date. The release published on 19 August 2026 is
+`tsudev-cwico-v26.8.19`; a second release the same day is
+`tsudev-cwico-v26.8.19.2`.
+
+Cargo, the MSI bundler and the updater all require three-component semver —
+the updater *compares* versions to decide whether a user is out of date — so
+each name maps to a semver whose patch field carries the day and the
+release-of-day counter:
+
+| Release | semver |
+|---|---|
+| `tsudev-cwico-v26.8.19` | `26.8.1901` |
+| `tsudev-cwico-v26.8.19.2` | `26.8.1902` |
+| `tsudev-cwico-v26.8.20` | `26.8.2001` |
+| `tsudev-cwico-v26.9.1` | `26.9.101` |
+
+`tools/version.py` is the only thing that should ever compute a version;
+`tools/test_version.py` checks the mapping still sorts in release order.
+
+## tsudev-cwico-v26.8.19 — 2026-08-19
 
 First release. The project was previously a single 640-line PowerShell script
 (`legacy/Optimize_Win11_For_Dev.ps1`) that applied twelve fixed groups of

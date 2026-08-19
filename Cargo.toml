@@ -23,7 +23,7 @@ default-members = [
 ]
 
 [workspace.package]
-version      = "1.0.0"
+version      = "26.8.1901"
 edition      = "2021"
 # 1.82 for `Option::is_none_or`, which the path and command-line
 # parsers read far better with than `map_or(true, ..)`.

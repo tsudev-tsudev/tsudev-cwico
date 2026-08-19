@@ -91,5 +91,5 @@ Release binaries are built by
 from a tagged commit, and each release publishes `sha256sums.txt`.
 
 ```powershell
-Get-FileHash .\tsudev-cwico_1.0.0_x64_en-US.msi -Algorithm SHA256
+Get-FileHash .\tsudev-cwico_26.8.1901_x64_en-US.msi -Algorithm SHA256
 ```

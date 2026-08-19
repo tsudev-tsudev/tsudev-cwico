@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://aka.ms/winget-manifest.defaultLocale.1.6.0.schema.json
 PackageIdentifier: tsudev.cwico
-PackageVersion: 1.0.0
+PackageVersion: 26.8.1901
 PackageLocale: en-US
 Publisher: tsudev
 PublisherUrl: https://tsudev.com
@@ -40,7 +40,7 @@ Tags:
   - windows-11
   - appx
   - uwp
-ReleaseNotesUrl: https://github.com/tsudev-tsudev/tsudev-cwico/releases/tag/v1.0.0
+ReleaseNotesUrl: https://github.com/tsudev-tsudev/tsudev-cwico/releases/tag/tsudev-cwico-v26.8.19
 Documentations:
   - DocumentLabel: Safety model
     DocumentUrl: https://github.com/tsudev-tsudev/tsudev-cwico/blob/main/docs/SAFETY.md

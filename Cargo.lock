@@ -637,7 +637,7 @@ checksum = "52560adf09603e58c9a7ee1fe1dcb95a16927b17c127f0ac02d6e768a0e25bc1"
 
 [[package]]
 name = "cwico-app"
-version = "1.0.0"
+version = "26.8.1901"
 dependencies = [
  "cwico-core",
  "cwico-win",
@@ -652,7 +652,7 @@ dependencies = [
 
 [[package]]
 name = "cwico-cli"
-version = "1.0.0"
+version = "26.8.1901"
 dependencies = [
  "cwico-core",
  "cwico-win",
@@ -663,7 +663,7 @@ dependencies = [
 
 [[package]]
 name = "cwico-core"
-version = "1.0.0"
+version = "26.8.1901"
 dependencies = [
  "regex",
  "serde",
@@ -675,7 +675,7 @@ dependencies = [
 
 [[package]]
 name = "cwico-win"
-version = "1.0.0"
+version = "26.8.1901"
 dependencies = [
  "cwico-core",
  "rayon",

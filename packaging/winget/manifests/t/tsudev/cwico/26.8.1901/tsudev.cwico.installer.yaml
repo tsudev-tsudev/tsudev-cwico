@@ -9,7 +9,7 @@
 # artefacts as `winget-installer-manifest.yaml`. Copy that over this file when
 # submitting to microsoft/winget-pkgs.
 PackageIdentifier: tsudev.cwico
-PackageVersion: 1.0.0
+PackageVersion: 26.8.1901
 MinimumOSVersion: 10.0.19041.0
 InstallerType: wix
 Scope: machine
@@ -24,7 +24,7 @@ ElevationRequirement: elevatesSelf
 ReleaseDate: 2026-08-19
 Installers:
   - Architecture: x64
-    InstallerUrl: https://github.com/tsudev-tsudev/tsudev-cwico/releases/download/v1.0.0/tsudev-cwico_1.0.0_x64_en-US.msi
+    InstallerUrl: https://github.com/tsudev-tsudev/tsudev-cwico/releases/download/tsudev-cwico-v26.8.19/tsudev-cwico_26.8.1901_x64_en-US.msi
     # Replace with the real digest at release time:
     #   Get-FileHash .\tsudev-cwico_1.0.0_x64_en-US.msi -Algorithm SHA256
     InstallerSha256: 0000000000000000000000000000000000000000000000000000000000000000
