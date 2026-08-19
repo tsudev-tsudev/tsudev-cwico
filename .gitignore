@@ -35,3 +35,7 @@ Thumbs.db
 
 # Generated from data/tweaks.json by `npm run sync:data`
 /ui/public/tweaks.json
+
+# Python bytecode from tools/
+__pycache__/
+*.pyc

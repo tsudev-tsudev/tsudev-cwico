@@ -47,7 +47,7 @@ READMEs, the version encoding, or the three manifests have drifted.
 
 | Area | State | How it was verified |
 |---|---|---|
-| Engine, safety database, planner, guard | Done | 128 tests, incl. adversarial ones |
+| Engine, safety database, planner, guard | Done | 136 tests, incl. adversarial ones |
 | Windows backend (`cwico-win`) | Compiles, unit tests pass | CI Windows runner, MSVC |
 | Desktop app + CLI | Done | CI + headless-Chromium screenshots |
 | MSI / NSIS installers | Done | Release workflow; artefacts downloaded and inspected |
@@ -70,17 +70,67 @@ READMEs, the version encoding, or the three manifests have drifted.
 
 ---
 
-## In flight — the current work
+## What to do next
 
-Restructuring for release management and auto-update. Tasks, in order:
+Everything planned so far is finished and released. The work now splits three
+ways, and **the first group is the only part a session working in this
+repository can actually do** — the other two need the maintainer or a Windows
+machine.
 
-- [x] 11 · Session log system (`docs/sessions/`)
-- [x] 12 · CalVer versioning + `tools/version.py`
-- [x] 13 · Updater signing keypair into GitHub Secrets
-- [x] 14 · `tauri-plugin-updater` integration + IPC commands
-- [x] 15 · Mandatory update screen in the UI
-- [x] 16 · Release workflow publishing a signed `latest.json`
-- [x] 17 · Authenticode documentation, docs refresh
+### A · Available now, no Windows machine and no permissions needed
+
+Ordered by value.
+
+1. **Add rules to `data/safety-db.json`.** This is the highest-value work left
+   and it is pure data. Every item that matches no rule resolves to `Unknown`,
+   which pushes the judgement onto a user who has less context than the
+   database could. Gaps worth closing, roughly in order of how often they
+   appear on a real machine:
+   * OEM preloads by vendor — HP, Dell, Lenovo, Acer, Asus, MSI each ship a
+     dozen named utilities, and the current rules only catch the generic ones.
+   * Common third-party software that people *do* want to remove and that has
+     residue worth sweeping — Adobe Creative Cloud components, Java, Zoom,
+     Discord, Steam, Epic, iTunes, Nvidia GeForce Experience.
+   * Windows 11 24H2/25H2 packages this database predates.
+
+   `CONTRIBUTING.md` has the rule format. Classify one step stricter than you
+   think: a wrong `caution` costs a click, a wrong `safe` costs a feature the
+   user never agreed to lose. Run `cargo test -p cwico-core --features mock
+   safety::` after.
+
+2. **Extract more pure logic out of `cwico-win`.** The three host-independent
+   modules (`cmdline`, `naming`, `protected`) each turned up a real bug the
+   moment their tests could run. `registry.rs` value decoding, `startup.rs`
+   target resolution and `scanner.rs` item-id construction are the same shape
+   of code and are currently only type-checked.
+
+3. **Accessibility in the item table.** It is the surface users spend their
+   time in, it is a checkbox list that drives destructive actions, and it has
+   never been driven by keyboard alone or read by a screen reader.
+
+4. **Grow `data/tweaks.json`.** Same shape of work as the safety database,
+   lower stakes.
+
+5. **Start `cwico-linux`.** `PlatformBackend` is the seam; `MockBackend` shows
+   the shape. apt/dnf/flatpak/snap inventory would come first. Large, and
+   nothing else depends on it.
+
+### B · Blocked on the maintainer
+
+1. **Sign the Microsoft CLA** — winget PR #420321 cannot proceed at all until
+   then, and their validation does not run beforehand.
+2. **Submit the SignPath application** (deferred deliberately: internal testing
+   first). Text is written; see below.
+
+### C · Blocked on a Windows machine
+
+1. **Run it.** `cwico info`, `cwico scan`, `cwico plan --safe-only` — none
+   change anything. This is the single largest gap in the project.
+2. **Test the update path end to end.** Needs two published releases: install
+   `v26.8.19`, publish a second, watch the gate appear and the installer hand
+   over. The UI states and the signatures are verified; the handoff is not.
+
+---
 
 ### Release `tsudev-cwico-v26.8.19` — published
 
@@ -191,8 +241,11 @@ Deferred by the maintainer: internal testing first, code signing later.
   `cargo tauri build`, which CI's Windows job does not run — the release
   workflow does.
 * **Tauri builds are not reproducible.** Two runs of the same commit produced
-  different MSI hashes *and* different ProductCodes. The checked-in winget
-  manifest is therefore a placeholder; the real one is generated per build.
+  different MSI hashes *and* different ProductCodes, so a winget manifest is
+  only valid for the exact build it was generated from. The one checked in for
+  `26.8.1901` carries the real values from the published release;
+  `tools/apply_winget_manifest.py` folds a new build's in and refuses a
+  placeholder hash.
 * **The release workflow can be run manually** (`gh workflow run release.yml`)
   to build installers without drafting a release. Use it to check packaging
   without cutting a version.
@@ -202,7 +255,7 @@ Deferred by the maintainer: internal testing first, code signing later.
 ## Repository map
 
 ```
-crates/cwico-core/     engine — no OS calls, all the safety logic, 128 tests
+crates/cwico-core/     engine — no OS calls, all the safety logic, 136 tests
   safety.rs              the classifier
   plan.rs                the planning gate — Critical items die here
   guard.rs               the deletion guard — unsafe paths die here
@@ -213,7 +266,15 @@ app/src-tauri/         IPC only, no logic
 ui/                    React 19 + TS + Tailwind 4
 data/safety-db.json    58 rules — the most consequential file here
 data/tweaks.json       36 system tweaks
-tools/                 icon/wordmark generation, doc checks, winget manifest
+tools/
+  version.py             the ONLY thing that computes a version
+  test_version.py        + Rust tests, both on data/version-cases.json
+  check_docs.py          fails CI when the READMEs' numbers drift
+  changelog_section.py   release notes -> the update dialog
+  verify_update_signature.py   will installed copies accept this update?
+  apply_winget_manifest.py     folds a build's manifest in, checks URL + hash
+  winget-manifest.ps1    reads SHA256 and ProductCode from the MSI itself
+  gen_icons.py gen_wordmark.py   brand assets from assets/brand/
 packaging/             MSIX manifest + Store notes, winget manifests
 docs/sessions/         you are here
 ```
@@ -227,5 +288,9 @@ docs/sessions/         you are here
 3. Read [`docs/SAFETY.md`](../SAFETY.md) — it is the design rationale for
    everything that stops this tool breaking someone's machine, and changing
    the safety layer without reading it is how that protection gets eroded.
-4. Pick up the first unchecked task in **In flight**.
-5. Before you stop, update this file.
+4. Pick something from **What to do next → A**. That section is ordered by
+   value, and everything in it can be done from this repository alone.
+5. Before you stop — including if you are running out of context — update this
+   file first, then write the session log. If there is only time for one, make
+   it this file: a missing log costs the next session context, a stale
+   `STATE.md` costs them a wrong decision.
