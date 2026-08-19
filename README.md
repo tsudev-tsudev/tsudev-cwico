@@ -16,7 +16,7 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-2482bd)](LICENSE)
 [![Rust](https://img.shields.io/badge/rust-1.82%2B-ef6d18)](https://www.rust-lang.org)
 [![Safety rules](https://img.shields.io/badge/safety%20rules-58-2482bd)](data/safety-db.json)
-[![Tests](https://img.shields.io/badge/tests-128-2482bd)](#tests)
+[![Tests](https://img.shields.io/badge/tests-136-2482bd)](#tests)
 
 [tsudev.com](https://tsudev.com) · [Quick start](#quick-start) · [Safety model](#the-safety-model) · [Tiếng Việt](docs/README.vi.md)
 
@@ -274,7 +274,7 @@ everywhere.
 cargo test
 ```
 
-**128 tests.** The ones that matter most:
+**136 tests.** The ones that matter most:
 
 * `selecting_everything_still_cannot_remove_a_critical_component` — ticks every
   row, confirms every prompt, presses go, and asserts Defender and RPC survive.
