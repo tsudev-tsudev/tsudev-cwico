@@ -82,37 +82,59 @@ Restructuring for release management and auto-update. Tasks, in order:
 - [x] 16 · Release workflow publishing a signed `latest.json`
 - [x] 17 · Authenticode documentation, docs refresh
 
-### Release `tsudev-cwico-v26.8.19`
+### Release `tsudev-cwico-v26.8.19` — published
 
-Tagged and built. The draft carries the installers, their `.sig` files and
-`latest.json`. **Publishing is what starts the mandatory-update mechanism for
-real** — until then `releases/latest` resolves to nothing and every installed
-copy treats the check as a failure, which fails open.
+https://github.com/tsudev-tsudev/tsudev-cwico/releases/tag/tsudev-cwico-v26.8.19
+
+The mandatory-update mechanism is now live: the endpoint installed copies poll
+returns HTTP 200 with a `latest.json` carrying version `26.8.1901`, three
+platform entries and 4,982 characters of release notes. Both payload signatures
+verify against the public key compiled into the application.
 
 The release notes state plainly that this has never run on a live Windows
 machine, and point at the three commands that change nothing.
 
+**The next release is what tests the update path.** Publishing it will make
+every installed copy of `v26.8.19` show the blocking gate. Before doing that,
+read `docs/RELEASING.md`, and ideally install this release on a Windows machine
+first so there is something to update *from*.
+
+### winget — submitted, waiting on a signature
+
+[microsoft/winget-pkgs#420321](https://github.com/microsoft/winget-pkgs/pull/420321),
+labelled `Needs-CLA`.
+
+**Only the account owner can clear it:** Microsoft's bot requires
+[@tsudev-tsudev](https://github.com/tsudev-tsudev) to sign the
+[Contributor License Agreement](https://cla.opensource.microsoft.com). Nothing
+else in the pull request can proceed until that is done — their validation
+pipeline does not run beforehand.
+
+Two checklist boxes were deliberately left unchecked, because `winget validate`
+and `winget install` cannot be run from this development host. What was
+verified instead is written into the pull request body.
+
+### SignPath — prepared, not submitted
+
+`packaging/signpath/APPLICATION.md` has the application text, including the
+argument for why this is not a hacking tool (their terms exclude those, and a
+summary of this tool's capabilities reads like one at a glance).
+`docs/CODE-SIGNING-POLICY.md` is the publicly-visible policy they require.
+
+Deferred by the maintainer: internal testing first, code signing later.
+
 ### Next
 
-**Cut the first CalVer release.** `docs/RELEASING.md` is the procedure. Two
-steps in it are not optional the first time:
-
-* verifying the signature with `tools/verify_update_signature.py`, and
-* installing the draft's MSI on a Windows machine and running it once.
-
-Publishing starts the mandatory-update mechanism for real. Until a release is
-published, `releases/latest` resolves to nothing and every installed copy
-treats the check as a failure — which fails open, so nothing breaks, but
-nothing updates either.
-
-**Then, on that same Windows machine, the two things nothing has verified:**
+**On a Windows machine, the things nothing has verified:**
 
 1. That the scanner reads a real registry, service control manager and task
    scheduler correctly. Start with `cwico info`, `cwico scan`, then
    `cwico plan --safe-only` — none of which change anything.
 2. That `download_and_install` genuinely replaces the running process and
    restarts into the new version. The UI states are verified; the handoff to
-   the Windows installer is not.
+   the Windows installer is not. This needs two releases to test — install
+   `v26.8.19`, then publish a second one.
+3. Sign the Microsoft CLA so winget#420321 can proceed.
 
 ### Decisions taken for this work — do not re-litigate
 
