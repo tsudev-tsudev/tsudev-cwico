@@ -72,7 +72,8 @@
           "en-US"
         ]
       }
-    }
+    },
+    "createUpdaterArtifacts": true
   },
   "plugins": {
     "updater": {

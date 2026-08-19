@@ -115,7 +115,6 @@ jobs:
       # A release whose payload is unsigned is a release installed copies will
       # refuse, and the failure would only show up on a user's machine.
       - name: Confirm the update payload was signed
-        if: startsWith(github.ref, 'refs/tags/') || inputs.publish
         shell: pwsh
         run: |
           $bundle = "app/src-tauri/target/release/bundle"
