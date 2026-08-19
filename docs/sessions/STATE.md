@@ -4,7 +4,7 @@
 > in flight, and what to do next. Everything else in `docs/sessions/` is
 > history. See [`README.md`](README.md) for the conventions.
 
-**Last updated:** 2026-08-19 · session `2026-08-19-02`
+**Last updated:** 2026-08-19 · session `2026-08-19-03`
 **Branch:** `main` · **Remote:** https://github.com/tsudev-tsudev/tsudev-cwico
 
 ---
@@ -81,6 +81,16 @@ Restructuring for release management and auto-update. Tasks, in order:
 - [x] 15 · Mandatory update screen in the UI
 - [x] 16 · Release workflow publishing a signed `latest.json`
 - [x] 17 · Authenticode documentation, docs refresh
+
+### Release `tsudev-cwico-v26.8.19`
+
+Tagged and built. The draft carries the installers, their `.sig` files and
+`latest.json`. **Publishing is what starts the mandatory-update mechanism for
+real** — until then `releases/latest` resolves to nothing and every installed
+copy treats the check as a failure, which fails open.
+
+The release notes state plainly that this has never run on a live Windows
+machine, and point at the three commands that change nothing.
 
 ### Next
 
