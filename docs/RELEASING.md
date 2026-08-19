@@ -74,6 +74,13 @@ the release notes users read **inside the mandatory update screen**, so write
 it for them rather than for other developers: what changed about what the tool
 will and will not remove, and anything they should know before it installs.
 
+The build fails if the section is missing. A blocking screen with no
+explanation is worse than no blocking screen — check what it will look like:
+
+```bash
+tools/changelog_section.py "$(tools/version.py current | awk '{print $1}')"
+```
+
 ### 4. Commit and tag
 
 ```bash

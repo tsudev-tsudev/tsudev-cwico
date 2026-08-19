@@ -291,6 +291,7 @@ Gói cập nhật được ký; bản đã cài chỉ chấp nhận bản cập 
 | [`SAFETY.md`](SAFETY.md) | Cơ sở thiết kế của mọi lớp bảo vệ. Đọc trước khi sửa tầng an toàn. |
 | [`RELEASING.md`](RELEASING.md) | Quy trình phát hành. Publish là đẩy cập nhật bắt buộc tới mọi máy. |
 | [`SIGNING.md`](SIGNING.md) | Hai loại chữ ký hay bị nhầm lẫn. |
+| [`CODE-SIGNING-POLICY.md`](CODE-SIGNING-POLICY.md) | Vai trò nhóm, thứ gì được ký, và phần mềm thu thập gì — không gì cả. |
 | [`sessions/STATE.md`](sessions/STATE.md) | Dự án đang ở đâu và làm gì tiếp theo. |
 | [`../CONTRIBUTING.md`](../CONTRIBUTING.md) | Code nên đặt ở đâu, chạy kiểm tra thế nào. |
 | [`../SECURITY.md`](../SECURITY.md) | Thế nào là lỗi bảo mật ở đây. |

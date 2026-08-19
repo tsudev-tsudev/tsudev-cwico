@@ -350,6 +350,7 @@ engine, the safety model and the entire UI are already portable.
 | [`docs/SAFETY.md`](docs/SAFETY.md) | The design rationale for everything that stops this tool breaking a machine. Read before changing the safety layer. |
 | [`docs/RELEASING.md`](docs/RELEASING.md) | Cutting a release. Publishing pushes a mandatory update to every installed copy, so this one matters. |
 | [`docs/SIGNING.md`](docs/SIGNING.md) | The two signatures people conflate — update signing (done) and Authenticode (needs a certificate). |
+| [`docs/CODE-SIGNING-POLICY.md`](docs/CODE-SIGNING-POLICY.md) | Team roles, what gets signed, and what the software collects — nothing. |
 | [`docs/sessions/STATE.md`](docs/sessions/STATE.md) | Where the project is right now, and what to do next. |
 | [`CONTRIBUTING.md`](CONTRIBUTING.md) | Where code belongs, and how to run everything. |
 | [`SECURITY.md`](SECURITY.md) | What counts as a security bug here, and six design commitments. |

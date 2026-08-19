@@ -49,6 +49,26 @@ jobs:
         shell: bash
         run: python3 tools/test_version.py
 
+      # The release body becomes `latest.json`'s `notes`, which the application
+      # shows inside the mandatory update dialog. A blocking screen with no
+      # explanation is worse than no blocking screen, so a missing CHANGELOG
+      # section fails the build rather than shipping an empty one.
+      - name: Extract the release notes from CHANGELOG.md
+        id: notes
+        shell: bash
+        run: |
+          {
+            echo 'body<<CWICO_NOTES_EOF'
+            # On a manual run `ref_name` is the branch; fall back to whatever
+            # version the manifests currently carry.
+            if python3 tools/version.py to-semver "${{ github.ref_name }}" >/dev/null 2>&1; then
+              python3 tools/changelog_section.py "${{ github.ref_name }}"
+            else
+              python3 tools/changelog_section.py
+            fi
+            echo 'CWICO_NOTES_EOF'
+          } >> "$GITHUB_OUTPUT"
+
       - run: npm --prefix ui ci
 
       # A tag push drafts a release; a manual run only produces artefacts, so
@@ -73,6 +93,7 @@ jobs:
           projectPath: app/src-tauri
           tagName: ${{ github.ref_name }}
           releaseName: ${{ github.ref_name }}
+          releaseBody: ${{ steps.notes.outputs.body }}
           releaseDraft: true
           # `latest.json` is what installed copies poll. Without it the
           # updater has nothing to read and no update is ever delivered.
