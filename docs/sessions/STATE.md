@@ -4,7 +4,7 @@
 > in flight, and what to do next. Everything else in `docs/sessions/` is
 > history. See [`README.md`](README.md) for the conventions.
 
-**Last updated:** 2026-08-19 · session `2026-08-19-01`
+**Last updated:** 2026-08-19 · session `2026-08-19-02`
 **Branch:** `main` · **Remote:** https://github.com/tsudev-tsudev/tsudev-cwico
 
 ---
@@ -16,9 +16,11 @@ OS calls and holds all the safety logic; `cwico-win` is Win32/WinRT adapters;
 `app/src-tauri` is IPC plumbing; `ui/` is React. It scans registry uninstall
 keys, AppX packages, provisioned packages, services, scheduled tasks and
 autostart entries, classifies everything against a 58-rule safety database,
-and refuses outright to remove anything classified `Critical`. Version 1.0.0
-builds, tests and packages successfully on Windows via CI. Nobody has yet run
-it on a live Windows machine.
+and refuses outright to remove anything classified `Critical`. Installed
+copies check for updates on startup and block until a confirmed newer release
+is installed. The current version is `tsudev-cwico-v26.8.19` (semver
+`26.8.1901`). It builds, tests and packages successfully on Windows via CI.
+**Nobody has yet run it on a live Windows machine.**
 
 ---
 
@@ -29,14 +31,15 @@ Run these before trusting anything below. They take about three minutes.
 ```bash
 cargo fmt --all -- --check          # expect: silent
 cargo clippy --all-targets -- -D warnings
-cargo test                          # expect: 128 passing
+cargo test                          # expect: 136 passing
 cargo check -p cwico-win --target x86_64-pc-windows-gnu
 npm --prefix ui run build
-python3 tools/check_docs.py         # expect: documentation matches the project
+python3 tools/check_docs.py --with-tests
+python3 tools/test_version.py
 ```
 
-If `cargo test` reports a different number, the count in this file and in
-`README.md` is stale — fix both.
+The last two are self-checking: they fail if the numbers quoted in the
+READMEs, the version encoding, or the three manifests have drifted.
 
 ---
 
@@ -50,6 +53,9 @@ If `cargo test` reports a different number, the count in this file and in
 | MSI / NSIS installers | Done | Release workflow; artefacts downloaded and inspected |
 | winget manifest generation | Done | `tools/winget-manifest.ps1`, verified twice |
 | Docs, CI, issue templates, security policy | Done | CI green |
+| CalVer release naming | Done | `tools/test_version.py` + Rust tests on shared vectors |
+| Updater signing key | Done | In `~/.tsudev-cwico/` and repository secrets |
+| Mandatory update gate | Rust code awaiting CI; UI verified | Screenshots of both states |
 
 ## What is *not* verified
 
@@ -68,12 +74,19 @@ If `cargo test` reports a different number, the count in this file and in
 Restructuring for release management and auto-update. Tasks, in order:
 
 - [x] 11 · Session log system (`docs/sessions/`)
-- [ ] 12 · CalVer versioning + `tools/version.py`
-- [ ] 13 · Updater signing keypair into GitHub Secrets
-- [ ] 14 · `tauri-plugin-updater` integration + IPC commands
-- [ ] 15 · Mandatory update screen in the UI
-- [ ] 16 · Release workflow publishing a signed `latest.json`
-- [ ] 17 · Authenticode documentation, docs refresh
+- [x] 12 · CalVer versioning + `tools/version.py`
+- [x] 13 · Updater signing keypair into GitHub Secrets
+- [x] 14 · `tauri-plugin-updater` integration + IPC commands
+- [x] 15 · Mandatory update screen in the UI
+- [x] 16 · Release workflow publishing a signed `latest.json`
+- [x] 17 · Authenticode documentation, docs refresh
+
+### Next
+
+The first CalVer release has not been cut. `docs/RELEASING.md` is the
+procedure. Publishing it starts the mandatory-update mechanism for real, so
+step 5 of that document — installing the draft's MSI on a Windows machine
+before publishing — is not optional the first time.
 
 ### Decisions taken for this work — do not re-litigate
 

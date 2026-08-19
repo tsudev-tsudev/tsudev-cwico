@@ -87,6 +87,16 @@ phải trả.*
 
 <br>
 
+<img src="screenshots/update-gate-vi.png" alt="Màn hình cập nhật bắt buộc" width="620">
+
+*Phát hành một bản mới nghĩa là đẩy cập nhật bắt buộc. Không có nút bỏ qua,
+không có "để sau" — chỉ có Cập nhật — vì người dùng chạy bản cũ đang dùng đánh
+giá an toàn đã lỗi thời cho chính máy của họ. Nhưng nếu không kiểm tra được,
+phần mềm vẫn chạy bình thường: sự cố server không được phép khóa toàn bộ người
+dùng cùng lúc.*
+
+<br>
+
 <img src="screenshots/about-light-en.png" alt="Bảng giới thiệu hiển thị số quy tắc an toàn" width="820">
 
 *Mức bảo vệ thực sự đang được nạp, và nơi lưu các bản sao lưu để khôi phục.*

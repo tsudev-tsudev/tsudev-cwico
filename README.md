@@ -91,6 +91,15 @@ explanation of what it costs.*
 
 <br>
 
+<img src="docs/screenshots/update-gate-vi.png" alt="The mandatory update screen" width="620">
+
+*Publishing a release pushes a mandatory update. There is no dismiss and no
+"later" — only Update — because a user on an old build is running an old idea
+of what is safe to delete on their machine. A check that fails, though, lets
+the app start normally: an outage must not lock everyone out at once.*
+
+<br>
+
 <img src="docs/screenshots/about-light-en.png" alt="The about panel showing safety database rule counts" width="820">
 
 *How much protection is actually loaded, and where your rollback artefacts go.*

@@ -170,20 +170,20 @@ python3 tools/check_docs.py   # if you changed a rule or tweak count
 
 ## Releasing
 
+See **[docs/RELEASING.md](docs/RELEASING.md)**. In short:
+
 ```bash
-git tag v1.0.1 && git push origin v1.0.1
+tools/version.py set "$(tools/version.py next)"
+# write the CHANGELOG entry — it becomes the text users read in the
+# mandatory update dialog
+git commit -am "Release $(tools/version.py current | awk '{print $1}')"
+git tag "$(tools/version.py current | awk '{print $1}')" && git push --tags
 ```
 
-That runs `.github/workflows/release.yml`, which builds the MSI and NSIS
-installers on a Windows runner, drafts a GitHub release, and generates
-`winget-installer-manifest.yaml` with the real SHA256 and ProductCode —
-both change with every build, so neither is ever copied by hand. Paste that
-file over `packaging/winget/manifests/.../tsudev.cwico.installer.yaml` when
-submitting to winget.
-
-Running the workflow manually (`gh workflow run release.yml`) builds the same
-installers and uploads them as artefacts without drafting a release, which is
-how to check the packaging still works without cutting a version.
+Publishing the resulting draft pushes a **mandatory** update to every
+installed copy, which is why the workflow drafts rather than publishes.
+`gh workflow run release.yml` builds the same installers without touching
+anyone.
 
 ## Commit style
 
