@@ -60,10 +60,15 @@ READMEs, the version encoding, or the three manifests have drifted.
 
 ## What is *not* verified
 
-* **Nothing has ever run on a live Windows machine.** `SRSetRestorePointW`,
-  `EnumServicesStatusExW`, `ITaskService` and `RemovePackageWithOptionsAsync`
-  compile and are covered by unit tests of their pure logic, but no code path
-  has executed against a real registry or a real service control manager.
+* **The application has never run on a live Windows machine.**
+  `SRSetRestorePointW`, `EnumServicesStatusExW`, `ITaskService` and
+  `RemovePackageWithOptionsAsync` compile and are covered by unit tests of
+  their pure logic, but no code path has executed against a real registry or a
+  real service control manager.
+
+  The one exception, and it is worth knowing: winget's validation pipeline
+  installed the MSI in a clean Windows VM and passed. So the *installer* works
+  on real Windows. Nothing beyond that is evidenced.
   First thing to do on a Windows box: `cwico info`, then `cwico scan`, then
   `cwico plan --safe-only` — none of which change anything.
 * Installers are **unsigned**. SmartScreen will warn on first run.
@@ -117,8 +122,9 @@ Ordered by value.
 
 ### B · Blocked on the maintainer
 
-1. **Sign the Microsoft CLA** — winget PR #420321 cannot proceed at all until
-   then, and their validation does not run beforehand.
+1. **Check the CLA state on winget PR #420321.** The `license/cla` check says
+   requirements are met but the `Needs-CLA` label is still applied. If it is
+   genuinely unsigned, only the account owner can sign it.
 2. **Submit the SignPath application** (deferred deliberately: internal testing
    first). Text is written; see below.
 
@@ -149,20 +155,37 @@ every installed copy of `v26.8.19` show the blocking gate. Before doing that,
 read `docs/RELEASING.md`, and ideally install this release on a Windows machine
 first so there is something to update *from*.
 
-### winget — submitted, waiting on a signature
+### winget — submitted, automated validation passed
 
-[microsoft/winget-pkgs#420321](https://github.com/microsoft/winget-pkgs/pull/420321),
-labelled `Needs-CLA`.
+[microsoft/winget-pkgs#420321](https://github.com/microsoft/winget-pkgs/pull/420321)
 
-**Only the account owner can clear it:** Microsoft's bot requires
-[@tsudev-tsudev](https://github.com/tsudev-tsudev) to sign the
-[Contributor License Agreement](https://cla.opensource.microsoft.com). Nothing
-else in the pull request can proceed until that is done — their validation
-pipeline does not run beforehand.
+Labels as of close of session: `Azure-Pipeline-Passed`, `Policy-Test-2.7`,
+`Needs-CLA`, `New-Package`, `Validation-Guide`.
 
-Two checklist boxes were deliberately left unchecked, because `winget validate`
-and `winget install` cannot be run from this development host. What was
-verified instead is written into the pull request body.
+**`Azure-Pipeline-Passed` matters.** Their pipeline installs a new package in a
+clean Windows VM. It is the closest thing to a real-Windows smoke test this
+project has had — the MSI installs. It does *not* say the application was
+launched, that it read a registry, or that anything was removed.
+
+The other labels, read carefully:
+
+* **`Needs-CLA`** — but the `license/cla` check on the head commit reports
+  *"All CLA requirements met"*. The label and the check disagree; the label is
+  probably just stale. **Confirm on the pull request page** before acting on
+  either.
+* **`Policy-Test-2.7`** is the *adult content* review policy, applied in the
+  same second as `Azure-Pipeline-Passed`. Almost certainly routine routing for
+  a new package rather than a finding — the manifests were checked for the
+  usual false-positive substrings and contain only `do**cum**entations`,
+  `cl**ass**ified` and `s**hell**`.
+* **`Validation-Guide`** came with a generic bot comment ("there was an issue
+  validating") and no specifics. Nothing actionable was stated.
+
+**Next action:** watch the pull request and respond to whatever a moderator
+asks. Two checklist boxes were deliberately left unchecked — `winget validate`
+and `winget install` cannot be run from this development host — with an
+explanation in the pull request body of what was verified instead. If a
+moderator asks for them, that needs a Windows machine.
 
 ### SignPath — prepared, not submitted
 
