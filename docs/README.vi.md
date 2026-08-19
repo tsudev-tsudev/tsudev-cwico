@@ -248,6 +248,55 @@ hình an toàn và toàn bộ giao diện vốn đã sẵn sàng đa nền tản
 
 ---
 
+## Quy ước phiên bản
+
+Mỗi bản phát hành được đặt tên theo ngày ra mắt:
+
+| Tình huống | Tên phiên bản |
+|---|---|
+| Bản đầu tiên ngày 19/8/2026 | `tsudev-cwico-v26.8.19` |
+| Bản thứ hai cùng ngày | `tsudev-cwico-v26.8.19.2` |
+| Ngày hôm sau | `tsudev-cwico-v26.8.20` |
+
+Bên trong, mỗi tên ánh xạ sang một semver ba số mà phần patch mang cả ngày lẫn
+số thứ tự trong ngày (`26.8.1901`) — vì Cargo, bộ đóng gói MSI và bộ cập nhật
+đều bắt buộc ba thành phần, và bộ cập nhật *so sánh* chính con số đó để biết
+người dùng có đang lạc hậu hay không.
+
+Không bao giờ viết phiên bản bằng tay: `tools/version.py` giữ quy tắc này.
+
+## Cập nhật tự động
+
+Mỗi bản đã cài đặt sẽ kiểm tra bản mới khi khởi động. Nếu xác nhận có bản mới,
+toàn bộ giao diện bị thay bằng màn hình chỉ có nút **Cập nhật** — không có
+"để sau", không có cách bỏ qua.
+
+Lý do: cơ sở dữ liệu an toàn quyết định phần mềm nào được phép gỡ. Khi một quy
+tắc được sửa, bản sửa đi kèm phiên bản mới; người dùng chạy bản cũ đang dùng
+đánh giá an toàn đã lỗi thời với quyền Administrator.
+
+Tuy vậy, cổng chặn **chỉ đóng khi đã xác nhận** có bản mới. Lỗi mạng, DNS hỏng
+hay GitHub sập thì phần mềm vẫn chạy bình thường kèm một dòng ghi chú nhỏ — vì
+sự cố máy chủ không được phép khóa toàn bộ người dùng cùng lúc.
+
+Gói cập nhật được ký; bản đã cài chỉ chấp nhận bản cập nhật ký bằng đúng khóa
+đó. Chi tiết: [`SIGNING.md`](SIGNING.md).
+
+---
+
+## Tài liệu
+
+| | |
+|---|---|
+| [`SAFETY.md`](SAFETY.md) | Cơ sở thiết kế của mọi lớp bảo vệ. Đọc trước khi sửa tầng an toàn. |
+| [`RELEASING.md`](RELEASING.md) | Quy trình phát hành. Publish là đẩy cập nhật bắt buộc tới mọi máy. |
+| [`SIGNING.md`](SIGNING.md) | Hai loại chữ ký hay bị nhầm lẫn. |
+| [`sessions/STATE.md`](sessions/STATE.md) | Dự án đang ở đâu và làm gì tiếp theo. |
+| [`../CONTRIBUTING.md`](../CONTRIBUTING.md) | Code nên đặt ở đâu, chạy kiểm tra thế nào. |
+| [`../SECURITY.md`](../SECURITY.md) | Thế nào là lỗi bảo mật ở đây. |
+
+---
+
 ## Đóng góp cho cơ sở dữ liệu an toàn
 
 `data/safety-db.json` là file có giá trị nhất trong kho mã này, và cũng dễ đóng
