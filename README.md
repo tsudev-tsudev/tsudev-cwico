@@ -322,9 +322,12 @@ Ready, but waiting on something only a human can supply:
 - [ ] **Code signing (Authenticode).** Unsigned installers work, but
       SmartScreen warns on first run — a poor first impression for a tool that
       then asks for Administrator, and it trains users to click through the
-      warning that protects them. Needs a certificate from a commercial CA;
-      [`docs/SIGNING.md`](docs/SIGNING.md) has the workflow ready to fill in.
-      *Update signing is separate and already done.*
+      warning that protects them. Worse here than for most projects:
+      reputation for an unsigned binary is tracked per file hash, so frequent
+      releases never accumulate any. [SignPath
+      Foundation](https://signpath.org/) issues these free to open-source
+      projects; [`docs/SIGNING.md`](docs/SIGNING.md) has the route and the
+      workflow ready to fill in. *Update signing is separate and already done.*
 - [ ] **Microsoft Store submission.** Needs a Partner Center account; the
       manifest and the reviewer notes are in [`packaging/msix/`](packaging/msix/).
 - [ ] **`winget` publication.** Needs a tagged release, then a pull request to
