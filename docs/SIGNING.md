@@ -49,9 +49,21 @@ next to the key itself.
 
 ### Verifying a release actually got signed
 
-The release workflow fails if no `.sig` files were produced, because an
-unsigned release is one that installed copies will refuse — a failure that
-would otherwise only surface on a user's machine, days later.
+Two layers:
+
+1. The release workflow fails if no `.sig` files were produced at all.
+2. `tools/verify_update_signature.py` checks the signature verifies against
+   the public key **this build carries**, which the first check cannot:
+
+   ```bash
+   gh run download <run-id> -n installers -D /tmp/release
+   python3 tools/verify_update_signature.py /tmp/release
+   ```
+
+The second catches the failure that matters most — a key rotation applied to
+the repository secrets but not to `tauri.conf.json`. That produces a
+perfectly-signed release that every installed copy shows as a mandatory update
+and then refuses to install, which is worse than no release at all.
 
 ---
 
@@ -141,6 +153,8 @@ do need one. See [`../packaging/msix/README.md`](../packaging/msix/README.md).
 - [x] `TAURI_SIGNING_PRIVATE_KEY` and `..._PASSWORD` in repository secrets
 - [x] Public key committed to `tauri.conf.json`
 - [x] Release workflow fails when no `.sig` is produced
+- [x] `tools/verify_update_signature.py` checks the signature against the
+      key the build carries
 - [ ] Code-signing certificate obtained
 - [ ] Signing step added to `release.yml`
 - [ ] Timestamping configured

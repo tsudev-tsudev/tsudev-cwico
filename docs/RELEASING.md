@@ -97,9 +97,21 @@ nothing reaches users yet.
 Before publishing, confirm on the draft:
 
 - [ ] `latest.json` is attached — without it no update is ever delivered
-- [ ] A `.sig` is attached for the installer
 - [ ] The MSI and NSIS installers are attached and their sizes look sane
 - [ ] The release notes read the way you want them to, in a blocking dialog
+- [ ] **The signature verifies against the key this build carries:**
+
+  ```bash
+  gh run download <run-id> -n installers -D /tmp/release
+  python3 tools/verify_update_signature.py /tmp/release
+  ```
+
+  This is the check worth not skipping. A payload signed by the wrong key —
+  a rotation applied to the repository secrets but not to `tauri.conf.json` —
+  produces a release that every installed copy shows as a mandatory update and
+  then refuses to install. Users are stuck behind a wall with a broken button,
+  and the only way out is downloading a fresh installer by hand.
+
 - [ ] Ideally: install the MSI on a Windows machine and run it once
 
 ### 6. Publish
