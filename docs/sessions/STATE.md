@@ -55,7 +55,8 @@ READMEs, the version encoding, or the three manifests have drifted.
 | Docs, CI, issue templates, security policy | Done | CI green |
 | CalVer release naming | Done | `tools/test_version.py` + Rust tests on shared vectors |
 | Updater signing key | Done | In `~/.tsudev-cwico/` and repository secrets |
-| Mandatory update gate | Rust code awaiting CI; UI verified | Screenshots of both states |
+| Mandatory update gate | Done | CI Windows build; UI screenshots of both states |
+| Signed update payloads | Done | Signature cryptographically verified against the app's public key |
 
 ## What is *not* verified
 
@@ -83,10 +84,25 @@ Restructuring for release management and auto-update. Tasks, in order:
 
 ### Next
 
-The first CalVer release has not been cut. `docs/RELEASING.md` is the
-procedure. Publishing it starts the mandatory-update mechanism for real, so
-step 5 of that document — installing the draft's MSI on a Windows machine
-before publishing — is not optional the first time.
+**Cut the first CalVer release.** `docs/RELEASING.md` is the procedure. Two
+steps in it are not optional the first time:
+
+* verifying the signature with `tools/verify_update_signature.py`, and
+* installing the draft's MSI on a Windows machine and running it once.
+
+Publishing starts the mandatory-update mechanism for real. Until a release is
+published, `releases/latest` resolves to nothing and every installed copy
+treats the check as a failure — which fails open, so nothing breaks, but
+nothing updates either.
+
+**Then, on that same Windows machine, the two things nothing has verified:**
+
+1. That the scanner reads a real registry, service control manager and task
+   scheduler correctly. Start with `cwico info`, `cwico scan`, then
+   `cwico plan --safe-only` — none of which change anything.
+2. That `download_and_install` genuinely replaces the running process and
+   restarts into the new version. The UI states are verified; the handoff to
+   the Windows installer is not.
 
 ### Decisions taken for this work — do not re-litigate
 
