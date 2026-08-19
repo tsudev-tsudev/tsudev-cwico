@@ -23,6 +23,7 @@ import { formatBytes, formatDateTime, translator } from "../i18n";
 import * as api from "../api";
 import { Brand } from "./Brand";
 import { Button, Notice, ProgressBar } from "./primitives";
+import { parseNotes } from "../releaseNotes";
 
 type Phase = "idle" | "downloading" | "installing" | "failed";
 
@@ -144,12 +145,35 @@ export function UpdateGate({
               >
                 {t("update.notes")}
               </p>
-              <p
-                className="selectable max-h-32 overflow-y-auto whitespace-pre-line text-[13px]"
+              <div
+                className="selectable max-h-40 space-y-2 overflow-y-auto pr-1 text-[13px]"
                 style={{ color: "var(--text-secondary)" }}
               >
-                {status.notes}
-              </p>
+                {parseNotes(status.notes).map((block, index) => {
+                  if (block.kind === "code") {
+                    return (
+                      <pre
+                        key={index}
+                        className="overflow-x-auto rounded px-2.5 py-2 font-mono text-[12px]"
+                        style={{ background: "var(--surface-sunken)" }}
+                      >
+                        {block.text}
+                      </pre>
+                    );
+                  }
+                  if (block.kind === "bullet") {
+                    return (
+                      <p key={index} className="flex gap-2">
+                        <span aria-hidden="true" style={{ color: "var(--text-muted)" }}>
+                          •
+                        </span>
+                        <span>{block.text}</span>
+                      </p>
+                    );
+                  }
+                  return <p key={index}>{block.text}</p>;
+                })}
+              </div>
             </div>
           )}
 

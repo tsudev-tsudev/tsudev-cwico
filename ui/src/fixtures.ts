@@ -558,11 +558,28 @@ export async function checkForUpdate(): Promise<UpdateStatus> {
       newRelease: "tsudev-cwico-v26.8.25",
       newVersion: "26.8.2501",
       publishedAt: "2026-08-25T09:14:00Z",
-      notes:
-        "Reclassifies Microsoft Store as Critical after reports that removing " +
-        "it left machines unable to update any Store application.\n\n" +
-        "Adds 14 OEM bloatware rules and fixes a deep-clean path that could " +
-        "match a folder outside the product's install location.",
+      // Deliberately the shape a real CHANGELOG section produces — blockquote,
+      // fenced code, bullets, inline code — so the dialog is designed against
+      // what it will actually receive rather than against clean prose.
+      notes: [
+        "> **Read this before updating.** This release changes what the tool",
+        "> considers safe to remove.",
+        "",
+        "### Changed",
+        "",
+        "- Reclassifies **Microsoft Store** as `Critical` after reports that",
+        "  removing it left machines unable to update any Store application.",
+        "- Adds 14 OEM bloatware rules.",
+        "",
+        "### Fixed",
+        "",
+        "- A deep-clean path could match a folder outside the product's install",
+        "  location. Check what a removal will do first:",
+        "",
+        "```",
+        "cwico plan --safe-only",
+        "```",
+      ].join("\n"),
     };
   }
   if (mode === "offline") {
