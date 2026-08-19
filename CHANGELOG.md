@@ -26,6 +26,26 @@ release-of-day counter:
 
 ## tsudev-cwico-v26.8.19 — 2026-08-19
 
+> **Read this before installing.** This build compiles, passes 136 tests and
+> packages cleanly on a Windows CI runner, but it has never been run on a live
+> Windows machine. Every Win32 and WinRT call is exercised only by unit tests
+> of its pure logic — no code path has yet touched a real registry, service
+> control manager or task scheduler.
+>
+> Start with the commands that change nothing:
+>
+> ```
+> cwico info                    # what it detects about your machine
+> cwico scan                    # the inventory, classified
+> cwico plan --safe-only        # what removal would do — a dry run
+> ```
+>
+> The desktop app's **Dry run** button does the same thing. Only `--apply`,
+> or the Remove button after the plan dialog, changes anything — and even then
+> a System Restore Point is taken first, or the run is cancelled.
+>
+> The installer is unsigned, so Windows SmartScreen will warn on first run.
+
 First release. The project was previously a single 640-line PowerShell script
 (`legacy/Optimize_Win11_For_Dev.ps1`) that applied twelve fixed groups of
 changes with no inspection, no selection and no way back.
