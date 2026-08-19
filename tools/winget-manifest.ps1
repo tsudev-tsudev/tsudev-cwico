@@ -13,9 +13,12 @@
 .PARAMETER BundleDir
     Where the Tauri bundler put its output.
 
-.PARAMETER Version
-    Package version, without a leading `v`. Defaults to the version in
-    tauri.conf.json.
+.PARAMETER Tag
+    The git tag the release was published under, used verbatim in the download
+    URL. The tag and the version are *different strings* — the tag is
+    `tsudev-cwico-v26.8.19` and the version is `26.8.1901` — and treating one
+    as the other produces a URL that 404s. Defaults to the tag this version
+    would be published under.
 
 .PARAMETER Repository
     `owner/name`, used to build the release download URL.
@@ -24,12 +27,12 @@
     Where to write the manifest.
 
 .EXAMPLE
-    ./tools/winget-manifest.ps1 -Repository tsudev-tsudev/tsudev-cwico
+    ./tools/winget-manifest.ps1 -Tag tsudev-cwico-v26.8.19
 #>
 [CmdletBinding()]
 param(
     [string]$BundleDir = "app/src-tauri/target/release/bundle",
-    [string]$Version = "",
+    [string]$Tag = "",
     [string]$Repository = "tsudev-tsudev/tsudev-cwico",
     [string]$OutFile = "winget-installer-manifest.yaml"
 )
@@ -62,19 +65,21 @@ $record = $view.GetType().InvokeMember("Fetch", "InvokeMethod", $null, $view, $n
 if (-not $record) { throw "the MSI has no ProductCode property" }
 $productCode = $record.GetType().InvokeMember("StringData", "GetProperty", $null, $record, 1)
 
-# `github.ref_name` is the tag on a tag push but the *branch* name on a manual
-# run, so an emptiness check is not enough — "main" is a non-empty value that
-# is not a version. Fall back unless it actually looks like one.
-if ($Version -notmatch '^v?\d+\.\d+') {
-    if ($Version) {
-        Write-Host "ref '$Version' is not a version; reading tauri.conf.json instead"
-    }
-    $conf = Get-Content "app/src-tauri/tauri.conf.json" -Raw | ConvertFrom-Json
-    $Version = $conf.version
-}
-$Version = $Version -replace '^v', ''
+# The version always comes from the manifests. An earlier revision derived it
+# from `github.ref_name`, which produced `.../download/v26.8.1901/...` — the
+# version where the tag belongs, and a URL that 404s.
+$conf = Get-Content "app/src-tauri/tauri.conf.json" -Raw | ConvertFrom-Json
+$Version = $conf.version
 
-$url = "https://github.com/$Repository/releases/download/v$Version/$($msi.Name)"
+# The tag goes into the URL verbatim, because that is what the asset path
+# contains. On a manual run `github.ref_name` is a branch name, so derive the
+# tag this version would be published under instead.
+if (-not $Tag -or $Tag -notmatch '^tsudev-cwico-v') {
+    if ($Tag) { Write-Host "ref '$Tag' is not a release tag; deriving it from the version" }
+    $Tag = (python3 tools/version.py to-name $Version).Trim()
+}
+
+$url = "https://github.com/$Repository/releases/download/$Tag/$($msi.Name)"
 $today = Get-Date -Format 'yyyy-MM-dd'
 
 $lines = @(
@@ -105,6 +110,7 @@ $lines = @(
 
 $lines -join "`n" | Set-Content -Path $OutFile -Encoding utf8
 Write-Host "wrote $OutFile"
+Write-Host "  tag         $Tag"
 Write-Host "  installer   $($msi.Name)"
 Write-Host "  sha256      $sha"
 Write-Host "  productCode $productCode"

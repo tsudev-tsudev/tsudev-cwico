@@ -16,11 +16,14 @@ Then review the diff and open a pull request against microsoft/winget-pkgs.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import importlib.util
 import pathlib
 import re
 import shutil
 import sys
+import urllib.error
+import urllib.request
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 MANIFEST_ROOT = ROOT / "packaging" / "winget" / "manifests" / "t" / "tsudev" / "cwico"
@@ -28,6 +31,39 @@ MANIFEST_ROOT = ROOT / "packaging" / "winget" / "manifests" / "t" / "tsudev" / "
 spec = importlib.util.spec_from_file_location("version", ROOT / "tools" / "version.py")
 version = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(version)
+
+
+def verify_installer_url(url: str, expected_sha: str) -> None:
+    """Download the installer and check it is the one the manifest describes.
+
+    winget's own validation would eventually catch a wrong URL or hash, but
+    only after a pull request has been opened against someone else's
+    repository. This has caught a real bug already: the URL was built from the
+    *version* (`.../download/v26.8.1901/`) where the *tag*
+    (`.../download/tsudev-cwico-v26.8.19/`) belongs, which 404s.
+    """
+    print(f"  fetching {url}")
+    try:
+        with urllib.request.urlopen(url, timeout=120) as response:
+            data = response.read()
+    except urllib.error.HTTPError as error:
+        sys.exit(
+            f"the installer URL returned HTTP {error.code}. "
+            "Is the release published, and is the tag in the URL the release "
+            "tag rather than the version?"
+        )
+    except urllib.error.URLError as error:
+        sys.exit(f"could not reach the installer URL: {error.reason}")
+
+    actual = hashlib.sha256(data).hexdigest().upper()
+    if actual != expected_sha.upper():
+        sys.exit(
+            f"the manifest's InstallerSha256 does not match the file at that URL.\n"
+            f"  manifest: {expected_sha.upper()}\n"
+            f"  actual:   {actual}\n"
+            "The manifest and the published release are from different builds."
+        )
+    print(f"  ok  {len(data):,} bytes, SHA256 matches the manifest")
 
 
 def read_field(text: str, field: str) -> str | None:
@@ -41,6 +77,11 @@ def main() -> int:
         "manifest",
         type=pathlib.Path,
         help="the winget-installer-manifest.yaml a release build produced",
+    )
+    parser.add_argument(
+        "--skip-download",
+        action="store_true",
+        help="do not fetch the installer to confirm the URL and hash",
     )
     args = parser.parse_args()
 
@@ -89,6 +130,12 @@ def main() -> int:
                 text,
             )
             path.write_text(text)
+
+    url = read_field(generated, "InstallerUrl")
+    if not url:
+        sys.exit("the generated manifest has no InstallerUrl")
+    if not args.skip_download:
+        verify_installer_url(url, sha)
 
     installer = target_dir / "tsudev.cwico.installer.yaml"
     installer.write_text(generated)
