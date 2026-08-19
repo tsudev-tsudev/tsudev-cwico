@@ -26,6 +26,8 @@ import type {
   SoftwareItem,
   TweakCatalog,
   TweakOutcome,
+  UpdateProgress,
+  UpdateStatus,
 } from "./types";
 import { DEFAULT_PLAN_OPTIONS, DEFAULT_SCAN_OPTIONS } from "./types";
 
@@ -272,7 +274,8 @@ const ITEMS: SoftwareItem[] = [
 
 export function about(): AboutInfo {
   return {
-    appVersion: "1.0.0",
+    appVersion: "26.8.1901",
+    appRelease: "tsudev-cwico-v26.8.19",
     productUrl: "https://tsudev.com",
     platform: {
       platform: "browser",
@@ -516,4 +519,73 @@ export async function applyTweaks(
     ok: true,
     detail: `simulated ${enable ? "apply" : "revert"} (browser preview)`,
   }));
+}
+
+// ---------------------------------------------------------------------------
+// Updates
+// ---------------------------------------------------------------------------
+
+let updateEmit: ((p: UpdateProgress) => void) | null = null;
+
+export function onUpdateProgress(handler: (p: UpdateProgress) => void) {
+  updateEmit = handler;
+  return () => {
+    updateEmit = null;
+  };
+}
+
+/**
+ * The browser preview reports itself current by default.
+ *
+ * Append `?preview=update` to the URL to exercise the blocking gate, or
+ * `?preview=offline` to see the "could not check" state. Both are how those
+ * screens get designed and screenshotted without waiting for a real release.
+ */
+export async function checkForUpdate(): Promise<UpdateStatus> {
+  await sleep(500);
+  const mode = new URLSearchParams(window.location.search).get("preview");
+
+  const base = {
+    currentRelease: "tsudev-cwico-v26.8.19",
+    currentVersion: "26.8.1901",
+  };
+
+  if (mode === "update") {
+    return {
+      ...base,
+      available: true,
+      checked: true,
+      newRelease: "tsudev-cwico-v26.8.25",
+      newVersion: "26.8.2501",
+      publishedAt: "2026-08-25T09:14:00Z",
+      notes:
+        "Reclassifies Microsoft Store as Critical after reports that removing " +
+        "it left machines unable to update any Store application.\n\n" +
+        "Adds 14 OEM bloatware rules and fixes a deep-clean path that could " +
+        "match a folder outside the product's install location.",
+    };
+  }
+  if (mode === "offline") {
+    return {
+      ...base,
+      available: false,
+      checked: false,
+      checkError: "error sending request for url (https://github.com/...)",
+    };
+  }
+  return { ...base, available: false, checked: true };
+}
+
+export async function installUpdate(): Promise<void> {
+  const total = 2_936_012;
+  let downloaded = 0;
+  while (downloaded < total) {
+    downloaded = Math.min(total, downloaded + 180_000);
+    updateEmit?.({ downloaded, total, installing: false });
+    await sleep(90);
+  }
+  updateEmit?.({ downloaded: total, total, installing: true });
+  await sleep(1500);
+  // The real one never returns: the process is replaced by the new version.
+  await new Promise(() => {});
 }

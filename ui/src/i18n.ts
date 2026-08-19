@@ -150,6 +150,26 @@ const vi = {
   "detail.why": "Vì sao được phân loại như vậy",
 
   "error.title": "Đã xảy ra lỗi",
+  "update.gate.title": "Có phiên bản mới",
+  "update.gate.lead":
+    "Cần cập nhật lên phiên bản mới nhất trước khi tiếp tục sử dụng.",
+  "update.gate.why":
+    "Cơ sở dữ liệu an toàn quyết định phần mềm nào được phép gỡ. Khi một quy tắc được sửa — ví dụ một mục từng bị xếp nhầm là An toàn — bản sửa đi kèm phiên bản mới. Chạy bản cũ nghĩa là đang dùng đánh giá an toàn đã lỗi thời cho chính máy của bạn.",
+  "update.current": "Đang dùng",
+  "update.new": "Phiên bản mới",
+  "update.published": "Phát hành",
+  "update.notes": "Có gì thay đổi",
+  "update.button": "Cập nhật",
+  "update.downloading": "Đang tải…",
+  "update.installing": "Đang cài đặt…",
+  "update.restarting": "Sắp khởi động lại…",
+  "update.failed": "Cập nhật không thành công",
+  "update.retry": "Thử lại",
+  "update.checking": "Đang kiểm tra cập nhật…",
+  "update.checkFailed": "Chưa kiểm tra được cập nhật",
+  "update.checkFailedBody":
+    "Không kết nối được máy chủ cập nhật, phần mềm vẫn dùng bình thường. Sẽ kiểm tra lại ở lần khởi động sau.",
+  "update.upToDate": "Đang dùng phiên bản mới nhất",
   "theme.toggle": "Đổi giao diện sáng/tối",
   "locale.toggle": "Đổi ngôn ngữ",
 } as const;
@@ -297,6 +317,26 @@ const en: Record<TranslationKey, string> = {
   "detail.why": "Why it is classified this way",
 
   "error.title": "Something went wrong",
+  "update.gate.title": "A new version is available",
+  "update.gate.lead":
+    "This update must be installed before you can continue.",
+  "update.gate.why":
+    "The safety database decides what this tool will and will not remove. When a rule is corrected — something classified Safe that should not have been, say — the fix ships as a new version. Running an old build means running an out-of-date idea of what is safe to delete on your machine.",
+  "update.current": "Installed",
+  "update.new": "New version",
+  "update.published": "Published",
+  "update.notes": "What changed",
+  "update.button": "Update",
+  "update.downloading": "Downloading…",
+  "update.installing": "Installing…",
+  "update.restarting": "Restarting…",
+  "update.failed": "The update did not complete",
+  "update.retry": "Try again",
+  "update.checking": "Checking for updates…",
+  "update.checkFailed": "Could not check for updates",
+  "update.checkFailedBody":
+    "The update server could not be reached, so the app started normally. It will check again next time.",
+  "update.upToDate": "You are on the latest version",
   "theme.toggle": "Toggle light/dark theme",
   "locale.toggle": "Change language",
 };

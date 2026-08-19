@@ -22,10 +22,13 @@ import type {
   Selection,
   TweakCatalog,
   TweakOutcome,
+  UpdateProgress,
+  UpdateStatus,
 } from "./types";
 import * as fixtures from "./fixtures";
 
 const PROGRESS_EVENT = "cwico://progress";
+const UPDATE_PROGRESS_EVENT = "cwico://update-progress";
 
 /** `true` when running inside the Tauri window rather than a plain browser. */
 export const isDesktop = (): boolean =>
@@ -124,6 +127,47 @@ export async function openBackupDir(): Promise<void> {
 export async function relaunchAsAdmin(): Promise<void> {
   if (!isDesktop()) return;
   return call<void>("relaunch_as_admin");
+}
+
+// ---------------------------------------------------------------------------
+// Updates
+// ---------------------------------------------------------------------------
+
+/**
+ * Ask whether a newer release exists.
+ *
+ * Never throws: a check that could not run comes back with `checked: false`
+ * and the app carries on. Failing open is deliberate — a server outage must
+ * not lock every user out of the tool at once.
+ */
+export async function checkForUpdate(): Promise<UpdateStatus> {
+  if (!isDesktop()) return fixtures.checkForUpdate();
+  try {
+    return await invoke<UpdateStatus>("check_for_update");
+  } catch (error) {
+    return {
+      available: false,
+      checked: false,
+      checkError: String(error),
+      currentRelease: "",
+      currentVersion: "",
+    };
+  }
+}
+
+/** Download and install the update, then restart. Only returns on failure. */
+export async function installUpdate(): Promise<void> {
+  if (!isDesktop()) return fixtures.installUpdate();
+  return call<void>("install_update");
+}
+
+export async function onUpdateProgress(
+  handler: (progress: UpdateProgress) => void,
+): Promise<UnlistenFn> {
+  if (!isDesktop()) return fixtures.onUpdateProgress(handler);
+  return listen<UpdateProgress>(UPDATE_PROGRESS_EVENT, (event) =>
+    handler(event.payload),
+  );
 }
 
 // ---------------------------------------------------------------------------

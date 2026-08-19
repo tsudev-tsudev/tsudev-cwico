@@ -212,7 +212,10 @@ export interface PlatformInfo {
 }
 
 export interface AboutInfo {
+  /** Raw semver, for support reports. */
   appVersion: string;
+  /** The name users recognise: `tsudev-cwico-v26.8.19`. */
+  appRelease: string;
   productUrl: string;
   platform: PlatformInfo;
   safetyDbVersion: string;
@@ -318,3 +321,29 @@ export const DEFAULT_PLAN_OPTIONS: PlanOptions = {
   dryRun: false,
   continueOnError: true,
 };
+
+/**
+ * The result of an update check.
+ *
+ * `available` is the only field that closes the update gate. `checked: false`
+ * means the check could not run — offline, DNS, GitHub down — and the app
+ * carries on normally; see `app/src-tauri/src/update.rs` for why that
+ * distinction matters.
+ */
+export interface UpdateStatus {
+  available: boolean;
+  checked: boolean;
+  checkError?: string;
+  currentRelease: string;
+  currentVersion: string;
+  newRelease?: string;
+  newVersion?: string;
+  notes?: string;
+  publishedAt?: string;
+}
+
+export interface UpdateProgress {
+  downloaded: number;
+  total?: number;
+  installing: boolean;
+}

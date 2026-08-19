@@ -13,6 +13,7 @@ Run:  python3 tools/test_version.py
 from __future__ import annotations
 
 import importlib.util
+import json
 import pathlib
 import sys
 
@@ -20,6 +21,10 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 spec = importlib.util.spec_from_file_location("version", ROOT / "tools" / "version.py")
 version = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(version)
+
+#: Shared with cwico-core's version tests. Changing the mapping in one language
+#: without the other fails a test in the language that was not changed.
+CASES = json.loads((ROOT / "data" / "version-cases.json").read_text())
 
 failures: list[str] = []
 
@@ -36,15 +41,8 @@ def semver_key(s: str) -> tuple[int, int, int]:
 
 
 def test_round_trip() -> None:
-    cases = [
-        ("tsudev-cwico-v26.8.19", "26.8.1901"),
-        ("tsudev-cwico-v26.8.19.2", "26.8.1902"),
-        ("tsudev-cwico-v26.8.20", "26.8.2001"),
-        ("tsudev-cwico-v26.9.1", "26.9.101"),
-        ("tsudev-cwico-v26.12.31", "26.12.3101"),
-        ("tsudev-cwico-v27.1.1.99", "27.1.199"),
-    ]
-    for name, semver in cases:
+    for case in CASES["roundTrip"]:
+        name, semver = case["name"], case["semver"]
         check(
             f"{name} <-> {semver}",
             version.to_semver(name) == semver and version.to_name(semver) == name,
@@ -53,17 +51,7 @@ def test_round_trip() -> None:
 
 def test_ordering() -> None:
     """The updater compares these, so they must sort in release order."""
-    releases = [
-        "tsudev-cwico-v26.8.19",
-        "tsudev-cwico-v26.8.19.2",
-        "tsudev-cwico-v26.8.19.10",
-        "tsudev-cwico-v26.8.20",
-        "tsudev-cwico-v26.8.31",
-        "tsudev-cwico-v26.9.1",
-        "tsudev-cwico-v26.12.31",
-        "tsudev-cwico-v27.1.1",
-    ]
-    semvers = [version.to_semver(name) for name in releases]
+    semvers = [version.to_semver(name) for name in CASES["ascendingOrder"]]
     check("release order survives the mapping", semvers == sorted(semvers, key=semver_key))
 
     # The specific trap: the tenth release of a day must sort above the second,
@@ -87,7 +75,7 @@ def test_accepted_input_forms() -> None:
 
 
 def test_rejected_names() -> None:
-    for bad in ["26.8.19.0", "tsudev-cwico-v26.13.1", "26.8.32", "nonsense", "", "v"]:
+    for bad in CASES["rejectedNames"]:
         try:
             version.to_semver(bad)
             check(f"rejects `{bad}`", False)
@@ -97,7 +85,7 @@ def test_rejected_names() -> None:
 
 def test_rejected_semvers() -> None:
     """A semver from outside this scheme must fail loudly, not mis-decode."""
-    for bad in ["1.0.0", "26.8.0", "26.8.3200", "26.8.100"]:
+    for bad in CASES["rejectedSemvers"]:
         try:
             version.to_name(bad)
             check(f"rejects semver `{bad}`", False)

@@ -1,0 +1,44 @@
+{
+  "comment": [
+    "Shared test vectors for the release-name <-> semver mapping.",
+    "Read by tools/test_version.py and by cwico-core's version tests, so that",
+    "the Python tooling and the Rust runtime cannot drift apart: changing one",
+    "implementation without the other fails a test in the language that was",
+    "not changed."
+  ],
+  "roundTrip": [
+    { "name": "tsudev-cwico-v26.8.19", "semver": "26.8.1901" },
+    { "name": "tsudev-cwico-v26.8.19.2", "semver": "26.8.1902" },
+    { "name": "tsudev-cwico-v26.8.19.10", "semver": "26.8.1910" },
+    { "name": "tsudev-cwico-v26.8.20", "semver": "26.8.2001" },
+    { "name": "tsudev-cwico-v26.8.31", "semver": "26.8.3101" },
+    { "name": "tsudev-cwico-v26.9.1", "semver": "26.9.101" },
+    { "name": "tsudev-cwico-v26.12.31", "semver": "26.12.3101" },
+    { "name": "tsudev-cwico-v27.1.1", "semver": "27.1.101" },
+    { "name": "tsudev-cwico-v27.1.1.99", "semver": "27.1.199" }
+  ],
+  "ascendingOrder": [
+    "tsudev-cwico-v26.8.19",
+    "tsudev-cwico-v26.8.19.2",
+    "tsudev-cwico-v26.8.19.10",
+    "tsudev-cwico-v26.8.20",
+    "tsudev-cwico-v26.8.31",
+    "tsudev-cwico-v26.9.1",
+    "tsudev-cwico-v26.12.31",
+    "tsudev-cwico-v27.1.1"
+  ],
+  "rejectedNames": [
+    "26.8.19.0",
+    "tsudev-cwico-v26.13.1",
+    "26.8.32",
+    "nonsense",
+    "",
+    "v"
+  ],
+  "rejectedSemvers": [
+    "1.0.0",
+    "26.8.0",
+    "26.8.3200",
+    "26.8.100"
+  ]
+}

@@ -17,6 +17,12 @@ tracing     = { workspace = true }
 time        = { workspace = true }
 regex       = { workspace = true }
 
+# Self-referential, so `cargo test -p cwico-core` on its own has the fixture
+# backend its integration tests need. Without it the feature only arrives
+# transitively from cwico-cli, and testing this crate in isolation fails.
+[dev-dependencies]
+cwico-core = { path = ".", features = ["mock"] }
+
 [features]
 default = []
 # Deterministic in-memory backend: lets the UI and the engine be developed and

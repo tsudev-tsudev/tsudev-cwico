@@ -61,6 +61,7 @@ pub mod plan;
 pub mod safety;
 pub mod scan;
 pub mod tweaks;
+pub mod version;
 
 #[cfg(feature = "mock")]
 pub mod mock;
@@ -76,6 +77,7 @@ pub use plan::{PlanOptions, PlannedItem, RejectedSelection, RemovalPlan, Selecti
 pub use safety::{SafetyDatabase, SafetyRule, Verdict};
 pub use scan::{ItemFilter, ScanOptions, ScanReport, ScanStats, SortBy};
 pub use tweaks::{Tweak, TweakCatalog, TweakCategory};
+pub use version::{current_release_name, name_for_semver, Release};
 
 /// Product name, used in restore-point descriptions and log headers.
 pub const PRODUCT_NAME: &str = "tsudev-cwico";

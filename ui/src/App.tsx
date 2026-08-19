@@ -16,6 +16,7 @@ import { CwicoError } from "./api";
 import { formatDateTime, translator } from "./i18n";
 import type {
   AboutInfo,
+  UpdateStatus,
   Locale,
   ProgressEvent,
   RemovalPlan,
@@ -35,6 +36,7 @@ import { PlanDialog } from "./components/PlanDialog";
 import { RunPanel, eventToLine, type LogLine } from "./components/RunPanel";
 import { SoftwareTable } from "./components/SoftwareTable";
 import { TweaksView } from "./components/TweaksView";
+import { UpdateGate } from "./components/UpdateGate";
 import { Button, Notice, Panel, ProgressBar } from "./components/primitives";
 import { formatBytes } from "./i18n";
 
@@ -54,6 +56,9 @@ export default function App() {
         window.matchMedia("(prefers-color-scheme: dark)").matches),
   );
   const [tab, setTab] = useState<Tab>("software");
+
+  /** `null` while the check is still running — the app is not shown yet. */
+  const [update, setUpdate] = useState<UpdateStatus | null>(null);
 
   const [about, setAbout] = useState<AboutInfo | null>(null);
   const [report, setReport] = useState<ScanReport | null>(null);
@@ -95,6 +100,43 @@ export default function App() {
     localStorage.setItem(LOCALE_KEY, locale);
     document.documentElement.lang = locale;
   }, [locale]);
+
+  // Checked before the application is shown, because the gate must not appear
+  // in the middle of someone's work. Bounded so a hanging request cannot leave
+  // the user staring at a splash screen: a timeout is treated exactly like any
+  // other failed check, and the app starts normally.
+  useEffect(() => {
+    const CHECK_TIMEOUT_MS = 10_000;
+    let settled = false;
+
+    const settle = (status: UpdateStatus) => {
+      if (!settled) {
+        settled = true;
+        setUpdate(status);
+      }
+    };
+
+    const timer = window.setTimeout(
+      () =>
+        settle({
+          available: false,
+          checked: false,
+          checkError: `the update check did not answer within ${
+            CHECK_TIMEOUT_MS / 1000
+          }s`,
+          currentRelease: "",
+          currentVersion: "",
+        }),
+      CHECK_TIMEOUT_MS,
+    );
+
+    void api.checkForUpdate().then((status) => {
+      window.clearTimeout(timer);
+      settle(status);
+    });
+
+    return () => window.clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     api.about().then(setAbout).catch(() => setAbout(null));
@@ -298,6 +340,35 @@ export default function App() {
     0,
   );
 
+  // Nothing is rendered until the update check has settled: showing the app
+  // and then yanking it away a second later would be worse than a brief wait.
+  if (update === null) {
+    return (
+      <div
+        className="flex h-full flex-col items-center justify-center gap-5"
+        style={{ background: "var(--surface-app)" }}
+      >
+        <Brand size="lg" />
+        <p className="text-sm" style={{ color: "var(--text-muted)" }}>
+          {t("update.checking")}
+        </p>
+        <div className="w-56">
+          <ProgressBar />
+        </div>
+      </div>
+    );
+  }
+
+  if (update.available) {
+    return (
+      <UpdateGate
+        status={update}
+        locale={locale}
+        onLocaleToggle={() => setLocale(locale === "vi" ? "en" : "vi")}
+      />
+    );
+  }
+
   return (
     <div className="flex h-full flex-col">
       {/* --------------------------------------------------------- header */}
@@ -375,6 +446,20 @@ export default function App() {
             }
           >
             <span className="selectable">{error}</span>
+          </Notice>
+        )}
+
+        {!update.checked && (
+          <Notice tone="info" title={t("update.checkFailed")}>
+            {t("update.checkFailedBody")}
+            {update.checkError && (
+              <span
+                className="selectable mt-1 block font-mono text-[11px]"
+                style={{ color: "var(--text-muted)" }}
+              >
+                {update.checkError}
+              </span>
+            )}
           </Notice>
         )}
 
@@ -534,8 +619,8 @@ export default function App() {
         }}
       >
         <Brand size="sm" />
-        <span>
-          v{about?.appVersion ?? "1.0.0"}
+        <span className="selectable">
+          {about?.appRelease ?? update.currentRelease}
           {about && ` · ${t("about.safetyDb")} v${about.safetyDbVersion}`}
         </span>
       </footer>

@@ -25,6 +25,7 @@ export function AboutView({
 
   const rows: [string, string][] = [
     [t("about.engine"), `cwico-core ${info.appVersion}`],
+    ["Release", info.appRelease],
     [t("about.os"), info.platform.osDescription],
     ["Architecture", info.platform.arch],
     [
@@ -42,8 +43,8 @@ export function AboutView({
         <Brand size="lg" />
         <div>
           <p className="text-sm font-medium">{t("app.subtitle")}</p>
-          <p className="mt-1 text-[13px]" style={{ color: "var(--text-muted)" }}>
-            v{info.appVersion} · MIT
+          <p className="selectable mt-1 text-[13px]" style={{ color: "var(--text-muted)" }}>
+            {info.appRelease} · MIT
           </p>
         </div>
         <Button variant="primary" onClick={() => void openProductSite()}>

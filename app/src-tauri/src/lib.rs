@@ -11,6 +11,8 @@ use cwico_core::{
     Engine, PlanOptions, RemovalPlan, RunReport, SafetyDatabase, ScanOptions, ScanReport,
     Selection, TweakCatalog,
 };
+pub mod update;
+
 use serde::Serialize;
 use std::path::PathBuf;
 use std::sync::{Arc, Mutex};
@@ -102,7 +104,10 @@ fn default_backup_dir() -> PathBuf {
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AboutInfo {
+    /// The raw semver, for support reports.
     pub app_version: String,
+    /// The name users recognise: `tsudev-cwico-v26.8.19`.
+    pub app_release: String,
     pub product_url: String,
     pub platform: PlatformInfo,
     pub safety_db_version: String,
@@ -119,6 +124,7 @@ fn about(state: State<'_, AppState>) -> AboutInfo {
     let (safe, caution, critical) = state.db.class_counts();
     AboutInfo {
         app_version: env!("CARGO_PKG_VERSION").to_string(),
+        app_release: cwico_core::current_release_name(),
         product_url: cwico_core::PRODUCT_URL.to_string(),
         platform: state.backend.platform_info(),
         safety_db_version: state.db.version().to_string(),
@@ -283,6 +289,28 @@ fn run_tweaks(ids: Vec<String>, enable: bool, _dry_run: bool) -> ApiResult<Vec<T
         .collect())
 }
 
+// ---------------------------------------------------------------------------
+// Updates
+// ---------------------------------------------------------------------------
+
+/// Ask whether a newer release exists.
+///
+/// Never fails: a check that could not run reports `checked: false` and the
+/// app carries on. See `update.rs` for why the gate fails open.
+#[tauri::command]
+async fn check_for_update(app: AppHandle) -> update::UpdateStatus {
+    update::check(&app).await
+}
+
+/// Download and install the update, then restart into it.
+#[tauri::command]
+async fn install_update(app: AppHandle) -> ApiResult<()> {
+    update::install(&app).await.map_err(|message| ApiError {
+        code: "update_failed".into(),
+        message,
+    })
+}
+
 /// Open a URL in the user's browser. Used by the tsudev logo and wordmark.
 ///
 /// Restricted to the product's own site: a command that opens any URL is a
@@ -355,8 +383,12 @@ pub fn run() {
         )
         .init();
 
-    tauri::Builder::default()
-        .plugin(tauri_plugin_opener::init())
+    let builder = tauri::Builder::default().plugin(tauri_plugin_opener::init());
+
+    #[cfg(windows)]
+    let builder = builder.plugin(tauri_plugin_updater::Builder::new().build());
+
+    builder
         .setup(|app| {
             let state = AppState::new(make_backend(), default_backup_dir());
             tracing::info!(
@@ -375,6 +407,8 @@ pub fn run() {
             execute_plan,
             tweak_catalog,
             apply_tweaks,
+            check_for_update,
+            install_update,
             open_product_site,
             open_backup_dir,
             relaunch_as_admin,

@@ -31,6 +31,9 @@ tracing-subscriber = { workspace = true }
 
 [target.'cfg(windows)'.dependencies]
 cwico-win = { workspace = true }
+# There is nothing to update on a fixture build, and the plugin pulls in a
+# download and process-spawning stack a Linux dev build has no use for.
+tauri-plugin-updater = "2"
 
 # See cwico-cli: a non-Windows build always uses the fixture backend.
 [target.'cfg(not(windows))'.dependencies]

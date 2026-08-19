@@ -115,10 +115,14 @@ Restructuring for release management and auto-update. Tasks, in order:
 * **`cargo test --workspace` fails on Linux/macOS** — it drags in the Tauri
   crate, which needs webkit2gtk. `default-members` deliberately excludes it.
   Use plain `cargo test`.
-* **Cross-checking the Tauri crate from Linux** needs
-  `x86_64-w64-mingw32-windres` (`apt install binutils-mingw-w64-x86-64`).
-  Without it the build script fails at the resource-compiler step, *after*
-  successfully parsing the config — that failure is not a code error.
+* **The Tauri crate can no longer be cross-checked from Linux.** Since the
+  updater plugin was added it pulls in `ring`, whose build script needs a C
+  compiler for the target (`x86_64-w64-mingw32-gcc`), and before that it
+  needed `x86_64-w64-mingw32-windres`. Install both to restore it:
+  `apt install binutils-mingw-w64-x86-64 gcc-mingw-w64-x86-64`. Without them,
+  **CI's Windows job is the only thing that type-checks `cwico-app`** — push
+  and read the result rather than assuming. `cwico-core`, `cwico-win` and
+  `cwico-cli` still cross-check fine, and they hold all the logic.
 * **Paths in `tauri.conf.json` have two different bases.** `frontendDist` is
   relative to `tauri.conf.json` (`app/src-tauri/`); the `before*Command` hooks
   run from the *app directory* one level up (`app/`). That is why one says
