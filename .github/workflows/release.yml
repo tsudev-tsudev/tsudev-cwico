@@ -2,11 +2,12 @@ name: Release
 
 on:
   push:
-    tags: ["v*"]
+    # Release tags carry the full product name: tsudev-cwico-v26.8.19
+    tags: ["tsudev-cwico-v*"]
   workflow_dispatch:
     inputs:
       publish:
-        description: "Create a draft GitHub release (tag pushes always do)"
+        description: "Draft a GitHub release (tag pushes always do)"
         type: boolean
         default: false
 
@@ -27,33 +28,64 @@ jobs:
           cache: npm
           cache-dependency-path: ui/package-lock.json
 
+      # Tagging without bumping the manifests would ship a build that reports
+      # the previous version — and the updater compares exactly that number,
+      # so every user would be told they are already current.
+      - name: Check the tag matches the version in the manifests
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: bash
+        run: |
+          expected=$(python3 tools/version.py to-semver "${{ github.ref_name }}")
+          actual=$(python3 tools/version.py current | grep -oE '\(semver [^)]+\)' | sed 's/(semver //;s/)//')
+          echo "tag      ${{ github.ref_name }} -> $expected"
+          echo "manifests                       -> $actual"
+          if [ "$expected" != "$actual" ]; then
+            echo "::error::the tag and the manifests disagree." \
+                 "Run 'tools/version.py set ${{ github.ref_name }}' and commit before tagging."
+            exit 1
+          fi
+
+      - name: Check the version encoding
+        shell: bash
+        run: python3 tools/test_version.py
+
       - run: npm --prefix ui ci
 
-      # A tag push publishes a draft release; a manual run just produces the
-      # artefacts, so the packaging pipeline can be exercised without leaving a
-      # half-finished release behind.
+      # A tag push drafts a release; a manual run only produces artefacts, so
+      # the packaging pipeline can be exercised without leaving a half-finished
+      # release behind.
+      #
+      # The release is drafted rather than published on purpose: the updater
+      # endpoint resolves `releases/latest`, which ignores drafts, so nothing
+      # is delivered to users until the release is published by hand. That is
+      # the last human checkpoint before a mandatory update reaches every
+      # installation.
       - name: Build installers and draft the release
-        if: startsWith(github.ref, 'refs/tags/v') || inputs.publish
+        if: startsWith(github.ref, 'refs/tags/') || inputs.publish
         uses: tauri-apps/tauri-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Set these to sign the installers. Unsigned builds still work but
-          # SmartScreen warns on first run, which for a tool that asks for
-          # Administrator is a bad first impression.
+          # Signs the update payload so installed copies will accept it.
+          # Not the same as Authenticode — see docs/SIGNING.md.
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         with:
           projectPath: app/src-tauri
           tagName: ${{ github.ref_name }}
-          releaseName: tsudev-cwico ${{ github.ref_name }}
+          releaseName: ${{ github.ref_name }}
           releaseDraft: true
+          # `latest.json` is what installed copies poll. Without it the
+          # updater has nothing to read and no update is ever delivered.
+          uploadUpdaterJson: true
           args: --verbose
 
       - name: Build installers only
-        if: "!(startsWith(github.ref, 'refs/tags/v') || inputs.publish)"
+        if: "!(startsWith(github.ref, 'refs/tags/') || inputs.publish)"
         uses: tauri-apps/tauri-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         with:
           projectPath: app/src-tauri
           args: --verbose
@@ -66,7 +98,7 @@ jobs:
         run: |
           $bundle = "app/src-tauri/target/release/bundle"
           if (-not (Test-Path $bundle)) { $bundle = "target/release/bundle" }
-          Get-ChildItem -Recurse -Include *.msi,*.exe $bundle |
+          Get-ChildItem -Recurse -Include *.msi,*.exe,*.sig $bundle |
             ForEach-Object {
               "{0}  {1}" -f (Get-FileHash $_ -Algorithm SHA256).Hash, $_.Name
             } | Tee-Object -FilePath sha256sums.txt
@@ -80,6 +112,23 @@ jobs:
           -Repository "${{ github.repository }}"
           -Version "${{ github.ref_name }}"
 
+      # A release whose payload is unsigned is a release installed copies will
+      # refuse, and the failure would only show up on a user's machine.
+      - name: Confirm the update payload was signed
+        if: startsWith(github.ref, 'refs/tags/') || inputs.publish
+        shell: pwsh
+        run: |
+          $bundle = "app/src-tauri/target/release/bundle"
+          if (-not (Test-Path $bundle)) { $bundle = "target/release/bundle" }
+          $sigs = Get-ChildItem -Recurse -Filter *.sig $bundle
+          if (-not $sigs) {
+            Write-Error ("no .sig files were produced — TAURI_SIGNING_PRIVATE_KEY " +
+                         "is probably missing, and installed copies would reject " +
+                         "this update")
+            exit 1
+          }
+          $sigs | ForEach-Object { Write-Host "  signed: $($_.Name)" }
+
       - uses: actions/upload-artifact@v7
         with:
           name: installers
@@ -87,8 +136,10 @@ jobs:
           path: |
             app/src-tauri/target/release/bundle/**/*.msi
             app/src-tauri/target/release/bundle/**/*.exe
+            app/src-tauri/target/release/bundle/**/*.sig
             target/release/bundle/**/*.msi
             target/release/bundle/**/*.exe
+            target/release/bundle/**/*.sig
             target/release/cwico.exe
             sha256sums.txt
             winget-installer-manifest.yaml

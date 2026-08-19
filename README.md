@@ -300,15 +300,22 @@ cargo test
 - [x] MSIX manifest and Store submission notes
 - [x] `winget` manifest generated automatically at release time
 
+Auto-update is in place: installed copies check GitHub Releases on startup and
+block until a confirmed newer release is installed — see
+[`docs/SIGNING.md`](docs/SIGNING.md) for how update payloads are signed.
+
 Ready, but waiting on something only a human can supply:
 
 - [ ] **Runtime testing on real Windows.** Everything compiles and its tests
       pass on a Windows runner, but no version of this has yet driven
       `SRSetRestorePointW` or the service control manager on a live machine.
       Start with `cwico plan`, which changes nothing.
-- [ ] **Code signing.** Unsigned installers work, but SmartScreen warns on
-      first run — a poor first impression for a tool that asks for
-      Administrator. Set `TAURI_SIGNING_PRIVATE_KEY` in the repository secrets.
+- [ ] **Code signing (Authenticode).** Unsigned installers work, but
+      SmartScreen warns on first run — a poor first impression for a tool that
+      then asks for Administrator, and it trains users to click through the
+      warning that protects them. Needs a certificate from a commercial CA;
+      [`docs/SIGNING.md`](docs/SIGNING.md) has the workflow ready to fill in.
+      *Update signing is separate and already done.*
 - [ ] **Microsoft Store submission.** Needs a Partner Center account; the
       manifest and the reviewer notes are in [`packaging/msix/`](packaging/msix/).
 - [ ] **`winget` publication.** Needs a tagged release, then a pull request to
