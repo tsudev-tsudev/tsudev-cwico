@@ -1,4 +1,4 @@
-# TÀI SẢN THƯƠNG HIỆU (v2.7.0)
+# TÀI SẢN THƯƠNG HIỆU (v2.8.0)
 
 > Logo, dấu hiệu thu gọn, wordmark, favicon và icon ứng dụng của hệ sinh thái
 > tsudev: bản gốc nằm ở đâu, sinh ra bằng gì, dùng dấu hiệu nào ở cỡ nào.
@@ -44,6 +44,7 @@ chạy lại dây chuyền sẽ ghi đè. Sửa thì sửa ở `packages/brand/s
 | **Logo đầy đủ** | `brand/logo-full.png` (`768x1169`) | Cú + chữ "tsudev" + tagline | Trang giới thiệu, bìa tài liệu, ảnh chia sẻ, bản in. Cạnh ngắn **từ 160px** |
 | **Dấu hiệu thu gọn** | `brand/logo-mark.png` (`512x626`) | **Chỉ hình cú**, không chữ | Mặc định ở giao diện, và **bắt buộc** cho mọi icon: favicon, icon ứng dụng, khay hệ thống, avatar |
 | **Wordmark ảnh** | `brand/logo-wordmark.png` (`640x192`) | Chỉ phần chữ | Chỉ nơi không chạy được chữ thật: ảnh mở đầu bản cài, chữ ký email, bản in |
+| **Bản cho nền tối** | `brand/logo-full-dark.png`, `brand/logo-wordmark-dark.png` | Như trên, mực navy đổi sang trắng | Bắt buộc khi đặt trên nền tối (mục 4) |
 
 **Dấu hiệu thu gọn là dấu hiệu mặc định trên giao diện**, không phải logo đầy đủ.
 Logo đầy đủ có tagline chữ nhỏ; thu xuống dưới 160px là tagline thành vệt xám.
@@ -78,9 +79,14 @@ Hình cú có nền trong suốt và tự đủ tương phản trên cả ba ch�
 Chữ thì khác. Chữ trong `logo-full.png` và `logo-wordmark.png` là **navy
 `#11355A`**, chỉ đạt **1.38:1** trên nền Tối - không đọc được. Vì vậy:
 
-- Trên nền tối, `MUST NOT` dùng `logo-full.png` hay `logo-wordmark.png`.
-- Dùng `logo-mark.png` kèm **chữ dựng bằng text** theo mục 5.
-- Bản `dark` của hai file ảnh kia hiện **chưa có** - xem mục 9.
+- Trên nền tối, `MUST NOT` dùng `logo-full.png` hay `logo-wordmark.png`. Dùng
+  `logo-full-dark.png` / `logo-wordmark-dark.png` - mực navy đã đổi sang trắng,
+  đạt **17.28:1**, còn chữ cam giữ nguyên vì nó vốn đã đạt **6.66:1**.
+- Nơi dựng được chữ bằng text thì vẫn `SHOULD` dùng `logo-mark.png` kèm chữ text
+  theo mục 5 - cách đó tự đúng ở cả ba chế độ nền, không phải chọn file.
+- Giới hạn đã biết: quầng sáng của con cú được vẽ để tan vào nền trắng, nên ở cỡ
+  rất lớn trên nền tối phần đáy thân cú vẫn hơi lộ vệt sáng. Dưới 300px không nhận
+  ra. Sửa hết hẳn là việc của khâu thiết kế, không phải của ngưỡng xoá nền.
 
 ## 5. Màu của dấu hiệu
 
@@ -176,7 +182,6 @@ Hai bản cài đặt tham chiếu, dùng cho hai loại sản phẩm:
 | Việc | Ở đâu | Ghi chú |
 | --- | --- | --- |
 | Nguồn sinh icon dưới chuẩn | `tsudev-cwico/assets/brand/tsudev-logo.png` | Chỉ `222x280`, trong khi `gen_icons.py` sinh icon tới **512**. Phải xuất lại dấu hiệu thu gọn từ bản gốc `2048x2048` |
-| Chưa có bản `dark` của logo và wordmark | dây chuyền `packages/brand` | Chữ navy không đọc được trên nền Tối. Hiện lách được vì giao diện dựng chữ bằng text, nhưng ảnh in và ảnh chia sẻ nền tối thì không lách được |
 
 ## 11. Biến thể không dùng cho sản phẩm
 
