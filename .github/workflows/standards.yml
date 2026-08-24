@@ -1,0 +1,25 @@
+name: Cổng kiểm quy ước
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Kiểm quy ước
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Cổng kiểm quy ước cục bộ
+        run: ./scripts/check-standards.sh
+
+      - name: Đối chiếu với bộ quy ước trung tâm
+        run: ./scripts/sync-standards.sh --check

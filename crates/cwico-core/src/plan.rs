@@ -1,7 +1,7 @@
 //! Turning a user's selection into an ordered, auditable plan.
 //!
 //! Nothing in this crate touches the system directly. The plan is built and
-//! validated first — including the hard block on `Critical` items — and only
+//! validated first - including the hard block on `Critical` items - and only
 //! then handed to a [`crate::backend::PlatformBackend`] for execution. That
 //! split is what makes the dangerous half of the tool testable on any host.
 
@@ -489,12 +489,12 @@ impl RemovalPlan {
                     }
                 }
 
-                // 3. Residue — but only for kinds that leave any.
+                // 3. Residue - but only for kinds that leave any.
                 //
                 // A service or a scheduled task is *disabled*, never deleted,
                 // and its "registry key" is its definition in the service
                 // control database. Sweeping that would delete the service
-                // outright — the opposite of the reversible change the user
+                // outright - the opposite of the reversible change the user
                 // asked for, and unrecoverable without a reinstall.
                 if matches!(action, Action::UninstallAndDeepClean)
                     && Self::leaves_residue(item.source)
@@ -519,7 +519,7 @@ impl RemovalPlan {
     ///
     /// Programs and packages install files and write registry trees, so they
     /// do. Services, scheduled tasks and autostart entries *are* the registry
-    /// entry — turning them off is the whole operation, and deleting their
+    /// entry - turning them off is the whole operation, and deleting their
     /// key would destroy something the user expects to be able to turn back on.
     fn leaves_residue(source: SourceKind) -> bool {
         matches!(

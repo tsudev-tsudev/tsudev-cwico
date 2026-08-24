@@ -2,7 +2,7 @@
 //!
 //! Each pass produces [`cwico_core::SoftwareItem`]s, classifies them against
 //! the safety database, and reports progress. A pass that fails records a
-//! warning on the report and the scan continues — one unreadable registry
+//! warning on the report and the scan continues - one unreadable registry
 //! hive must not cost the user the other four hundred results.
 
 use crate::naming::normalise_install_date;
@@ -535,9 +535,9 @@ fn scan_startup(report: &mut ScanReport, db: &SafetyDatabase) -> Result<usize> {
         if entry.target_missing {
             item.extra.insert("targetMissing".into(), "1".into());
             item.description = Some(cwico_core::model::LocalizedText::new(
-                "Points at a program that no longer exists — leftover from an uninstalled \
+                "Points at a program that no longer exists - leftover from an uninstalled \
                  application. Safe to remove.",
-                "Trỏ tới một chương trình không còn tồn tại — tàn dư của ứng dụng đã gỡ. \
+                "Trỏ tới một chương trình không còn tồn tại - tàn dư của ứng dụng đã gỡ. \
                  An toàn để xóa.",
             ));
         }

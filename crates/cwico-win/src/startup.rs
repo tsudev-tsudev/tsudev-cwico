@@ -49,7 +49,7 @@ pub struct StartupEntry {
     pub command: String,
     /// `HKCU\Software\...\Run`, or the Startup folder path.
     pub location: String,
-    /// `true` when the entry points at a file that no longer exists — pure
+    /// `true` when the entry points at a file that no longer exists - pure
     /// residue, and always safe to remove.
     pub target_missing: bool,
     /// `true` for a Startup-folder shortcut rather than a registry value.

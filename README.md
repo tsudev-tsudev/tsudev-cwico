@@ -28,7 +28,7 @@
 
 Windows hides installed software in at least six unrelated places. `cwico`
 reads all of them, classifies everything it finds, and lets you remove what you
-do not need — without breaking the operating system.
+do not need - without breaking the operating system.
 
 | Pass | What it reads | Win32 / WinRT API |
 |---|---|---|
@@ -41,16 +41,16 @@ do not need — without breaking the operating system.
 
 Removal runs a four-step flow per item:
 
-1. **Terminate** the software's processes — `CreateToolhelp32Snapshot`,
+1. **Terminate** the software's processes - `CreateToolhelp32Snapshot`,
    `OpenProcess`, `TerminateProcess`. Shared hosts (`svchost.exe`) and
    boot-critical processes are never touched.
 2. **Run the vendor's uninstaller**, silently. `QuietUninstallString` is
    preferred; otherwise the silent switches are inferred for MSI, Inno Setup
    and NSIS, and only for those.
-3. **Remove the package** — `RemovePackageWithOptionsAsync` with
+3. **Remove the package** - `RemovePackageWithOptionsAsync` with
    `RemoveForAllUsers`, then `DeprovisionPackageForAllUsersAsync` so it does
    not come back for the next user account.
-4. **Deep clean** — leftover folders and registry keys, each one validated
+4. **Deep clean** - leftover folders and registry keys, each one validated
    against the deletion guard first.
 
 ---
@@ -70,7 +70,7 @@ previews with it.*
 <img src="docs/screenshots/plan-light-en.png" alt="The removal plan, listing the backup steps and the exact steps per item" width="820">
 
 *Nothing happens until you have seen the plan: the restore point and `.reg`
-export that run first, then the exact steps for each item — and anything the
+export that run first, then the exact steps for each item - and anything the
 engine refused, with the reason.*
 
 <br>
@@ -86,7 +86,7 @@ flag the engine requires.*
 <img src="docs/screenshots/tweaks-dark-vi.png" alt="The tweaks catalogue" width="820">
 
 *The old PowerShell script's twelve fixed steps, now 36 individually
-selectable changes — each with a safety class, a revert path and an
+selectable changes - each with a safety class, a revert path and an
 explanation of what it costs.*
 
 <br>
@@ -94,7 +94,7 @@ explanation of what it costs.*
 <img src="docs/screenshots/update-gate-vi.png" alt="The mandatory update screen" width="620">
 
 *Publishing a release pushes a mandatory update. There is no dismiss and no
-"later" — only Update — because a user on an old build is running an old idea
+"later" - only Update - because a user on an old build is running an old idea
 of what is safe to delete on their machine. A check that fails, though, lets
 the app start normally: an outage must not lock everyone out at once.*
 
@@ -105,7 +105,7 @@ the app start normally: an outage must not lock everyone out at once.*
 *How much protection is actually loaded, and where your rollback artefacts go.*
 
 <sub>Rendered from the fixture backend (`cwico-core`'s `MockBackend`), not a
-live scan — which is also how the interface is developed and reviewed without a
+live scan - which is also how the interface is developed and reviewed without a
 Windows machine in the loop.</sub>
 
 </div>
@@ -117,7 +117,7 @@ Windows machine in the loop.</sub>
 A debloater's failure mode is an unbootable machine, so three independent
 layers stand between a user and that outcome.
 
-### 1. Classification — `data/safety-db.json`
+### 1. Classification - `data/safety-db.json`
 
 Every discovered item is matched against a rule set of **58 rules**:
 
@@ -126,13 +126,13 @@ Every discovered item is matched against a rule set of **58 rules**:
 | **Safe** | No functional impact on Windows | 29 | OneDrive, Xbox app, Candy Crush, Bing News, Skype, telemetry services |
 | **Caution** | Removal works, but costs a secondary feature | 11 | Microsoft Edge, Windows Camera, Photos, Media Player, Cortana, Microsoft Store |
 | **Critical** | Removal breaks boot, logon, security or the shell | 18 | Defender, File Explorer, Settings, RPC/DCOM/WMI, VC++ and .NET runtimes, device drivers, licensing |
-| *Unknown* | Matched no rule | — | Any third-party software the database has not seen |
+| *Unknown* | Matched no rule | - | Any third-party software the database has not seen |
 
-An item that matches nothing is **`Unknown`, never `Safe`** — the database
+An item that matches nothing is **`Unknown`, never `Safe`** - the database
 fails closed. When an item matches both a `Safe` and a `Critical` rule,
 `Critical` wins: severity beats specificity.
 
-### 2. The planning gate — `RemovalPlan::build`
+### 2. The planning gate - `RemovalPlan::build`
 
 * `Critical` items **cannot be planned at all.** Not with a flag, not with a
   confirmation, not from the CLI. The plan type's constructor drops them and
@@ -142,7 +142,7 @@ fails closed. When an item matches both a `Safe` and a `Critical` rule,
 * Everything refused is reported back with a reason. Nothing is dropped
   silently.
 
-### 3. The deletion guard — `cwico_core::guard`
+### 3. The deletion guard - `cwico_core::guard`
 
 Every filesystem path and registry key is validated immediately before
 deletion, because residue paths come from the registry and vendors get them
@@ -150,9 +150,9 @@ wrong. Rejected outright:
 
 * drive roots, `C:\Windows`, `System32`, `WinSxS`, `Program Files`,
   `ProgramData`, and anything that is a *parent* of a protected directory
-* user profile roots and the user's own folders — `Documents`, `Desktop`,
+* user profile roots and the user's own folders - `Documents`, `Desktop`,
   `Downloads`, `OneDrive`
-* shared containers — `AppData`, `AppData\Local`, `Packages`, `Temp`,
+* shared containers - `AppData`, `AppData\Local`, `Packages`, `Temp`,
   `Start Menu\Programs`
 * every registry hive root, `HKLM\SOFTWARE`, `HKLM\SYSTEM\CurrentControlSet`,
   the services database
@@ -170,7 +170,7 @@ Before the first destructive step of any run:
 
 * a **System Restore Point** via `SRSetRestorePointW`
   (`APPLICATION_UNINSTALL`, bracketed by `BEGIN_`/`END_SYSTEM_CHANGE`). If it
-  cannot be created, the run **aborts** rather than proceeding unprotected —
+  cannot be created, the run **aborts** rather than proceeding unprotected -
   a rollback you cannot perform is not a rollback.
 * a **`.reg` export** of every key the run will touch, in both registry views,
   plus a generated `restore-registry.cmd` the user can run without this tool
@@ -200,7 +200,7 @@ can be removed.
 git clone https://github.com/tsudev-tsudev/tsudev-cwico
 cd tsudev-cwico
 
-# Engine tests — run on any host, no flags needed
+# Engine tests - run on any host, no flags needed
 cargo test
 
 # Type-check the Windows backend from Linux/macOS
@@ -256,7 +256,7 @@ tsudev-cwico/
 │   │   ├── naming.rs          Package/task name transforms (host-independent)
 │   │   └── protected.rs       Process deny-list          (host-independent)
 │   └── cwico-cli/           Headless interface
-├── app/src-tauri/           Tauri v2 shell — a thin IPC layer, no logic
+├── app/src-tauri/           Tauri v2 shell - a thin IPC layer, no logic
 ├── ui/                      React 19 + TypeScript + Tailwind 4
 ├── data/
 │   ├── safety-db.json         58 classification rules
@@ -285,10 +285,10 @@ cargo test
 
 **136 tests.** The ones that matter most:
 
-* `selecting_everything_still_cannot_remove_a_critical_component` — ticks every
+* `selecting_everything_still_cannot_remove_a_critical_component` - ticks every
   row, confirms every prompt, presses go, and asserts Defender and RPC survive.
 * `a_required_restore_point_that_fails_aborts_before_anything_is_touched`
-* `a_failing_uninstaller_stops_that_item_but_not_the_run` — and specifically
+* `a_failing_uninstaller_stops_that_item_but_not_the_run` - and specifically
   that deep clean does *not* run after a failed uninstall.
 * `a_folder_named_like_a_known_folder_is_still_residue_when_deep_in_appdata`
 * `shared_host_processes_are_never_terminated`
@@ -310,7 +310,7 @@ cargo test
 - [x] `winget` manifest generated automatically at release time
 
 Auto-update is in place: installed copies check GitHub Releases on startup and
-block until a confirmed newer release is installed — see
+block until a confirmed newer release is installed - see
 [`docs/SIGNING.md`](docs/SIGNING.md) for how update payloads are signed.
 
 Ready, but waiting on something only a human can supply:
@@ -320,7 +320,7 @@ Ready, but waiting on something only a human can supply:
       `SRSetRestorePointW` or the service control manager on a live machine.
       Start with `cwico plan`, which changes nothing.
 - [ ] **Code signing (Authenticode).** Unsigned installers work, but
-      SmartScreen warns on first run — a poor first impression for a tool that
+      SmartScreen warns on first run - a poor first impression for a tool that
       then asks for Administrator, and it trains users to click through the
       warning that protects them. Worse here than for most projects:
       reputation for an unsigned binary is tracked per file hash, so frequent
@@ -349,8 +349,8 @@ engine, the safety model and the entire UI are already portable.
 |---|---|
 | [`docs/SAFETY.md`](docs/SAFETY.md) | The design rationale for everything that stops this tool breaking a machine. Read before changing the safety layer. |
 | [`docs/RELEASING.md`](docs/RELEASING.md) | Cutting a release. Publishing pushes a mandatory update to every installed copy, so this one matters. |
-| [`docs/SIGNING.md`](docs/SIGNING.md) | The two signatures people conflate — update signing (done) and Authenticode (needs a certificate). |
-| [`docs/CODE-SIGNING-POLICY.md`](docs/CODE-SIGNING-POLICY.md) | Team roles, what gets signed, and what the software collects — nothing. |
+| [`docs/SIGNING.md`](docs/SIGNING.md) | The two signatures people conflate - update signing (done) and Authenticode (needs a certificate). |
+| [`docs/CODE-SIGNING-POLICY.md`](docs/CODE-SIGNING-POLICY.md) | Team roles, what gets signed, and what the software collects - nothing. |
 | [`docs/sessions/STATE.md`](docs/sessions/STATE.md) | Where the project is right now, and what to do next. |
 | [`CONTRIBUTING.md`](CONTRIBUTING.md) | Where code belongs, and how to run everything. |
 | [`SECURITY.md`](SECURITY.md) | What counts as a security bug here, and six design commitments. |
@@ -377,7 +377,7 @@ easiest to contribute to. A rule looks like:
 }
 ```
 
-Both `reason` translations are required — a test enforces it. Classify
+Both `reason` translations are required - a test enforces it. Classify
 conservatively: `Caution` costs a user one confirmation click, while a wrong
 `Safe` costs them a feature they did not agree to lose.
 

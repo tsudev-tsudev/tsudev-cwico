@@ -2,7 +2,7 @@
 //!
 //! Step one of the uninstall flow. An installer that cannot replace or delete
 //! a file because the application is still running usually fails halfway,
-//! leaving a half-removed product — so the running processes go first.
+//! leaving a half-removed product - so the running processes go first.
 //!
 //! The hard rule here is the protected list in [`crate::protected`]:
 //! `svchost.exe` hosts a dozen unrelated services, and `lsass.exe` or
@@ -90,7 +90,7 @@ fn image_path(pid: u32) -> Option<String> {
 /// `executables` (case-insensitive, file-name only).
 ///
 /// Protected images are skipped and logged, never terminated. A process that
-/// exits between the snapshot and the `OpenProcess` is not an error — it is
+/// exits between the snapshot and the `OpenProcess` is not an error - it is
 /// exactly the outcome we wanted.
 pub fn kill_matching(executables: &[String]) -> Result<Vec<KilledProcess>> {
     let wanted: Vec<String> = executables

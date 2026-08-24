@@ -4,7 +4,7 @@
 //! constrained. Every path and every key goes through
 //! [`cwico_core::guard`] first, without exception and without an override.
 //! The guard rejects drive roots, Windows and Program Files, user profile
-//! roots, the user's own document folders and every registry hive root — see
+//! roots, the user's own document folders and every registry hive root - see
 //! that module for the full rule set and its tests.
 //!
 //! A path that fails the guard is reported to the user as skipped, with the
@@ -33,7 +33,7 @@ fn directory_size(path: &Path) -> u64 {
 /// Delete one directory tree, retrying briefly.
 ///
 /// A folder that is still locked immediately after the uninstaller exited is
-/// common — antivirus scanners and the shell hold handles for a moment — so
+/// common - antivirus scanners and the shell hold handles for a moment - so
 /// a short retry turns a spurious failure into a success.
 fn remove_tree(path: &Path) -> std::io::Result<()> {
     const ATTEMPTS: usize = 3;
@@ -65,13 +65,13 @@ pub fn delete_paths(paths: &[String], dry_run: bool) -> Result<CleanSummary> {
         // --- Guard rail. Nothing gets past this. --------------------------
         if let Err(e) = guard::validate_delete_path(&expanded) {
             tracing::warn!(path = %expanded, error = %e, "refused an unsafe delete target");
-            summary.skipped.push(format!("{expanded} — {e}"));
+            summary.skipped.push(format!("{expanded} - {e}"));
             continue;
         }
 
         let path = Path::new(&expanded);
         if !path.exists() {
-            summary.skipped.push(format!("{expanded} — not present"));
+            summary.skipped.push(format!("{expanded} - not present"));
             continue;
         }
 
@@ -82,13 +82,13 @@ pub fn delete_paths(paths: &[String], dry_run: bool) -> Result<CleanSummary> {
             Ok(meta) if meta.file_type().is_symlink() => {
                 match std::fs::remove_file(path) {
                     Ok(()) => summary.removed.push(expanded),
-                    Err(e) => summary.failed.push(format!("{expanded} — {e}")),
+                    Err(e) => summary.failed.push(format!("{expanded} - {e}")),
                 }
                 continue;
             }
             Ok(_) => {}
             Err(e) => {
-                summary.failed.push(format!("{expanded} — {e}"));
+                summary.failed.push(format!("{expanded} - {e}"));
                 continue;
             }
         }
@@ -119,7 +119,7 @@ pub fn delete_paths(paths: &[String], dry_run: bool) -> Result<CleanSummary> {
             }
             Err(e) => {
                 tracing::warn!(path = %expanded, error = %e, "could not remove residue");
-                summary.failed.push(format!("{expanded} — {e}"));
+                summary.failed.push(format!("{expanded} - {e}"));
             }
         }
     }
@@ -138,7 +138,7 @@ pub fn delete_registry(keys: &[String], values: &[String], dry_run: bool) -> Res
         // --- Guard rail. --------------------------------------------------
         if let Err(e) = guard::validate_delete_key(key) {
             tracing::warn!(key = %key, error = %e, "refused an unsafe registry target");
-            summary.skipped.push(format!("{key} — {e}"));
+            summary.skipped.push(format!("{key} - {e}"));
             continue;
         }
 
@@ -161,11 +161,11 @@ pub fn delete_registry(keys: &[String], values: &[String], dry_run: bool) -> Res
             tracing::info!(key = %key, "removed registry residue");
             summary.removed.push(key.clone());
         } else if errors.is_empty() {
-            summary.skipped.push(format!("{key} — not present"));
+            summary.skipped.push(format!("{key} - not present"));
         } else {
             summary
                 .failed
-                .push(format!("{key} — {}", errors.join("; ")));
+                .push(format!("{key} - {}", errors.join("; ")));
         }
     }
 
@@ -173,7 +173,7 @@ pub fn delete_registry(keys: &[String], values: &[String], dry_run: bool) -> Res
         let (key, name) = match guard::validate_delete_value(spec) {
             Ok(pair) => pair,
             Err(e) => {
-                summary.skipped.push(format!("{spec} — {e}"));
+                summary.skipped.push(format!("{spec} - {e}"));
                 continue;
             }
         };
@@ -205,11 +205,11 @@ pub fn delete_registry(keys: &[String], values: &[String], dry_run: bool) -> Res
         if removed_any {
             summary.removed.push(spec.clone());
         } else if errors.is_empty() {
-            summary.skipped.push(format!("{spec} — not present"));
+            summary.skipped.push(format!("{spec} - not present"));
         } else {
             summary
                 .failed
-                .push(format!("{spec} — {}", errors.join("; ")));
+                .push(format!("{spec} - {}", errors.join("; ")));
         }
     }
 
@@ -238,7 +238,7 @@ mod tests {
         assert!(summary.removed.is_empty(), "{:?}", summary.removed);
         assert_eq!(summary.skipped.len(), 4);
         assert!(summary.failed.is_empty());
-        assert!(summary.skipped.iter().all(|s| s.contains('—')));
+        assert!(summary.skipped.iter().all(|s| s.contains('-')));
     }
 
     #[test]

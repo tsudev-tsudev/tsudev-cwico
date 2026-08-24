@@ -1,7 +1,7 @@
 /**
  * Render release notes for the update dialog.
  *
- * The notes come from `latest.json`, which carries the GitHub release body —
+ * The notes come from `latest.json`, which carries the GitHub release body -
  * which is the project's CHANGELOG section, which is Markdown. The dialog is a
  * small panel inside a modal, not a document viewer, so pulling in a Markdown
  * renderer for it would be disproportionate: the whole front end is 250 kB and
@@ -9,7 +9,7 @@
  *
  * Instead the common Markdown noise is reduced to readable prose. The goal is
  * that a user blocked from their tool can read *why* without meeting a stray
- * `>` or a row of backticks — not to reproduce the CHANGELOG faithfully. The
+ * `>` or a row of backticks - not to reproduce the CHANGELOG faithfully. The
  * full text stays one click away on the release page.
  */
 

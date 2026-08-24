@@ -3,7 +3,7 @@
 //! Failure policy: an individual step failing records the error and moves on
 //! to the next *item*; the remaining steps of the failed item are skipped,
 //! because running a deep clean after a failed uninstall is how you end up
-//! with a half-removed product. The preamble is different — if the restore
+//! with a half-removed product. The preamble is different - if the restore
 //! point was required and could not be created, the run does not start at all.
 
 use crate::backend::{
@@ -46,7 +46,7 @@ pub struct ItemOutcome {
 }
 
 /// Everything that happened during a run. Written to disk as the transaction
-/// log so a later session — or a support engineer — can see exactly what was
+/// log so a later session - or a support engineer - can see exactly what was
 /// changed and which `.reg` files restore it.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -329,7 +329,7 @@ impl<'a> Engine<'a> {
 
             if outcome.status != StepStatus::Failed {
                 // An item whose every step was a no-op is "skipped", not
-                // "succeeded" — it was already gone.
+                // "succeeded" - it was already gone.
                 outcome.status = if outcome
                     .steps
                     .iter()

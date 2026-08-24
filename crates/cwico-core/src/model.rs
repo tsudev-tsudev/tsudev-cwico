@@ -1,7 +1,7 @@
 //! Core data model: what a "removable thing" is, and how safe it is to touch.
 //!
-//! Everything the scanner finds — a classic Win32 program in the registry, a
-//! UWP/AppX package, a Windows service, a scheduled task, an autostart entry —
+//! Everything the scanner finds - a classic Win32 program in the registry, a
+//! UWP/AppX package, a Windows service, a scheduled task, an autostart entry -
 //! is normalised into a single [`SoftwareItem`] so the UI, the safety
 //! classifier and the uninstall engine only ever deal with one shape.
 
@@ -50,11 +50,11 @@ pub enum Locale {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum SourceKind {
-    /// `HKLM/HKCU\...\Uninstall\*` — classic MSI / NSIS / Inno installers.
+    /// `HKLM/HKCU\...\Uninstall\*` - classic MSI / NSIS / Inno installers.
     RegistryUninstall,
     /// A UWP/MSIX package installed for one or more users.
     AppxPackage,
-    /// A provisioned AppX package — reinstalled for every *new* user account
+    /// A provisioned AppX package - reinstalled for every *new* user account
     /// unless it is deprovisioned too.
     AppxProvisioned,
     /// A Win32 service under `HKLM\SYSTEM\CurrentControlSet\Services`.
@@ -154,7 +154,7 @@ pub enum SafetyClass {
     Unknown,
     /// Removal breaks Windows, security, or the ability to log in.
     /// Defender, File Explorer, Settings, CoreShell, RPC, WinLogon.
-    /// **Hard-blocked** by the engine — the UI cannot override this.
+    /// **Hard-blocked** by the engine - the UI cannot override this.
     Critical,
 }
 
@@ -217,7 +217,7 @@ pub struct SoftwareItem {
     /// Verdict from the safety database, resolved at scan time.
     pub safety: SafetyClass,
 
-    /// Why it carries that verdict — shown in the UI next to the badge.
+    /// Why it carries that verdict - shown in the UI next to the badge.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub safety_reason: Option<LocalizedText>,
 
@@ -229,11 +229,11 @@ pub struct SoftwareItem {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub install_location: Option<PathBuf>,
 
-    /// `UninstallString` — the vendor's own uninstall command.
+    /// `UninstallString` - the vendor's own uninstall command.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub uninstall_string: Option<String>,
 
-    /// `QuietUninstallString` — preferred when present, it needs no UI.
+    /// `QuietUninstallString` - preferred when present, it needs no UI.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub quiet_uninstall_string: Option<String>,
 
@@ -366,7 +366,7 @@ pub enum Action {
     Uninstall,
     /// Uninstall, then sweep folders and registry residue.
     UninstallAndDeepClean,
-    /// Sweep residue only — for items already uninstalled elsewhere.
+    /// Sweep residue only - for items already uninstalled elsewhere.
     DeepCleanOnly,
 }
 

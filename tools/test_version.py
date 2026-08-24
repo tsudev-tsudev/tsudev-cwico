@@ -5,7 +5,7 @@ Tests for tools/version.py.
 The version encoding is load-bearing in a way that is easy to overlook: the
 updater *compares* versions to decide whether a user is out of date, so a
 mapping that round-trips but sorts wrongly would silently stop delivering
-updates — or push users backwards. Ordering is therefore tested explicitly,
+updates - or push users backwards. Ordering is therefore tested explicitly,
 not just conversion.
 
 Run:  python3 tools/test_version.py

@@ -1,14 +1,14 @@
 /**
  * The tsudev logo and wordmark.
  *
- * One component, used everywhere a brand mark belongs — the header, the about
- * panel, the empty state and the footer — so the mark is identical in all of
+ * One component, used everywhere a brand mark belongs - the header, the about
+ * panel, the empty state and the footer - so the mark is identical in all of
  * them and there is exactly one place that knows how to open tsudev.com.
  *
  * The wordmark is two coloured spans rather than an image: `tsu` in the brand
  * blue and `dev` in the brand orange, both taken from the logo itself. Text
  * scales with the user's font size, stays crisp at any DPI, and remains
- * selectable and searchable — none of which a baked-in PNG would give.
+ * selectable and searchable - none of which a baked-in PNG would give.
  */
 
 import { openProductSite } from "../api";
@@ -44,7 +44,7 @@ export function Brand({ size = "md", tagline, className = "" }: BrandProps) {
         if (event.key === "Enter" || event.key === " ") open(event);
       }}
       title="tsudev.com"
-      aria-label="tsudev — mở tsudev.com / open tsudev.com"
+      aria-label="tsudev - mở tsudev.com / open tsudev.com"
       className={`group inline-flex items-center ${scale.gap} rounded-lg px-1 py-0.5 no-underline transition-opacity hover:opacity-85 ${className}`}
     >
       <img

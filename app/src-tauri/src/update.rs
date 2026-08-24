@@ -3,8 +3,8 @@
 //! ## Why this is a blocking gate rather than a notification
 //!
 //! The safety database decides what this tool will and will not remove. When a
-//! rule turns out to be wrong — something classified `Safe` that costs a user
-//! a feature, or worse, something that should have been `Critical` — the fix
+//! rule turns out to be wrong - something classified `Safe` that costs a user
+//! a feature, or worse, something that should have been `Critical` - the fix
 //! ships as a new version. A user running last month's build is running last
 //! month's idea of what is safe to delete on their machine.
 //!
@@ -20,7 +20,7 @@
 //!
 //! The reasoning: a mandatory update protects users from a stale safety
 //! database, which is a slow, bounded risk. A check that fails closed turns
-//! any outage into every user losing the tool at once — including the user who
+//! any outage into every user losing the tool at once - including the user who
 //! needs it right now to undo something. Trading a bounded risk for an
 //! unbounded one is the wrong way round.
 
@@ -37,7 +37,7 @@ pub struct UpdateStatus {
     /// `true` only when a newer version was confirmed. This is the one field
     /// that closes the gate.
     pub available: bool,
-    /// `false` when the check itself could not complete — offline, DNS,
+    /// `false` when the check itself could not complete - offline, DNS,
     /// GitHub down. The app runs normally; the UI says so quietly.
     pub checked: bool,
     /// Why the check failed, when it did. Shown in the details pane, not as

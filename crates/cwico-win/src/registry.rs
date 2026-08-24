@@ -5,7 +5,7 @@
 //! * **Registry views.** A 64-bit process sees 32-bit software under
 //!   `WOW6432Node`. Opening the same logical path twice, once with
 //!   `KEY_WOW64_64KEY` and once with `KEY_WOW64_32KEY`, is the only way to
-//!   enumerate everything — miss it and half the installed programs on a
+//!   enumerate everything - miss it and half the installed programs on a
 //!   typical machine are invisible.
 //! * **Handle lifetime.** [`RegKey`] closes its handle on drop, so an early
 //!   return in the middle of a deep enumeration cannot leak one.

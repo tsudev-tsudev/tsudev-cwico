@@ -16,12 +16,12 @@ wastes a lot of time. One is already in place; the other costs money.
 | What it protects | Installed copies only accept updates you published | Windows and SmartScreen recognise the publisher |
 | What it costs | Nothing | An OV or EV certificate from a commercial CA |
 | Failure symptom | Updates silently rejected on users' machines | "Windows protected your PC" on first run |
-| State here | **Done** | **Not done** — needs a certificate |
-| Key location | `~/.tsudev-cwico/`, and repository secrets | — |
+| State here | **Done** | **Not done** - needs a certificate |
+| Key location | `~/.tsudev-cwico/`, and repository secrets | - |
 
 ---
 
-## 1. Update signing — already configured
+## 1. Update signing - already configured
 
 The Tauri updater will not install a payload that is not signed by the key
 whose public half is baked into the application at build time
@@ -60,14 +60,14 @@ Two layers:
    python3 tools/verify_update_signature.py /tmp/release
    ```
 
-The second catches the failure that matters most — a key rotation applied to
+The second catches the failure that matters most - a key rotation applied to
 the repository secrets but not to `tauri.conf.json`. That produces a
 perfectly-signed release that every installed copy shows as a mandatory update
 and then refuses to install, which is worse than no release at all.
 
 ---
 
-## 2. Code signing — what is left to do
+## 2. Code signing - what is left to do
 
 Unsigned installers work. What the user sees on first run is:
 
@@ -76,7 +76,7 @@ Unsigned installers work. What the user sees on first run is:
 
 with the publisher shown as *Unknown*, and a "Run anyway" hidden behind *More
 info*. For a tool that then asks for Administrator rights, that is a poor
-first impression — and it trains users to click through exactly the warning
+first impression - and it trains users to click through exactly the warning
 that protects them from something worse.
 
 ### Why this matters more here than for most projects
@@ -84,19 +84,19 @@ that protects them from something worse.
 SmartScreen reputation for an **unsigned** binary is tracked *per file hash*.
 Every release produces a new hash and starts from zero. This project uses
 date-based versioning and expects to ship often, so an unsigned build never
-accumulates enough downloads to stop warning before it is superseded — the
+accumulates enough downloads to stop warning before it is superseded - the
 warning is effectively permanent rather than a first-release inconvenience.
 
 Signing moves reputation to the *certificate*, so it carries across releases.
 That is the actual reason to sign, more than any single warning.
 
-### Getting a certificate for free — the route for this project
+### Getting a certificate for free - the route for this project
 
 **[SignPath Foundation](https://signpath.org/)** issues free OV code-signing
 certificates to qualifying open-source projects, with the key held in an HSM
-and signing driven from CI. `tsudev-cwico` meets the substantive conditions —
+and signing driven from CI. `tsudev-cwico` meets the substantive conditions -
 OSI-approved licence (MIT), public repository owned by the maintainers, no
-proprietary components — with three things to do first:
+proprietary components - with three things to do first:
 
 1. **Cut a release.** They require an existing released product to sign.
 2. **Enable MFA** on the GitHub account, which they require for both SignPath
@@ -107,9 +107,9 @@ proprietary components — with three things to do first:
 
 One condition is worth reading carefully before applying: they exclude
 *"hacking tools and active vulnerability scanning features"*. This is a
-system-maintenance utility — it removes software the machine's owner selects,
+system-maintenance utility - it removes software the machine's owner selects,
 on their own machine, and hard-blocks the components that would make it
-dangerous — but a reviewer seeing "terminates processes and deletes registry
+dangerous - but a reviewer seeing "terminates processes and deletes registry
 keys" may reasonably ask. The safety model in [`SAFETY.md`](SAFETY.md) is the
 answer to that question, and worth linking in the application.
 
@@ -118,12 +118,12 @@ answer to that question, and worth linking in the application.
 | Option | Cost | Notes |
 |---|---|---|
 | [Azure Artifact Signing](https://azure.microsoft.com/en-us/pricing/details/trusted-signing/) (formerly Trusted Signing) | ~$9.99/month, Basic tier, 5,000 signatures | Individual developers accepted; needs 3 years of verifiable identity history |
-| Commercial OV certificate | ~$200–400/year | Reputation builds over time |
-| Commercial EV certificate | ~$400–700/year | No SmartScreen warning from the first release |
+| Commercial OV certificate | ~$200-400/year | Reputation builds over time |
+| Commercial EV certificate | ~$400-700/year | No SmartScreen warning from the first release |
 
 Since June 2023 all publicly trusted code-signing keys must live in certified
 hardware, so "download a `.pfx` and put it in a repository secret" is no longer
-how any of this works — every option above is a cloud signing service or a
+how any of this works - every option above is a cloud signing service or a
 hardware token.
 
 ### Wiring it into the release workflow
@@ -156,7 +156,7 @@ Two things to get right:
   only the MSI leaves the application itself unsigned, and SmartScreen
   evaluates what actually runs.
 * **Always timestamp.** Without `timestamp-rfc3161`, every signature stops
-  validating the day the certificate expires — including on releases already
+  validating the day the certificate expires - including on releases already
   in users' hands.
 
 ### Order matters
@@ -173,13 +173,13 @@ already-published artefact in place.
 
 ### What is *not* affected by being unsigned
 
-The SmartScreen warning appears when a file carries the Mark of the Web — the
+The SmartScreen warning appears when a file carries the Mark of the Web - the
 tag a *browser* attaches to a download. The in-app updater fetches the
 installer over HTTP from Rust and runs it, which does not apply that tag, so
 an update should install without a warning even while the first manual
 download from a browser gets one.
 
-That bounds the problem to first install rather than every release — but it is
+That bounds the problem to first install rather than every release - but it is
 reasoning about how Mark of the Web works, not something this project has
 observed. It is on the list of things to confirm during the first run on a real
 Windows machine.
@@ -207,7 +207,7 @@ do need one. See [`../packaging/msix/README.md`](../packaging/msix/README.md).
 - [x] `tools/verify_update_signature.py` checks the signature against the
       key the build carries
 - [ ] Code-signing certificate obtained
-      (try [SignPath Foundation](https://signpath.org/) first — free for OSS)
+      (try [SignPath Foundation](https://signpath.org/) first - free for OSS)
 - [ ] Signing step added to `release.yml`
 - [ ] Timestamping configured
 - [ ] A test release downloaded on a clean Windows install to confirm no

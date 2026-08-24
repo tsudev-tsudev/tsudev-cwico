@@ -7,7 +7,7 @@ Releases are named by date: the release published on 19 August 2026 is
 `tsudev-cwico-v26.8.19.2`.
 
 That four-component name is not valid semver, and Cargo, the MSI bundler and
-the Tauri updater all require semver — the updater in particular *compares*
+the Tauri updater all require semver - the updater in particular *compares*
 versions to decide whether an update exists, so the encoding has to sort
 correctly. The name therefore maps to a semver where the patch field carries
 both the day and the release-of-day counter:
@@ -97,7 +97,7 @@ def parse_semver(semver: str) -> tuple[int, int, int, int]:
     day, n = divmod(patch, 100)
     if not 1 <= day <= 31:
         raise VersionError(
-            f"patch {patch} decodes to day {day}, which is not a calendar day — "
+            f"patch {patch} decodes to day {day}, which is not a calendar day - "
             "was this version produced by something other than tools/version.py?"
         )
     if n == 0:

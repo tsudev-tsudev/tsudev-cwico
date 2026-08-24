@@ -53,9 +53,9 @@ signtool sign /fd SHA256 /a /f cert.pfx /p $env:CERT_PASSWORD `
 
 `Publisher` in `AppxManifest.xml` must match the certificate subject exactly,
 and for a Store submission it must match the publisher identity Partner Center
-assigns — replace `CN=tsudev` with that value before packing.
+assigns - replace `CN=tsudev` with that value before packing.
 
 ## Age rating and category
 
 * Category: **Utilities & tools**
-* Age rating: 3+ — no user-generated content, no network, no purchases.
+* Age rating: 3+ - no user-generated content, no network, no purchases.

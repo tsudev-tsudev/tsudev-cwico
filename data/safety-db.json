@@ -983,8 +983,8 @@
         "vi": "Notepad / Terminal / Máy tính / Snipping Tool"
       },
       "reason": {
-        "en": "Everyday tools with no system dependency, but their absence is noticed immediately — Notepad in particular is the fallback handler for .txt and .log.",
-        "vi": "Công cụ dùng hằng ngày, không có phụ thuộc hệ thống, nhưng sẽ thấy thiếu ngay — riêng Notepad là trình xử lý dự phòng cho .txt và .log."
+        "en": "Everyday tools with no system dependency, but their absence is noticed immediately - Notepad in particular is the fallback handler for .txt and .log.",
+        "vi": "Công cụ dùng hằng ngày, không có phụ thuộc hệ thống, nhưng sẽ thấy thiếu ngay - riêng Notepad là trình xử lý dự phòng cho .txt và .log."
       },
       "tags": [
         "utility",
@@ -1399,8 +1399,8 @@
         "vi": "Thành phần giao diện hệ thống không thể gỡ"
       },
       "reason": {
-        "en": "Framework packages the shell activates on demand — SmartScreen prompts, pin dialogs, the input host, kiosk lock app. They are marked non-removable by Windows for good reason.",
-        "vi": "Các gói framework mà shell kích hoạt khi cần — hộp thoại SmartScreen, hộp thoại ghim, input host, ứng dụng khóa kiosk. Windows đánh dấu không thể gỡ là có lý do."
+        "en": "Framework packages the shell activates on demand - SmartScreen prompts, pin dialogs, the input host, kiosk lock app. They are marked non-removable by Windows for good reason.",
+        "vi": "Các gói framework mà shell kích hoạt khi cần - hộp thoại SmartScreen, hộp thoại ghim, input host, ứng dụng khóa kiosk. Windows đánh dấu không thể gỡ là có lý do."
       },
       "tags": [
         "framework",
@@ -1651,8 +1651,8 @@
         "vi": "Boot manager & môi trường khôi phục"
       },
       "reason": {
-        "en": "The boot loader and the recovery partition tooling. Damaging these produces a machine that will not start and cannot repair itself — recovery requires external installation media.",
-        "vi": "Bộ nạp khởi động và công cụ phân vùng khôi phục. Làm hỏng chúng sẽ khiến máy không khởi động được và không tự sửa được — phải dùng USB/đĩa cài đặt bên ngoài để khôi phục."
+        "en": "The boot loader and the recovery partition tooling. Damaging these produces a machine that will not start and cannot repair itself - recovery requires external installation media.",
+        "vi": "Bộ nạp khởi động và công cụ phân vùng khôi phục. Làm hỏng chúng sẽ khiến máy không khởi động được và không tự sửa được - phải dùng USB/đĩa cài đặt bên ngoài để khôi phục."
       },
       "tags": [
         "boot",

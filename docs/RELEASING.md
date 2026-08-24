@@ -12,8 +12,8 @@ Publishing a release here is not only publishing a download. Every installed
 copy checks GitHub Releases on startup and **blocks until it has installed
 whatever is newest**. Publishing pushes a mandatory update to everyone.
 
-That is deliberate — see [`SAFETY.md`](SAFETY.md) for why a stale safety
-database is worth interrupting people over — but it makes the publish step the
+That is deliberate - see [`SAFETY.md`](SAFETY.md) for why a stale safety
+database is worth interrupting people over - but it makes the publish step the
 one that deserves care.
 
 ---
@@ -31,7 +31,7 @@ Releases are named for the day they ship:
 
 Internally each maps to a semver whose patch field carries the day and the
 release counter (`26.8.1901`), because Cargo, the MSI bundler and the updater
-all require three components — and the updater *compares* that number to
+all require three components - and the updater *compares* that number to
 decide whether a user is out of date.
 
 Never write a version by hand. `tools/version.py` owns the mapping:
@@ -75,7 +75,7 @@ it for them rather than for other developers: what changed about what the tool
 will and will not remove, and anything they should know before it installs.
 
 The build fails if the section is missing. A blocking screen with no
-explanation is worse than no blocking screen — check what it will look like:
+explanation is worse than no blocking screen - check what it will look like:
 
 ```bash
 tools/changelog_section.py "$(tools/version.py current | awk '{print $1}')"
@@ -92,7 +92,7 @@ git push origin main --tags
 
 The workflow refuses to build a tag whose version disagrees with the
 manifests, so a forgotten step 2 fails in CI rather than shipping a build that
-reports the previous version — which, since the updater compares exactly that
+reports the previous version - which, since the updater compares exactly that
 number, would tell every user they were already current.
 
 ### 5. Check the draft
@@ -103,7 +103,7 @@ nothing reaches users yet.
 
 Before publishing, confirm on the draft:
 
-- [ ] `latest.json` is attached — without it no update is ever delivered
+- [ ] `latest.json` is attached - without it no update is ever delivered
 - [ ] The MSI and NSIS installers are attached and their sizes look sane
 - [ ] The release notes read the way you want them to, in a blocking dialog
 - [ ] **The signature verifies against the key this build carries:**
@@ -113,8 +113,8 @@ Before publishing, confirm on the draft:
   python3 tools/verify_update_signature.py /tmp/release
   ```
 
-  This is the check worth not skipping. A payload signed by the wrong key —
-  a rotation applied to the repository secrets but not to `tauri.conf.json` —
+  This is the check worth not skipping. A payload signed by the wrong key -
+  a rotation applied to the repository secrets but not to `tauri.conf.json` -
   produces a release that every installed copy shows as a mandatory update and
   then refuses to install. Users are stuck behind a wall with a broken button,
   and the only way out is downloading a fresh installer by hand.
@@ -124,7 +124,7 @@ Before publishing, confirm on the draft:
 ### 6. Publish
 
 Publishing is the moment every installed copy starts blocking on this version.
-There is no staged rollout — press it when you are confident.
+There is no staged rollout - press it when you are confident.
 
 ### 7. Update winget
 
@@ -144,7 +144,7 @@ gh workflow run release.yml
 
 A manual run builds the installers and uploads them as artefacts without
 drafting a release or touching any user. Use it after changing anything about
-packaging, the bundler configuration or the build hooks — `cargo build` does
+packaging, the bundler configuration or the build hooks - `cargo build` does
 not exercise those, so CI's Windows job will not catch a break there.
 
 ---
@@ -154,8 +154,8 @@ not exercise those, so CI's Windows job will not catch a break there.
 Because updates are mandatory, a broken release reaches everyone who opens the
 app. In order of preference:
 
-1. **Fix forward.** Cut the next release the same day —
-   `tsudev-cwico-v26.8.19.2` — and publish it. Users who have not yet updated
+1. **Fix forward.** Cut the next release the same day -
+   `tsudev-cwico-v26.8.19.2` - and publish it. Users who have not yet updated
    go straight to the fixed build; users who did get the fix on next start.
    This is almost always the right answer, and it is what the same-day
    counter exists for.

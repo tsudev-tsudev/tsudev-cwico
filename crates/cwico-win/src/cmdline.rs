@@ -11,11 +11,11 @@
 //! ```
 //!
 //! Parsing it wrong means launching the wrong executable, so this module is
-//! pure `std` with no Windows dependency — it compiles and its tests run on
+//! pure `std` with no Windows dependency - it compiles and its tests run on
 //! any host, which is what lets CI cover it.
 //!
 //! Silent operation is only *inferred* for installer families whose switches
-//! are documented and stable — MSI, Inno Setup, NSIS. For anything else the
+//! are documented and stable - MSI, Inno Setup, NSIS. For anything else the
 //! command runs exactly as the vendor wrote it, because guessing a flag at an
 //! unknown installer is how you end up with a repair instead of a removal.
 
@@ -79,7 +79,7 @@ const PROGRAM_SUFFIXES: &[&str] = &[".exe", ".com", ".bat", ".cmd", ".msi"];
 /// Find the end of an unquoted program path.
 ///
 /// `C:\Program Files\App\unins000.exe /SILENT` has a space inside the path
-/// and no quotes — extremely common in real `UninstallString` values. Splitting
+/// and no quotes - extremely common in real `UninstallString` values. Splitting
 /// on the first space yields `C:\Program`, which is not a program. Instead,
 /// scan for the first executable suffix that is followed by whitespace or the
 /// end of the string.
@@ -156,7 +156,7 @@ pub fn classify(parsed: &ParsedCommand) -> InstallerKind {
 
     // NSIS first. `Uninstall.exe` also starts with "unins", so a loose Inno
     // prefix check would claim it and hand an NSIS uninstaller Inno's
-    // `/VERYSILENT` flag — which it does not understand, so it would open a
+    // `/VERYSILENT` flag - which it does not understand, so it would open a
     // window instead of running silently.
     if matches!(
         leaf.as_str(),
@@ -165,7 +165,7 @@ pub fn classify(parsed: &ParsedCommand) -> InstallerKind {
         return InstallerKind::Nsis;
     }
 
-    // Inno Setup writes `unins000.exe`, `unins001.exe`, … — always `unins`
+    // Inno Setup writes `unins000.exe`, `unins001.exe`, … - always `unins`
     // followed by digits.
     if let Some(rest) = leaf.strip_prefix("unins") {
         if let Some(digits) = rest.strip_suffix(".exe") {
@@ -281,7 +281,7 @@ mod tests {
     #[test]
     fn msi_install_verb_is_flipped_to_uninstall() {
         // Leaving `/I` in place would *repair* the product rather than remove
-        // it — a silent no-op the user would read as a failed uninstall.
+        // it - a silent no-op the user would read as a failed uninstall.
         let (silent, ok) = make_silent(&parse("MsiExec.exe /I{90160000-008C}").unwrap());
         assert!(ok);
         assert!(silent.args.contains(&"/X{90160000-008C}".to_string()));

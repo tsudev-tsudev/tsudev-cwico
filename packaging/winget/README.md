@@ -11,7 +11,7 @@ winget install tsudev.cwico
 ## The installer manifest is generated, not written
 
 `tsudev.cwico.installer.yaml` in each version directory carries an
-`InstallerSha256` and a `ProductCode`. **Both change with every build** —
+`InstallerSha256` and a `ProductCode`. **Both change with every build** -
 Tauri's builds are not reproducible, and two runs of the same commit have
 produced different values for each. Transcribing them by hand is how a
 manifest ends up pointing at a different binary than the one it names.
@@ -28,7 +28,7 @@ forward and rewriting the version and URLs in them.
 
 ## Submitting
 
-1. Publish the GitHub release first — winget's validation downloads the
+1. Publish the GitHub release first - winget's validation downloads the
    installer from the URL in the manifest, so it has to be reachable.
 2. Verify the manifests locally on a Windows machine if you can:
 
@@ -48,7 +48,7 @@ The winget pipeline installs the package in a clean Windows VM and checks it
 launches. That is genuinely useful here: it is an automated smoke test on real
 Windows, which is the one thing this project's own CI cannot do.
 
-It also means a broken installer fails validation rather than reaching users —
+It also means a broken installer fails validation rather than reaching users -
 but it consumes maintainer attention, so it is worth having installed the MSI
 by hand at least once first.
 

@@ -103,7 +103,7 @@ impl Release {
         if counter == 0 {
             return Err(Error::other(format!(
                 "`{semver}`: patch {patch} decodes to release-of-day 0, but the \
-                 counter starts at 1 — this version was not produced by this scheme"
+                 counter starts at 1 - this version was not produced by this scheme"
             )));
         }
         Self::validate(year, month, day, counter, semver)?;

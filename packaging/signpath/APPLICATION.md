@@ -20,17 +20,17 @@ can see what was agreed to.
 ## What it does
 
 A Windows debloater and software-removal tool. It reads the six places Windows
-keeps installed software — the registry uninstall keys in both the 32- and
+keeps installed software - the registry uninstall keys in both the 32- and
 64-bit views, UWP/MSIX packages, packages provisioned on the image, services,
-scheduled tasks and autostart entries — classifies everything it finds against
+scheduled tasks and autostart entries - classifies everything it finds against
 a bundled safety database, and removes what the machine's owner selects.
 
 ## Why this is not a hacking tool
 
 The Foundation's terms exclude *"hacking tools and active vulnerability
 scanning features"*. This project contains neither, and the distinction is
-worth stating plainly because a summary of its capabilities —
-*terminates processes, deletes registry keys, reconfigures services* — reads
+worth stating plainly because a summary of its capabilities -
+*terminates processes, deletes registry keys, reconfigures services* - reads
 like one at a glance.
 
 * **It operates only on the machine it runs on**, on software the machine's
@@ -45,7 +45,7 @@ like one at a glance.
 * **It refuses to do the damaging thing.** 18 rule groups classify Windows
   Defender, the shell, core services, shared runtimes, device drivers, the
   boot loader and the licensing stack as `Critical`, and the removal planner
-  will not plan a `Critical` item at all — not with a flag, not from the
+  will not plan a `Critical` item at all - not with a flag, not from the
   command line, not with a confirmation dialog. Every filesystem path and
   registry key is validated before deletion against a guard that rejects drive
   roots, system directories, user data folders and hive roots.
@@ -91,7 +91,7 @@ Two reasons beyond the usual:
    This project uses date-based versioning and expects to ship corrections to
    its safety database promptly, so an unsigned build never accumulates enough
    reputation before it is superseded. Unsigned, the warning is permanent
-   rather than a first-release inconvenience — and because updates are
+   rather than a first-release inconvenience - and because updates are
    mandatory, users cannot opt out of receiving the new hash.
 
 ## Build pipeline

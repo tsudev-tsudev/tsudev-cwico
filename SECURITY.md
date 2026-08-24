@@ -19,10 +19,10 @@
 This tool runs elevated and deletes things. The threat model is unusual, so it
 is worth being explicit about what we treat as a vulnerability:
 
-**High priority — please report privately**
+**High priority - please report privately**
 
 * Any way to make the tool remove an item classified `Critical`.
-* Any way to make the deletion guard accept a path it should reject — a drive
+* Any way to make the deletion guard accept a path it should reject - a drive
   root, a system directory, a user's documents, a registry hive root.
 * Any way to make the tool execute a program that is not the vendor's own
   uninstaller or an entry on the tweak allow-list. In particular, a crafted
@@ -36,7 +36,7 @@ is worth being explicit about what we treat as a vulnerability:
 
 **Also welcome, lower urgency**
 
-* A misclassification in `data/safety-db.json` — something marked `safe` that
+* A misclassification in `data/safety-db.json` - something marked `safe` that
   costs the user a feature, or something removable that is over-classified.
   These are correctness bugs rather than vulnerabilities, but they matter.
 
@@ -74,7 +74,7 @@ a bug, not a trade-off:
    fixed allow-list (`powercfg`, `dism`, `tzutil`, `netsh`) plus internal
    actions implemented in Rust. A poisoned catalogue cannot run arbitrary code.
 4. **The web view has no capabilities of its own.** The Tauri capability set
-   grants window controls and nothing else — no filesystem, shell or HTTP
+   grants window controls and nothing else - no filesystem, shell or HTTP
    plugin. Everything the front end can do goes through this project's own
    commands, which are individually reviewable.
 5. **`open_product_site` takes no URL.** It always opens `https://tsudev.com`.

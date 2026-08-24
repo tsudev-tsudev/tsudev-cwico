@@ -6,7 +6,7 @@ Markdown on GitHub strips inline `style` attributes, so
 `<span style="color:#2482bd">tsu</span>` renders as plain uncoloured text
 there. The application renders the wordmark as live text (see
 `ui/src/components/Brand.tsx`); documentation needs an image to keep the same
-two-colour identity — `tsu` in the brand blue, `dev` in the brand orange.
+two-colour identity - `tsu` in the brand blue, `dev` in the brand orange.
 
 Two variants are produced because a single colour pair cannot serve both of
 GitHub's themes: the light-theme blue is too dark to read on a dark page.

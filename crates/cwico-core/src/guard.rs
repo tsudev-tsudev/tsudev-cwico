@@ -3,7 +3,7 @@
 //! The deep-clean engine deletes directories that a safety rule or an
 //! `InstallLocation` pointed at. Those inputs come from the registry, which
 //! means they come from software vendors, which means they are occasionally
-//! wrong — an `InstallLocation` of `C:\` is a real thing that ships in real
+//! wrong - an `InstallLocation` of `C:\` is a real thing that ships in real
 //! products. A single unchecked `remove_dir_all` on such a value destroys the
 //! machine.
 //!
@@ -73,7 +73,7 @@ const PROTECTED_LEAF_NAMES: &[&str] = &[
 
 /// Known folders under a user profile. These hold the user's own documents,
 /// so nothing below them is application residue and the whole subtree is off
-/// limits — an `InstallLocation` pointing at `C:\Users\me\Documents\App`
+/// limits - an `InstallLocation` pointing at `C:\Users\me\Documents\App`
 /// means the user installed into their documents, not that we may delete it.
 ///
 /// Note this is deliberately narrower than the leaf-name list: a folder
@@ -309,7 +309,7 @@ pub fn validate_delete_key(raw: &str) -> Result<()> {
     // The service control database is off limits at every depth. A service
     // key *is* the service; a subkey under it holds the parameters the
     // service needs to start. Services are turned off through the service
-    // control manager, which is reversible — deep clean has no business here.
+    // control manager, which is reversible - deep clean has no business here.
     if norm.starts_with(r"hklm\system\currentcontrolset\services") {
         return reject(
             "targets the service control database; disable the service instead of deleting it",
@@ -341,7 +341,7 @@ pub fn validate_delete_value(raw: &str) -> Result<(String, String)> {
         });
     }
     // Deleting a *value* is far less destructive than deleting a key, so the
-    // depth rule is relaxed — but the hive roots are still off limits.
+    // depth rule is relaxed - but the hive roots are still off limits.
     let norm = normalize_key(key);
     let segs: Vec<&str> = norm.split('\\').filter(|s| !s.is_empty()).collect();
     if segs.len() < 2 {

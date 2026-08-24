@@ -1,6 +1,6 @@
 # Session log
 
-This directory exists so that work on this project survives an interruption —
+This directory exists so that work on this project survives an interruption -
 a machine that shuts down mid-task, a session that runs out of context, or
 simply a gap of several weeks between one person picking it up and the next.
 
@@ -19,7 +19,7 @@ you what to do next.
 
 ```
 docs/sessions/
-├── README.md                    this file — the conventions
+├── README.md                    this file - the conventions
 ├── STATE.md                     where the project is. Always current.
 └── 2026-08-19-01.md             one file per working session, in order
 ```
@@ -41,11 +41,11 @@ corrects the record in `STATE.md`, not by rewriting yesterday's log.
 
 1. Read `STATE.md`, top to bottom. It is deliberately short enough to read.
 2. Run the verification block it lists. If something fails that `STATE.md`
-   claims passes, that is your first task — and it means the previous session
+   claims passes, that is your first task - and it means the previous session
    ended without verifying, which is itself worth recording.
 3. Create `docs/sessions/YYYY-MM-DD-NN.md` from the template below.
 
-## Ending a session — including an unplanned one
+## Ending a session - including an unplanned one
 
 Update `STATE.md` **first**, then the session log. If you only have time for
 one, make it `STATE.md`: a missing session log costs the next person context,
@@ -60,12 +60,12 @@ useful than a claim that something is done when it is not.
 ```markdown
 # Session YYYY-MM-DD-NN
 
-**Started:** <state at the beginning — the commit, what STATE.md said>
+**Started:** <state at the beginning - the commit, what STATE.md said>
 **Goal:** <what this session set out to do>
 
 ## What happened
 
-<Chronological. Decisions and their reasons, not just a list of commits —
+<Chronological. Decisions and their reasons, not just a list of commits -
 `git log` already has the commits.>
 
 ## Decisions

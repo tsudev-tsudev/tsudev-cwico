@@ -3,7 +3,7 @@
 Fold a release build's generated winget manifest into the repository.
 
 The release workflow produces `winget-installer-manifest.yaml` carrying the
-real SHA256 and ProductCode — both change with every build, because Tauri's
+real SHA256 and ProductCode - both change with every build, because Tauri's
 builds are not reproducible. This copies it into the versioned manifest
 directory and creates that directory's other two manifests if the version is
 new, so submitting to winget is not an exercise in careful transcription.

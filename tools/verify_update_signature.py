@@ -4,8 +4,8 @@ Verify that a release's update payload will actually be accepted.
 
 This checks the one property the whole update mechanism rests on: an installed
 copy only installs a payload signed by the private key matching the public key
-compiled into it. If the signature does not verify — wrong key, unsigned build,
-corrupted download — every user is shown a mandatory update they can never
+compiled into it. If the signature does not verify - wrong key, unsigned build,
+corrupted download - every user is shown a mandatory update they can never
 install, and the only way out is downloading a fresh installer by hand.
 
 The release workflow already fails when no `.sig` is produced. This goes
@@ -50,7 +50,7 @@ def load_public_key() -> tuple[bytes, bytes]:
         pubkey_b64 = conf["plugins"]["updater"]["pubkey"]
     except KeyError:
         sys.exit(
-            "no updater public key in tauri.conf.json — is the updater configured?"
+            "no updater public key in tauri.conf.json - is the updater configured?"
         )
     # Tauri stores the whole minisign public-key *file*, base64-encoded.
     key_file = base64.b64decode(pubkey_b64).decode()
@@ -71,7 +71,7 @@ def verify(payload: pathlib.Path, signature: pathlib.Path, key_id: bytes,
     if sig_key_id != key_id:
         return (
             f"signed by key {sig_key_id.hex()}, but this build expects "
-            f"{key_id.hex()} — the signing secret and tauri.conf.json disagree"
+            f"{key_id.hex()} - the signing secret and tauri.conf.json disagree"
         )
 
     data = payload.read_bytes()
@@ -83,7 +83,7 @@ def verify(payload: pathlib.Path, signature: pathlib.Path, key_id: bytes,
     try:
         VerifyKey(public_key).verify(signed, sig)
     except BadSignatureError:
-        return "the signature does not verify — the payload was modified after signing"
+        return "the signature does not verify - the payload was modified after signing"
     return None
 
 
@@ -105,7 +105,7 @@ def main() -> int:
     signatures = sorted(args.directory.rglob("*.sig"))
     if not signatures:
         sys.exit(
-            f"no .sig files under {args.directory} — this release would deliver "
+            f"no .sig files under {args.directory} - this release would deliver "
             "no update at all"
         )
 

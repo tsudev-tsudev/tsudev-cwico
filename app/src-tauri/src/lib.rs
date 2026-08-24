@@ -1,6 +1,6 @@
 //! The Tauri shell: a thin IPC layer over `cwico-core`.
 //!
-//! Deliberately thin. No safety decision is made here — the engine refuses
+//! Deliberately thin. No safety decision is made here - the engine refuses
 //! `Critical` items and the guard vets every delete target, so a bug in the
 //! UI cannot talk the backend into doing something dangerous. What this layer
 //! owns is: which backend to use, where backups go, keeping the last scan so

@@ -15,8 +15,8 @@
 
 .PARAMETER Tag
     The git tag the release was published under, used verbatim in the download
-    URL. The tag and the version are *different strings* — the tag is
-    `tsudev-cwico-v26.8.19` and the version is `26.8.1901` — and treating one
+    URL. The tag and the version are *different strings* - the tag is
+    `tsudev-cwico-v26.8.19` and the version is `26.8.1901` - and treating one
     as the other produces a URL that 404s. Defaults to the tag this version
     would be published under.
 
@@ -66,7 +66,7 @@ if (-not $record) { throw "the MSI has no ProductCode property" }
 $productCode = $record.GetType().InvokeMember("StringData", "GetProperty", $null, $record, 1)
 
 # The version always comes from the manifests. An earlier revision derived it
-# from `github.ref_name`, which produced `.../download/v26.8.1901/...` — the
+# from `github.ref_name`, which produced `.../download/v26.8.1901/...` - the
 # version where the tag belongs, and a URL that 404s.
 $conf = Get-Content "app/src-tauri/tauri.conf.json" -Raw | ConvertFrom-Json
 $Version = $conf.version

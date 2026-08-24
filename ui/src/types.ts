@@ -326,7 +326,7 @@ export const DEFAULT_PLAN_OPTIONS: PlanOptions = {
  * The result of an update check.
  *
  * `available` is the only field that closes the update gate. `checked: false`
- * means the check could not run — offline, DNS, GitHub down — and the app
+ * means the check could not run - offline, DNS, GitHub down - and the app
  * carries on normally; see `app/src-tauri/src/update.rs` for why that
  * distinction matters.
  */

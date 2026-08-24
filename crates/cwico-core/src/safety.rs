@@ -144,9 +144,9 @@ impl Verdict {
             rule_id: None,
             label: None,
             reason: Some(LocalizedText::new(
-                "Not in the safety database — third-party or uncommon software. \
+                "Not in the safety database - third-party or uncommon software. \
                  Review before removing.",
-                "Chưa có trong cơ sở dữ liệu an toàn — phần mềm bên thứ ba hoặc ít gặp. \
+                "Chưa có trong cơ sở dữ liệu an toàn - phần mềm bên thứ ba hoặc ít gặp. \
                  Hãy xem kỹ trước khi gỡ.",
             )),
             description: None,
@@ -307,7 +307,7 @@ impl SafetyDatabase {
         self.doc.rules.iter().find(|r| r.id == id)
     }
 
-    /// Count of rules per class — surfaced in the UI's "about" panel so users
+    /// Count of rules per class - surfaced in the UI's "about" panel so users
     /// can see how much protection is actually loaded.
     pub fn class_counts(&self) -> (usize, usize, usize) {
         let mut safe = 0;
@@ -492,7 +492,7 @@ impl SafetyDatabase {
         }
         if let Some(label) = &verdict.label {
             // The rule's label names the *group* ("Bing apps", "OEM antivirus
-            // trials"), which is useful for grouping the list — but the name
+            // trials"), which is useful for grouping the list - but the name
             // shown to the user stays the system's own DisplayName. Renaming
             // "Candy Crush Saga" to "Preinstalled third-party games" would
             // hide the very thing the user is looking for.

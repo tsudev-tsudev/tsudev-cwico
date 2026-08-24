@@ -7,7 +7,7 @@
 //!   leaves it installed for the others.
 //! * A **provisioned package** is staged on the image and re-installed for
 //!   every *new* user account. Removing the installed copy without
-//!   deprovisioning is why bloatware "comes back" — the tool does both.
+//!   deprovisioning is why bloatware "comes back" - the tool does both.
 //!
 //! Framework packages (`Microsoft.VCLibs`, `Microsoft.UI.Xaml`) are reported
 //! but flagged, because other applications link against them at runtime.

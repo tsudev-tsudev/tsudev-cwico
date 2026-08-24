@@ -1,0 +1,10 @@
+# Bổ sung cho project Node/TypeScript - đặt SAU nội dung base.gitignore
+.eslintcache
+.stylelintcache
+*.tsbuildinfo
+.next/types/
+storybook-static/
+.vercel/
+.netlify/
+.wrangler/
+.output/

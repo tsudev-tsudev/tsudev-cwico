@@ -1,0 +1,165 @@
+{
+  "$schema": "./design-tokens.schema.json",
+  "meta": {
+    "name": "tsudev-design-tokens",
+    "version": "2.0.0",
+    "updated": "24/08/2026",
+    "source": "https://github.com/tsudev-tsudev/tsudev-standards",
+    "note": "Nguồn chân lý duy nhất cho giao diện toàn hệ sinh thái tsudev. tokens/tokens.css là bản SINH RA từ file này (node scripts/build-tokens.mjs), không sửa tay. Khối extensions.* riêng của từng repo con KHÔNG nằm ở đây."
+  },
+
+  "color": {
+    "light": {
+      "bg-base": "#EEF4FB",
+      "bg-surface": "#FFFFFF",
+      "bg-subtle": "#E3EDF8",
+      "bg-hover": "#DCE8F6",
+      "border": "#C9D9EC",
+      "border-strong": "#9FB8D4",
+      "border-control": "#74899F",
+      "text-primary": "#1C2B3A",
+      "text-secondary": "#44607C",
+      "text-muted": "#52627A",
+      "text-link": "#1D4ED8",
+      "primary": "#2563EB",
+      "primary-hover": "#1D4ED8",
+      "primary-active": "#1E40AF",
+      "on-primary": "#FFFFFF",
+      "focus-ring": "#2563EB",
+      "success": "#15803D",
+      "warning": "#B45309",
+      "danger": "#DC2626",
+      "info": "#0369A1",
+      "on-status": "#FFFFFF",
+      "overlay": "rgba(15, 27, 45, 0.45)"
+    },
+    "warm": {
+      "bg-base": "#F6F1E6",
+      "bg-surface": "#FCF8EF",
+      "bg-subtle": "#EFE8D9",
+      "bg-hover": "#E9E1CF",
+      "border": "#DCD1BA",
+      "border-strong": "#BCAE90",
+      "border-control": "#8E8064",
+      "text-primary": "#2E2A21",
+      "text-secondary": "#5B5342",
+      "text-muted": "#5E5646",
+      "text-link": "#1A56B8",
+      "primary": "#1E5FC2",
+      "primary-hover": "#174FA6",
+      "primary-active": "#123F86",
+      "on-primary": "#FFFFFF",
+      "focus-ring": "#1E5FC2",
+      "success": "#1B6E38",
+      "warning": "#9A4A07",
+      "danger": "#BE2020",
+      "info": "#0B5E86",
+      "on-status": "#FFFFFF",
+      "overlay": "rgba(46, 42, 33, 0.45)"
+    },
+    "dark": {
+      "bg-base": "#0F1B2D",
+      "bg-surface": "#16263C",
+      "bg-subtle": "#1C2F4A",
+      "bg-hover": "#223A5A",
+      "border": "#2C4363",
+      "border-strong": "#3F5B80",
+      "border-control": "#6E88AE",
+      "text-primary": "#E6EDF5",
+      "text-secondary": "#A9BBD0",
+      "text-muted": "#9BB0C9",
+      "text-link": "#7FB2F7",
+      "primary": "#66A3F2",
+      "primary-hover": "#7FB2F7",
+      "primary-active": "#4E8FE6",
+      "on-primary": "#0C1930",
+      "focus-ring": "#66A3F2",
+      "success": "#4ADE80",
+      "warning": "#FBBF24",
+      "danger": "#F87171",
+      "info": "#38BDF8",
+      "on-status": "#0C1930",
+      "overlay": "rgba(0, 0, 0, 0.6)"
+    }
+  },
+
+  "typography": {
+    "font-family": "'Inter', 'SF Pro Text', 'Segoe UI', 'Roboto', system-ui, -apple-system, sans-serif",
+    "font-mono": "'JetBrains Mono', 'Cascadia Code', 'Consolas', monospace",
+    "font-size": {
+      "xs": "12px",
+      "sm": "13px",
+      "body-desktop": "14px",
+      "body-desktop-lg": "15px",
+      "body-web": "15px",
+      "body-web-lg": "16px",
+      "h4": "18px",
+      "h3": "20px",
+      "h2": "24px",
+      "h1": "30px"
+    },
+    "line-height": {
+      "heading": "1.3",
+      "body": "1.55",
+      "long": "1.6"
+    },
+    "weight": {
+      "regular": "400",
+      "medium": "500",
+      "semibold": "600",
+      "bold": "700"
+    },
+    "letter-spacing": {
+      "body": "0",
+      "heading": "-0.01em",
+      "caps-label": "0.04em"
+    }
+  },
+
+  "radius": {
+    "none": "0px",
+    "sm": "4px",
+    "md": "6px",
+    "lg": "8px"
+  },
+
+  "spacing": {
+    "1": "4px",
+    "2": "8px",
+    "3": "12px",
+    "4": "16px",
+    "5": "20px",
+    "6": "24px",
+    "8": "32px",
+    "10": "40px",
+    "12": "48px"
+  },
+
+  "shadow": {
+    "sm": "0 1px 2px rgba(15, 27, 45, 0.06)",
+    "md": "0 2px 8px rgba(15, 27, 45, 0.10)",
+    "lg": "0 8px 24px rgba(15, 27, 45, 0.14)"
+  },
+
+  "z-index": {
+    "dropdown": "1000",
+    "sticky": "1020",
+    "modal-overlay": "1040",
+    "modal": "1050",
+    "toast": "1080",
+    "tooltip": "1090"
+  },
+
+  "motion": {
+    "fast": "120ms",
+    "base": "180ms",
+    "slow": "260ms",
+    "easing": "cubic-bezier(0.2, 0, 0, 1)"
+  },
+
+  "format": {
+    "date": "DD/MM/YYYY",
+    "datetime": "HH:mm DD/MM/YYYY",
+    "version-app": "{ten-app}_{YY}.{M}.{DD}{NN}_{arch}-setup.{ext} - xem docs/DESIGN_SYSTEM.md mục 6"
+  }
+}

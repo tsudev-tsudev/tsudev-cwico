@@ -1,41 +1,308 @@
-# ---- Rust ----
-/target
-**/target/
-Cargo.lock.bak
+# ============================================================
+# .GITIGNORE CHUẨN TOÀN HỆ SINH THÁI tsudev - base v2.0.0
+# Nguồn: tsudev-standards/templates/gitignore/base.gitignore
+# Đây là chuẩn TỐI THIỂU. Được phép THÊM, KHÔNG được phép XÓA BỚT.
+# Quy tắc: hễ tạo ra file/thư mục chứa secret, cache, build output, dữ liệu
+# cá nhân -> BỔ SUNG vào đây TRƯỚC KHI commit. Chi tiết: docs/GITIGNORE_POLICY.md
+# Checklist bảo mật trước commit/PR/merge/deploy/push: AGENTS.md mục 3.
+# ============================================================
 
-# ---- Node / UI ----
-node_modules/
+# --- 1. Biến môi trường & cấu hình nhạy cảm (TUYỆT ĐỐI không commit) ---
+.env
+.env.*
+!.env.example
+!.env.sample
+!.env.*.example
+!.env.*.sample
+.envrc
+.direnv/
+config.local.*
+appsettings.*.local.json
+local.settings.json
+secrets.json
+secrets.yml
+secrets.yaml
+*secret*
+*credential*
+*password*
+!**/*secret*.example
+!**/*credential*.example
+
+# --- 2. Khóa, chứng chỉ, token (lộ một lần là lộ vĩnh viễn) ---
+*.pem
+*.key
+!**/*.public.key
+*.pfx
+*.p12
+*.jks
+*.keystore
+*.crt
+*.cer
+*.der
+*.asc
+*.gpg
+*.kdbx
+*.token
+*.pat
+id_rsa*
+id_ecdsa*
+id_ed25519*
+*.ppk
+*.ovpn
+.ssh/
+.gnupg/
+service-account*.json
+gha-creds-*.json
+client_secret*.json
+firebase-adminsdk*.json
+google-services.json
+GoogleService-Info.plist
+.npmrc
+.yarnrc.yml
+.pypirc
+.netrc
+_netrc
+.dockercfg
+.docker/config.json
+kubeconfig
+*.kubeconfig
+.aws/
+.azure/
+gcloud-key*.json
+
+# --- 3. Hạ tầng dưới dạng mã (chứa state và secret rò rỉ) ---
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+.terraformrc
+terraform.rc
+.pulumi/
+Pulumi.*.yaml
+!Pulumi.yaml
+ansible/inventory/production*
+*.retry
+
+# --- 4. Bản build & bản phát hành ---
 dist/
-dist-ssr/
-.vite/
-*.local
-
-# ---- Tauri ----
-/app/src-tauri/target/
-/app/src-tauri/gen/
-
-# ---- Build output ----
-/build/
-/out/
+build/
+release/
+out/
+target/
+bin/
+obj/
+Debug/
+Release/
+x64/
+x86/
+*.exe
 *.msi
-*.exe.bak
+*.dmg
+*.pkg
+*.deb
+*.rpm
+*.AppImage
+*.apk
+*.aab
+*.ipa
+*.app
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dylib
+*.dll
+!lib/**/*.dll
+*.pyc
+*.pyo
+*.class
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
+*.war
 
-# ---- Editor / OS ----
+# --- 5. Phụ thuộc & cache ---
+node_modules/
+jspm_packages/
+bower_components/
+.pnpm-store/
+.yarn/cache/
+.yarn/unplugged/
+__pycache__/
+*.egg-info/
+.eggs/
+.venv/
+venv/
+env/
+.tox/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.cache/
+.parcel-cache/
+.vite/
+.next/
+.nuxt/
+.svelte-kit/
+.astro/
+.turbo/
+.nx/cache/
+.gradle/
+.dart_tool/
+.pub-cache/
+Pods/
+vcpkg_installed/
+CMakeFiles/
+CMakeCache.txt
+cmake-build-*/
+packages/*/bin/
+packages/*/obj/
+
+# --- 6. Log & file tạm ---
+*.log
+logs/*.log
+logs/*.tmp
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+tmp/
+temp/
+scratch/
+.scratch/
+*.swp
+*.swo
+*.bak
+*.orig
+*.rej
+*~
+.#*
+\#*#
+
+# --- 7. IDE, công cụ & hệ điều hành ---
 .vscode/*
 !.vscode/extensions.json
+!.vscode/settings.shared.json
 .idea/
+*.iml
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+.vs/
+.history/
+.fleet/
 .DS_Store
+.AppleDouble
+.Spotlight-V100
+.Trashes
 Thumbs.db
-*.swp
+ehthumbs.db
+desktop.ini
+$RECYCLE.BIN/
 
-# ---- Runtime artifacts (never commit user machine data) ----
-/logs/
+# --- 8. Công cụ AI & agent (có thể chứa ngữ cảnh/khóa riêng) ---
+.claude/settings.local.json
+.claude/local/
+.cursor/rules.local.md
+.aider*
+.continue/
+.codeium/
+CLAUDE.local.md
+
+# --- 9. Dữ liệu cục bộ, cá nhân & kết quả kiểm thử ---
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal
+*.mdf
+*.ldf
+dump.rdb
+*.dump
+*.sql.gz
+*.bak.sql
+data/local/
+data/private/
+uploads/
+storage/app/private/
+coverage/
+.nyc_output/
+htmlcov/
+.coverage
+.coverage.*
+junit.xml
+test-results/
+playwright-report/
+blob-report/
+.lighthouseci/
+
+# --- 10. Dấu vết điều tra / gỡ lỗi (có thể chứa token phiên) ---
+*.har
+*.pcap
+*.pcapng
+*.hprof
+*.heapsnapshot
+core
+core.*
+crash-*.log
+
+# Bổ sung cho project Rust - đặt SAU nội dung base.gitignore
+# base.gitignore đã có target/ ; phần dưới là những thứ riêng của Rust.
+
+# --- Bản build và tạo phẩm ---
+**/target/
+**/*.rs.bk
+*.pdb
+
+# --- Cargo ---
+# Cargo.lock: COMMIT với binary/ứng dụng (bản build tái lập được),
+# BỎ QUA với thư viện. Bỏ dấu # ở dòng dưới nếu crate này là thư viện.
+# Cargo.lock
+.cargo/config.toml
+.cargo/credentials
+.cargo/credentials.toml
+
+# --- Công cụ ---
+*.profraw
+*.profdata
+tarpaulin-report.html
+cobertura.xml
+/criterion/
+flamegraph.svg
+perf.data*
+
+# --- Tauri (nếu dùng, theo LANGUAGE_SELECTION.md mục 2.3) ---
+src-tauri/target/
+src-tauri/WixTools/
+src-tauri/.tauri/
+# Khóa ký bản cập nhật - LỘ LÀ MẤT QUYỀN KIỂM SOÁT KÊNH CẬP NHẬT
+*.tauri.key
+tauri.conf.local.json
+
+# --- WebAssembly ---
+pkg/
+wasm-pack.log
+
+# --- Riêng của repo này (giữ lại từ .gitignore cũ) ---
 *.cwico-transaction.json
+*.exe.bak
+*.local
 *.reg.bak
-
-# Generated from data/tweaks.json by `npm run sync:data`
+/app/src-tauri/gen/
+/app/src-tauri/target/
+/build/
+/out/
+/target
 /ui/public/tweaks.json
+Cargo.lock.bak
+dist-ssr/
 
-# Python bytecode from tools/
-__pycache__/
-*.pyc
+# --- Quy tắc đã THU HẸP khi áp bộ quy ước v2.3.0 ---
+# Các dòng sau từng chặn cả thư mục, nuốt mất file bắt buộc phải commit
+# (logs/STATE.md, logs/LOCKS.md, .standards/**). Xem GITIGNORE_POLICY.md mục 5.
+# Đã bỏ: /logs/ 
+/logs/*.log
+/logs/*.tmp
+/logs/*.log
+/logs/*.tmp

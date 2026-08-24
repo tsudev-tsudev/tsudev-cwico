@@ -2,14 +2,14 @@
  * The blocking update screen.
  *
  * When a newer release is confirmed, this replaces the entire application.
- * There is no dismiss, no "later", and no way past it except installing —
+ * There is no dismiss, no "later", and no way past it except installing -
  * which is the point.
  *
  * ## Why blocking, for a tool that usually should not
  *
  * The safety database decides what this tool will and will not remove. A
- * correction to it — something classified `Safe` that turned out to cost a
- * user a feature, or something that should have been `Critical` — ships as a
+ * correction to it - something classified `Safe` that turned out to cost a
+ * user a feature, or something that should have been `Critical` - ships as a
  * new version. A user on last month's build is running last month's idea of
  * what is safe to delete, with Administrator rights.
  *
