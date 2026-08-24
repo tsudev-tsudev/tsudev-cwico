@@ -44,6 +44,7 @@ chuyên đề. Bản đồ đầy đủ: [`docs/00-INDEX.md`](docs/00-INDEX.md).
 | Hạ tầng 0 đồng | [`docs/FREE_TIER_STACK.md`](docs/FREE_TIER_STACK.md) |
 | Chọn ngôn ngữ, framework | [`docs/LANGUAGE_SELECTION.md`](docs/LANGUAGE_SELECTION.md) |
 | Giao diện, token, component | [`docs/DESIGN_SYSTEM.md`](docs/DESIGN_SYSTEM.md) |
+| Logo, favicon, icon ứng dụng | [`docs/BRAND_ASSETS.md`](docs/BRAND_ASSETS.md) |
 | Cấu trúc thư mục | [`docs/PROJECT_STRUCTURE.md`](docs/PROJECT_STRUCTURE.md) |
 | Khả năng truy cập | [`docs/ACCESSIBILITY.md`](docs/ACCESSIBILITY.md) |
 | Kiểm thử và chất lượng mã | [`docs/TESTING_QUALITY.md`](docs/TESTING_QUALITY.md) |

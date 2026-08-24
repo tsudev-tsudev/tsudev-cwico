@@ -1,0 +1,44 @@
+# Bổ sung cho project Go - đặt SAU nội dung base.gitignore
+# base.gitignore đã có bin/ , dist/ , build/ ; phần dưới là những thứ riêng của Go.
+
+# --- Bản build ---
+# Go build ra file KHÔNG có đuôi, nằm ngay cạnh mã nguồn. Không có mẫu chung nào
+# bắt được chúng mà không bắt oan file khác, nên quy ước là:
+# MUST build vào bin/ hoặc dist/ (đã bị base.gitignore chặn) bằng
+#   go build -o bin/<ten> ./cmd/<ten>
+# Chỉ liệt kê ở đây những đuôi Go sinh ra chắc chắn là tạo phẩm.
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# --- Kiểm thử và độ phủ ---
+coverage.out
+coverage.txt
+coverage.html
+*.cover
+profile.cov
+# Tạo phẩm của go test -cpuprofile / -memprofile
+*.prof
+__debug_bin*
+
+# --- Phụ thuộc ---
+# vendor/: COMMIT khi cần build tái lập được không cần mạng (khuyến nghị cho
+# dịch vụ đem deploy), BỎ QUA khi là thư viện. Bỏ dấu # ở dòng dưới nếu bỏ qua.
+# vendor/
+
+# go.work là cấu hình workspace CỤC BỘ của từng máy, MUST NOT commit.
+go.work
+go.work.sum
+
+# --- Công cụ ---
+# air (nạp lại nóng khi phát triển)
+tmp/
+# golangci-lint
+.golangci-cache/
+# delve
+debug
+debug.test

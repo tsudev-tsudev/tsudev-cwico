@@ -53,7 +53,7 @@ Dùng cho: một app web, một app Electron, một CLI, một thư viện, mộ
 │   ├── styles/                # Style toàn cục - chỉ nhập từ tokens/, cấm định nghĩa màu mới
 │   └── types/  hoặc  models/  # Kiểu dữ liệu dùng chung
 │
-├── assets/                    # icon/, fonts/ (Inter + JetBrains Mono), images/
+├── assets/                    # brand/ (BRAND_ASSETS.md), icon/, fonts/, images/
 ├── tests/                     # Test tích hợp và E2E (unit test đặt cạnh mã trong features/)
 ├── scripts/                   # Script build, phát hành, đồng bộ (đặt tên theo động từ)
 │   ├── sync-standards.sh
