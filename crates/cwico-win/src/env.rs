@@ -1,7 +1,7 @@
 //! Environment-variable expansion.
 //!
 //! The safety database stores residue paths as `%LOCALAPPDATA%\Vendor\App`.
-//! Those have to become real paths before the deletion guard sees them —
+//! Those have to become real paths before the deletion guard sees them -
 //! [`cwico_core::guard`] rejects any path still containing a `%`, precisely so
 //! that a failed expansion can never collapse into a short, dangerous path.
 

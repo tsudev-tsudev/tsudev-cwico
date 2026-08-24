@@ -236,7 +236,7 @@ export function SoftwareTable({
                       className="mt-0.5 truncate text-[12px]"
                       style={{ color: "var(--text-muted)" }}
                     >
-                      {[item.publisher, item.version].filter(Boolean).join(" · ") || "—"}
+                      {[item.publisher, item.version].filter(Boolean).join(" · ") || "-"}
                     </p>
 
                     {item.safetyReason && (

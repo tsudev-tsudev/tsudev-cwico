@@ -6,8 +6,8 @@
 //! Nothing in this crate touches an operating system. Scanning, classifying
 //! and planning happen here; execution happens behind
 //! [`backend::PlatformBackend`], which `cwico-win` implements with Win32 and
-//! WinRT calls. That split means the dangerous logic — what counts as safe to
-//! remove, which paths may be deleted, which items are hard-blocked — is
+//! WinRT calls. That split means the dangerous logic - what counts as safe to
+//! remove, which paths may be deleted, which items are hard-blocked - is
 //! ordinary testable Rust that runs on any host.
 //!
 //! ## The safety model

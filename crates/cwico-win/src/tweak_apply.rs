@@ -3,7 +3,7 @@
 //! [`cwico_core::tweaks`] describes *what* a tweak changes; this module makes
 //! the change. Each [`TweakEffect`] variant maps to exactly one narrow
 //! operation, and [`TweakEffect::RunCommand`] is restricted to an allow-list
-//! rather than being a general shell escape — a tweak catalogue is data, and
+//! rather than being a general shell escape - a tweak catalogue is data, and
 //! data that can run arbitrary commands is a remote code execution bug
 //! waiting for someone to ship a malicious catalogue update.
 
@@ -214,7 +214,7 @@ fn run_internal(action: &str, dry_run: bool) -> Result<StepResult> {
 
 /// Empty the user and system TEMP folders.
 ///
-/// Deletes the *contents*, never the folders themselves — the deletion guard
+/// Deletes the *contents*, never the folders themselves - the deletion guard
 /// rejects a TEMP directory as a target precisely because other software
 /// expects it to exist.
 fn clean_temp(dry_run: bool) -> Result<StepResult> {

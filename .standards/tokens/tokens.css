@@ -1,0 +1,174 @@
+/* ============================================================
+   tsudev-design-tokens v2.0.0 - SINH TỰ ĐỘNG, KHÔNG SỬA TAY
+   Nguồn: tokens/design-tokens.json
+   Sinh lại: node scripts/build-tokens.mjs
+   Cách dùng: <html data-theme="light|warm|dark">
+              <body data-platform="web|desktop">
+   ============================================================ */
+
+:root,
+[data-theme="light"] {
+  --bg-base: #EEF4FB;
+  --bg-surface: #FFFFFF;
+  --bg-subtle: #E3EDF8;
+  --bg-hover: #DCE8F6;
+  --border: #C9D9EC;
+  --border-strong: #9FB8D4;
+  --border-control: #74899F;
+  --text-primary: #1C2B3A;
+  --text-secondary: #44607C;
+  --text-muted: #52627A;
+  --text-link: #1D4ED8;
+  --primary: #2563EB;
+  --primary-hover: #1D4ED8;
+  --primary-active: #1E40AF;
+  --on-primary: #FFFFFF;
+  --focus-ring: #2563EB;
+  --success: #15803D;
+  --warning: #B45309;
+  --danger: #DC2626;
+  --info: #0369A1;
+  --on-status: #FFFFFF;
+  --overlay: rgba(15, 27, 45, 0.45);
+  color-scheme: light;
+}
+
+[data-theme="warm"] {
+  --bg-base: #F6F1E6;
+  --bg-surface: #FCF8EF;
+  --bg-subtle: #EFE8D9;
+  --bg-hover: #E9E1CF;
+  --border: #DCD1BA;
+  --border-strong: #BCAE90;
+  --border-control: #8E8064;
+  --text-primary: #2E2A21;
+  --text-secondary: #5B5342;
+  --text-muted: #5E5646;
+  --text-link: #1A56B8;
+  --primary: #1E5FC2;
+  --primary-hover: #174FA6;
+  --primary-active: #123F86;
+  --on-primary: #FFFFFF;
+  --focus-ring: #1E5FC2;
+  --success: #1B6E38;
+  --warning: #9A4A07;
+  --danger: #BE2020;
+  --info: #0B5E86;
+  --on-status: #FFFFFF;
+  --overlay: rgba(46, 42, 33, 0.45);
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  --bg-base: #0F1B2D;
+  --bg-surface: #16263C;
+  --bg-subtle: #1C2F4A;
+  --bg-hover: #223A5A;
+  --border: #2C4363;
+  --border-strong: #3F5B80;
+  --border-control: #6E88AE;
+  --text-primary: #E6EDF5;
+  --text-secondary: #A9BBD0;
+  --text-muted: #9BB0C9;
+  --text-link: #7FB2F7;
+  --primary: #66A3F2;
+  --primary-hover: #7FB2F7;
+  --primary-active: #4E8FE6;
+  --on-primary: #0C1930;
+  --focus-ring: #66A3F2;
+  --success: #4ADE80;
+  --warning: #FBBF24;
+  --danger: #F87171;
+  --info: #38BDF8;
+  --on-status: #0C1930;
+  --overlay: rgba(0, 0, 0, 0.6);
+  color-scheme: dark;
+}
+
+:root {
+  /* Typography */
+  --font-family: 'Inter', 'SF Pro Text', 'Segoe UI', 'Roboto', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Cascadia Code', 'Consolas', monospace;
+  --fs-xs: 12px;
+  --fs-sm: 13px;
+  --fs-body-desktop: 14px;
+  --fs-body-desktop-lg: 15px;
+  --fs-body-web: 15px;
+  --fs-body-web-lg: 16px;
+  --fs-h4: 18px;
+  --fs-h3: 20px;
+  --fs-h2: 24px;
+  --fs-h1: 30px;
+  --lh-heading: 1.3;
+  --lh-body: 1.55;
+  --lh-long: 1.6;
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+  --ls-body: 0;
+  --ls-heading: -0.01em;
+  --ls-caps-label: 0.04em;
+
+  /* Radius: none=khung layout | sm=badge,checkbox | md=button,input | lg=modal,card,table */
+  --radius-none: 0px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+
+  /* Spacing - bội số 4px */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+
+  /* Shadow */
+  --shadow-sm: 0 1px 2px rgba(15, 27, 45, 0.06);
+  --shadow-md: 0 2px 8px rgba(15, 27, 45, 0.10);
+  --shadow-lg: 0 8px 24px rgba(15, 27, 45, 0.14);
+
+  /* Z-index */
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-modal-overlay: 1040;
+  --z-modal: 1050;
+  --z-toast: 1080;
+  --z-tooltip: 1090;
+
+  /* Motion */
+  --motion-fast: 120ms;
+  --motion-base: 180ms;
+  --motion-slow: 260ms;
+  --motion-easing: cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* Nền tảng áp cỡ chữ body mặc định */
+body {
+  font-family: var(--font-family);
+  color: var(--text-primary);
+  background: var(--bg-base);
+  line-height: var(--lh-body);
+}
+body[data-platform="web"] { font-size: var(--fs-body-web); }
+body[data-platform="desktop"] { font-size: var(--fs-body-desktop); }
+
+/* Vòng focus luôn nhìn thấy được bằng bàn phím - DESIGN_SYSTEM.md mục 5 */
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* Tôn trọng lựa chọn giảm chuyển động của hệ điều hành */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

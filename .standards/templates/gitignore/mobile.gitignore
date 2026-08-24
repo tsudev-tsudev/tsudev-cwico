@@ -1,0 +1,21 @@
+# Bổ sung cho project Mobile (Flutter / React Native / Android / iOS)
+# Đặt SAU nội dung base.gitignore
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.metadata
+**/ios/Flutter/.last_build_id
+**/ios/Flutter/App.framework
+**/ios/Flutter/Flutter.framework
+local.properties
+captures/
+.externalNativeBuild/
+.cxx/
+*.hmap
+*.xcuserstate
+xcuserdata/
+DerivedData/
+*.mobileprovision
+*.certSigningRequest
+android/key.properties
+android/app/upload-keystore.jks

@@ -1,0 +1,20 @@
+# Bổ sung cho project .NET/C# - đặt SAU nội dung base.gitignore
+[Bb]in/
+[Oo]bj/
+# KHÔNG chặn cả thư mục [Ll]ogs/ - `logs/` là thư mục điều phối phiên BẮT BUỘC
+# phải commit (AGENT_PROTOCOL.md). Chỉ chặn file nhật ký bên trong.
+[Ll]og/*.log
+[Ll]ogs/*.log
+[Ll]ogs/*.txt
+*.pdb
+*.cache
+*.VisualState.xml
+TestResult.xml
+BenchmarkDotNet.Artifacts/
+publish/
+PublishProfiles/*.pubxml.user
+*.nupkg
+*.snupkg
+.nuget/packages/
+msbuild.log
+msbuild.binlog

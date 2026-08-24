@@ -54,7 +54,7 @@ Rules to follow when writing one:
   which is the desired outcome for a typo.
 * **Never add a `critical` rule that could be worked around.** If something is
   Critical, the point is that no user can remove it. Do not pair it with a
-  narrower `safe` rule "for convenience" — severity wins, but the intent
+  narrower `safe` rule "for convenience" - severity wins, but the intent
   becomes unclear to the next reader.
 
 Then:
@@ -107,7 +107,7 @@ hold every line of logic that matters. The Tauri crate is IPC plumbing.
 | is presentation | `ui/` |
 
 The rule behind the table: **`cwico-core` makes no OS calls**, which is what
-lets its whole test suite — including every adversarial safety test — run on a
+lets its whole test suite - including every adversarial safety test - run on a
 Linux CI runner. Adding a `#[cfg(windows)]` to that crate is a sign the logic
 belongs somewhere else.
 
@@ -123,7 +123,7 @@ instead of only type-checking them.
 > `beforeDevCommand` and `beforeBuildCommand` hooks run from the *app
 > directory* one level up (`app/`). That is why one says `../../ui/dist` and
 > the other says `../ui`. Getting this wrong fails only in `cargo tauri
-> build`, not in `cargo build`, so CI's Windows job will not catch it — the
+> build`, not in `cargo build`, so CI's Windows job will not catch it - the
 > release workflow will.
 
 
@@ -134,7 +134,7 @@ npm --prefix ui run dev     # opens in a browser against src/fixtures.ts
 
 The browser fixtures mirror the Rust `MockBackend`: one item of every safety
 class and every source kind. If you change the planner's behaviour in Rust,
-change `ui/src/fixtures.ts` to match — otherwise the interface you are
+change `ui/src/fixtures.ts` to match - otherwise the interface you are
 designing against is not the one that ships.
 
 Notes:
@@ -144,7 +144,7 @@ Notes:
 * `ui/src/i18n.ts` has a typed key space. A missing translation is a compile
   error, not a runtime surprise.
 * Colours come from CSS custom properties in `index.css`. No hard-coded hex in
-  a component — light and dark are the same code path.
+  a component - light and dark are the same code path.
 * Colour is never the only signal. Safety badges carry a glyph and a word too.
 
 ## Adding a tweak
@@ -174,7 +174,7 @@ See **[docs/RELEASING.md](docs/RELEASING.md)**. In short:
 
 ```bash
 tools/version.py set "$(tools/version.py next)"
-# write the CHANGELOG entry — it becomes the text users read in the
+# write the CHANGELOG entry - it becomes the text users read in the
 # mandatory update dialog
 git commit -am "Release $(tools/version.py current | awk '{print $1}')"
 git tag "$(tools/version.py current | awk '{print $1}')" && git push --tags

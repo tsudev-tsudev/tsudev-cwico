@@ -68,7 +68,7 @@ impl ScanOptions {
         }
     }
 
-    /// Installed programs only — the fastest useful scan.
+    /// Installed programs only - the fastest useful scan.
     pub fn quick() -> Self {
         Self {
             registry_programs: true,

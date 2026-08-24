@@ -12,8 +12,8 @@ members = [
     "app/src-tauri",
 ]
 
-# The desktop app needs a webview toolkit to build — WebView2 on Windows,
-# webkit2gtk on Linux — which a contributor working on the engine has no
+# The desktop app needs a webview toolkit to build - WebView2 on Windows,
+# webkit2gtk on Linux - which a contributor working on the engine has no
 # reason to install. Leaving it out of the default set means a bare
 # `cargo test` works on any host; `cargo build -p cwico-app` opts in.
 default-members = [

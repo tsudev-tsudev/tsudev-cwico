@@ -3,7 +3,7 @@
  *
  * The engine refuses to plan these without `confirmed: true`, and this dialog
  * is the only thing in the UI that sets it. Ticking a checkbox is not the
- * acknowledgement — reading what the item costs and saying yes is. That is
+ * acknowledgement - reading what the item costs and saying yes is. That is
  * the difference between a user who chose to lose their default photo viewer
  * and one who is surprised by it a week later.
  */

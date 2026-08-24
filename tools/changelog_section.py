@@ -27,7 +27,7 @@ spec.loader.exec_module(version)
 
 
 def section_for(release: str) -> str:
-    """The body of `## <release> — ...`, up to the next `##` heading."""
+    """The body of `## <release> - ...`, up to the next `##` heading."""
     text = CHANGELOG.read_text()
     pattern = re.compile(
         rf"^##\s+{re.escape(release)}\b.*?$(.*?)(?=^##\s|\Z)",
@@ -36,7 +36,7 @@ def section_for(release: str) -> str:
     match = pattern.search(text)
     if not match:
         raise SystemExit(
-            f"no `## {release}` section in CHANGELOG.md — "
+            f"no `## {release}` section in CHANGELOG.md - "
             "add one before tagging, or the update dialog will block users "
             "without telling them why"
         )

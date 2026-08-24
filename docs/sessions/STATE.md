@@ -70,7 +70,7 @@ READMEs, the version encoding, or the three manifests have drifted.
   installed the MSI in a clean Windows VM and passed. So the *installer* works
   on real Windows. Nothing beyond that is evidenced.
   First thing to do on a Windows box: `cwico info`, then `cwico scan`, then
-  `cwico plan --safe-only` — none of which change anything.
+  `cwico plan --safe-only` - none of which change anything.
 * Installers are **unsigned**. SmartScreen will warn on first run.
 
 ---
@@ -79,7 +79,7 @@ READMEs, the version encoding, or the three manifests have drifted.
 
 Everything planned so far is finished and released. The work now splits three
 ways, and **the first group is the only part a session working in this
-repository can actually do** — the other two need the maintainer or a Windows
+repository can actually do** - the other two need the maintainer or a Windows
 machine.
 
 ### A · Available now, no Windows machine and no permissions needed
@@ -91,10 +91,10 @@ Ordered by value.
    which pushes the judgement onto a user who has less context than the
    database could. Gaps worth closing, roughly in order of how often they
    appear on a real machine:
-   * OEM preloads by vendor — HP, Dell, Lenovo, Acer, Asus, MSI each ship a
+   * OEM preloads by vendor - HP, Dell, Lenovo, Acer, Asus, MSI each ship a
      dozen named utilities, and the current rules only catch the generic ones.
    * Common third-party software that people *do* want to remove and that has
-     residue worth sweeping — Adobe Creative Cloud components, Java, Zoom,
+     residue worth sweeping - Adobe Creative Cloud components, Java, Zoom,
      Discord, Steam, Epic, iTunes, Nvidia GeForce Experience.
    * Windows 11 24H2/25H2 packages this database predates.
 
@@ -130,7 +130,7 @@ Ordered by value.
 
 ### C · Blocked on a Windows machine
 
-1. **Run it.** `cwico info`, `cwico scan`, `cwico plan --safe-only` — none
+1. **Run it.** `cwico info`, `cwico scan`, `cwico plan --safe-only` - none
    change anything. This is the single largest gap in the project.
 2. **Test the update path end to end.** Needs two published releases: install
    `v26.8.19`, publish a second, watch the gate appear and the installer hand
@@ -138,7 +138,7 @@ Ordered by value.
 
 ---
 
-### Release `tsudev-cwico-v26.8.19` — published
+### Release `tsudev-cwico-v26.8.19` - published
 
 https://github.com/tsudev-tsudev/tsudev-cwico/releases/tag/tsudev-cwico-v26.8.19
 
@@ -155,7 +155,7 @@ every installed copy of `v26.8.19` show the blocking gate. Before doing that,
 read `docs/RELEASING.md`, and ideally install this release on a Windows machine
 first so there is something to update *from*.
 
-### winget — submitted, automated validation passed
+### winget - submitted, automated validation passed
 
 [microsoft/winget-pkgs#420321](https://github.com/microsoft/winget-pkgs/pull/420321)
 
@@ -164,30 +164,30 @@ Labels as of close of session: `Azure-Pipeline-Passed`, `Policy-Test-2.7`,
 
 **`Azure-Pipeline-Passed` matters.** Their pipeline installs a new package in a
 clean Windows VM. It is the closest thing to a real-Windows smoke test this
-project has had — the MSI installs. It does *not* say the application was
+project has had - the MSI installs. It does *not* say the application was
 launched, that it read a registry, or that anything was removed.
 
 The other labels, read carefully:
 
-* **`Needs-CLA`** — but the `license/cla` check on the head commit reports
+* **`Needs-CLA`** - but the `license/cla` check on the head commit reports
   *"All CLA requirements met"*. The label and the check disagree; the label is
   probably just stale. **Confirm on the pull request page** before acting on
   either.
 * **`Policy-Test-2.7`** is the *adult content* review policy, applied in the
   same second as `Azure-Pipeline-Passed`. Almost certainly routine routing for
-  a new package rather than a finding — the manifests were checked for the
+  a new package rather than a finding - the manifests were checked for the
   usual false-positive substrings and contain only `do**cum**entations`,
   `cl**ass**ified` and `s**hell**`.
 * **`Validation-Guide`** came with a generic bot comment ("there was an issue
   validating") and no specifics. Nothing actionable was stated.
 
 **Next action:** watch the pull request and respond to whatever a moderator
-asks. Two checklist boxes were deliberately left unchecked — `winget validate`
-and `winget install` cannot be run from this development host — with an
+asks. Two checklist boxes were deliberately left unchecked - `winget validate`
+and `winget install` cannot be run from this development host - with an
 explanation in the pull request body of what was verified instead. If a
 moderator asks for them, that needs a Windows machine.
 
-### SignPath — prepared, not submitted
+### SignPath - prepared, not submitted
 
 `packaging/signpath/APPLICATION.md` has the application text, including the
 argument for why this is not a hacking tool (their terms exclude those, and a
@@ -202,14 +202,14 @@ Deferred by the maintainer: internal testing first, code signing later.
 
 1. That the scanner reads a real registry, service control manager and task
    scheduler correctly. Start with `cwico info`, `cwico scan`, then
-   `cwico plan --safe-only` — none of which change anything.
+   `cwico plan --safe-only` - none of which change anything.
 2. That `download_and_install` genuinely replaces the running process and
    restarts into the new version. The UI states are verified; the handoff to
-   the Windows installer is not. This needs two releases to test — install
+   the Windows installer is not. This needs two releases to test - install
    `v26.8.19`, then publish a second one.
 3. Sign the Microsoft CLA so winget#420321 can proceed.
 
-### Decisions taken for this work — do not re-litigate
+### Decisions taken for this work - do not re-litigate
 
 1. **Version naming.** Release name `tsudev-cwico-v26.8.19`; a second release
    the same day is `…-v26.8.19.2`. Cargo, MSI and the updater all require
@@ -241,12 +241,12 @@ Deferred by the maintainer: internal testing first, code signing later.
 
 ---
 
-## Environment notes — things that waste an hour if you do not know them
+## Environment notes - things that waste an hour if you do not know them
 
 * **`cargo test` needs no feature flags.** A non-Windows build pulls
   `cwico-core/mock` in through a `[target.'cfg(not(windows))'.dependencies]`
   entry, so the fixture backend is automatic.
-* **`cargo test --workspace` fails on Linux/macOS** — it drags in the Tauri
+* **`cargo test --workspace` fails on Linux/macOS** - it drags in the Tauri
   crate, which needs webkit2gtk. `default-members` deliberately excludes it.
   Use plain `cargo test`.
 * **The Tauri crate can no longer be cross-checked from Linux.** Since the
@@ -254,14 +254,14 @@ Deferred by the maintainer: internal testing first, code signing later.
   compiler for the target (`x86_64-w64-mingw32-gcc`), and before that it
   needed `x86_64-w64-mingw32-windres`. Install both to restore it:
   `apt install binutils-mingw-w64-x86-64 gcc-mingw-w64-x86-64`. Without them,
-  **CI's Windows job is the only thing that type-checks `cwico-app`** — push
+  **CI's Windows job is the only thing that type-checks `cwico-app`** - push
   and read the result rather than assuming. `cwico-core`, `cwico-win` and
   `cwico-cli` still cross-check fine, and they hold all the logic.
 * **Paths in `tauri.conf.json` have two different bases.** `frontendDist` is
   relative to `tauri.conf.json` (`app/src-tauri/`); the `before*Command` hooks
   run from the *app directory* one level up (`app/`). That is why one says
   `../../ui/dist` and the other `../ui`. Getting it wrong fails only under
-  `cargo tauri build`, which CI's Windows job does not run — the release
+  `cargo tauri build`, which CI's Windows job does not run - the release
   workflow does.
 * **Tauri builds are not reproducible.** Two runs of the same commit produced
   different MSI hashes *and* different ProductCodes, so a winget manifest is
@@ -278,16 +278,16 @@ Deferred by the maintainer: internal testing first, code signing later.
 ## Repository map
 
 ```
-crates/cwico-core/     engine — no OS calls, all the safety logic, 136 tests
+crates/cwico-core/     engine - no OS calls, all the safety logic, 136 tests
   safety.rs              the classifier
-  plan.rs                the planning gate — Critical items die here
-  guard.rs               the deletion guard — unsafe paths die here
+  plan.rs                the planning gate - Critical items die here
+  guard.rs               the deletion guard - unsafe paths die here
 crates/cwico-win/      Win32/WinRT adapters
   cmdline.rs naming.rs protected.rs   host-independent, tested everywhere
 crates/cwico-cli/      headless interface
 app/src-tauri/         IPC only, no logic
 ui/                    React 19 + TS + Tailwind 4
-data/safety-db.json    58 rules — the most consequential file here
+data/safety-db.json    58 rules - the most consequential file here
 data/tweaks.json       36 system tweaks
 tools/
   version.py             the ONLY thing that computes a version
@@ -308,12 +308,12 @@ docs/sessions/         you are here
 
 1. Read this file (done).
 2. Run the verification block above.
-3. Read [`docs/SAFETY.md`](../SAFETY.md) — it is the design rationale for
+3. Read [`docs/SAFETY.md`](../SAFETY.md) - it is the design rationale for
    everything that stops this tool breaking someone's machine, and changing
    the safety layer without reading it is how that protection gets eroded.
 4. Pick something from **What to do next → A**. That section is ordered by
    value, and everything in it can be done from this repository alone.
-5. Before you stop — including if you are running out of context — update this
+5. Before you stop - including if you are running out of context - update this
    file first, then write the session log. If there is only time for one, make
    it this file: a missing log costs the next session context, a stale
    `STATE.md` costs them a wrong decision.

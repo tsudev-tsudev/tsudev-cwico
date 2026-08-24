@@ -57,7 +57,7 @@ export default function App() {
   );
   const [tab, setTab] = useState<Tab>("software");
 
-  /** `null` while the check is still running — the app is not shown yet. */
+  /** `null` while the check is still running - the app is not shown yet. */
   const [update, setUpdate] = useState<UpdateStatus | null>(null);
 
   const [about, setAbout] = useState<AboutInfo | null>(null);
@@ -223,7 +223,7 @@ export default function App() {
 
   const toggleItem = useCallback(
     (item: SoftwareItem) => {
-      // Critical items are not selectable at all — the row renders a lock
+      // Critical items are not selectable at all - the row renders a lock
       // instead of a checkbox, and this is the second line of that defence.
       if (item.safety === "critical") return;
 

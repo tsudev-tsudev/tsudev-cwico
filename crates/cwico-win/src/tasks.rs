@@ -103,7 +103,7 @@ fn connect() -> Result<ITaskService> {
 /// Enumerate every task in the scheduler tree.
 ///
 /// `include_xml` fetches each task's definition, which is what lets the
-/// scanner attribute a task to the product that created it — at the cost of
+/// scanner attribute a task to the product that created it - at the cost of
 /// several hundred extra COM calls.
 pub fn enumerate(include_xml: bool) -> Result<Vec<TaskInfo>> {
     let _com = ComApartment::enter()?;

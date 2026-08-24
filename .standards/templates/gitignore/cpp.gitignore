@@ -1,0 +1,20 @@
+# Bổ sung cho project C/C++ - đặt SAU nội dung base.gitignore
+*.d
+*.slo
+*.lo
+*.ko
+*.elf
+*.ilk
+*.map
+*.exp
+*.gch
+*.pch
+*.la
+*.lai
+*.idb
+compile_commands.json
+.ccls-cache/
+.clangd/
+build-*/
+_deps/
+Testing/

@@ -27,7 +27,7 @@ export function eventToLine(event: ProgressEvent, id: number): LogLine | null {
     case "stepStarted":
       return { id, text: `[${event.index}/${event.total}] ${event.step}…` };
     case "stepFinished":
-      return { id, text: `${event.step} — ${event.detail}`, status: event.status };
+      return { id, text: `${event.step} - ${event.detail}`, status: event.status };
     case "itemFinished":
       return { id, text: `→ ${event.name}`, status: event.status };
     case "log":

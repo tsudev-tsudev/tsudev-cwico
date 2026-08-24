@@ -1,4 +1,4 @@
-//! `cwico` — the headless interface to tsudev-cwico.
+//! `cwico` - the headless interface to tsudev-cwico.
 //!
 //! Everything the GUI can do, scriptable. Three reasons it exists:
 //!
@@ -25,7 +25,7 @@ use std::process::ExitCode;
 const HELP: &str = concat!(
     "tsudev-cwico ",
     env!("CARGO_PKG_VERSION"),
-    r#" — deep Windows debloater and software removal toolkit
+    r#" - deep Windows debloater and software removal toolkit
 https://tsudev.com
 
 USAGE
@@ -442,7 +442,7 @@ fn print_report(report: &ScanReport, args: &Args) {
     );
     if !report.elevated {
         println!(
-            "\n  note: not running as Administrator — machine-wide programs and service \
+            "\n  note: not running as Administrator - machine-wide programs and service \
              configuration are incomplete."
         );
     }
@@ -506,7 +506,7 @@ fn run() -> Result<ExitCode, String> {
                     if info.system_restore_available {
                         "available"
                     } else {
-                        "UNAVAILABLE — enable System Protection before removing anything"
+                        "UNAVAILABLE - enable System Protection before removing anything"
                     }
                 );
                 println!(
@@ -623,7 +623,7 @@ fn run() -> Result<ExitCode, String> {
             }
 
             if !args.apply {
-                eprintln!("  (dry run — add --apply to make changes)\n");
+                eprintln!("  (dry run - add --apply to make changes)\n");
             }
 
             let run_report = engine.execute(&plan, &sink).map_err(|e| e.to_string())?;

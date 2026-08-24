@@ -5,7 +5,7 @@
 
    The palette is sampled from tsudev-logo.png: the circuit-board blues of the
    owl, and the amber of its eyes. `tsu` is blue and `dev` is orange in the
-   wordmark, and those same two hues carry through the whole interface —
+   wordmark, and those same two hues carry through the whole interface -
    blue for structure, orange for the moments that need attention.
 --------------------------------------------------------------------------- */
 @theme {
@@ -100,8 +100,8 @@ body {
   user-select: none;
 }
 
-/* Anything that is genuinely content the user may want to copy — registry
-   keys, paths, error text — opts back in. */
+/* Anything that is genuinely content the user may want to copy - registry
+   keys, paths, error text - opts back in. */
 .selectable {
   user-select: text;
   cursor: text;

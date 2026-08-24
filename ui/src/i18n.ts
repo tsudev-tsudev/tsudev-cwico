@@ -49,8 +49,8 @@ const vi = {
   "safety.critical": "Trọng yếu",
   "safety.safe.short": "Gỡ được, Windows không ảnh hưởng",
   "safety.caution.short": "Gỡ được nhưng mất một tính năng phụ",
-  "safety.unknown.short": "Chưa phân loại — hãy tự kiểm tra",
-  "safety.critical.short": "Không thể gỡ — hệ điều hành phụ thuộc",
+  "safety.unknown.short": "Chưa phân loại - hãy tự kiểm tra",
+  "safety.critical.short": "Không thể gỡ - hệ điều hành phụ thuộc",
 
   "kind.registry_uninstall": "Chương trình",
   "kind.appx_package": "Ứng dụng UWP",
@@ -85,7 +85,7 @@ const vi = {
   "plan.restorePoint": "Tạo điểm khôi phục hệ thống trước khi gỡ",
   "plan.registryBackup": "Xuất sao lưu .reg cho các khóa sẽ can thiệp",
   "plan.killProcesses": "Tắt tiến trình đang chạy của phần mềm",
-  "plan.dryRun": "Chỉ chạy thử — không thay đổi hệ thống",
+  "plan.dryRun": "Chỉ chạy thử - không thay đổi hệ thống",
   "plan.empty": "Không còn mục nào sau khi kiểm tra an toàn.",
   "plan.confirmTitle": "Xác nhận thao tác không thể hoàn tác dễ dàng",
   "plan.confirmBody":
@@ -154,7 +154,7 @@ const vi = {
   "update.gate.lead":
     "Cần cập nhật lên phiên bản mới nhất trước khi tiếp tục sử dụng.",
   "update.gate.why":
-    "Cơ sở dữ liệu an toàn quyết định phần mềm nào được phép gỡ. Khi một quy tắc được sửa — ví dụ một mục từng bị xếp nhầm là An toàn — bản sửa đi kèm phiên bản mới. Chạy bản cũ nghĩa là đang dùng đánh giá an toàn đã lỗi thời cho chính máy của bạn.",
+    "Cơ sở dữ liệu an toàn quyết định phần mềm nào được phép gỡ. Khi một quy tắc được sửa - ví dụ một mục từng bị xếp nhầm là An toàn - bản sửa đi kèm phiên bản mới. Chạy bản cũ nghĩa là đang dùng đánh giá an toàn đã lỗi thời cho chính máy của bạn.",
   "update.current": "Đang dùng",
   "update.new": "Phiên bản mới",
   "update.published": "Phát hành",
@@ -216,8 +216,8 @@ const en: Record<TranslationKey, string> = {
   "safety.critical": "Critical",
   "safety.safe.short": "Removable with no effect on Windows",
   "safety.caution.short": "Removable, but costs a secondary feature",
-  "safety.unknown.short": "Unclassified — check it yourself",
-  "safety.critical.short": "Cannot be removed — Windows depends on it",
+  "safety.unknown.short": "Unclassified - check it yourself",
+  "safety.critical.short": "Cannot be removed - Windows depends on it",
 
   "kind.registry_uninstall": "Program",
   "kind.appx_package": "UWP app",
@@ -252,7 +252,7 @@ const en: Record<TranslationKey, string> = {
   "plan.restorePoint": "Create a System Restore Point first",
   "plan.registryBackup": "Export .reg backups of the keys being touched",
   "plan.killProcesses": "Terminate the software's running processes",
-  "plan.dryRun": "Dry run — nothing is changed",
+  "plan.dryRun": "Dry run - nothing is changed",
   "plan.empty": "Nothing left to do after the safety checks.",
   "plan.confirmTitle": "Confirm an action that is not easily undone",
   "plan.confirmBody":
@@ -321,7 +321,7 @@ const en: Record<TranslationKey, string> = {
   "update.gate.lead":
     "This update must be installed before you can continue.",
   "update.gate.why":
-    "The safety database decides what this tool will and will not remove. When a rule is corrected — something classified Safe that should not have been, say — the fix ships as a new version. Running an old build means running an out-of-date idea of what is safe to delete on your machine.",
+    "The safety database decides what this tool will and will not remove. When a rule is corrected - something classified Safe that should not have been, say - the fix ships as a new version. Running an old build means running an out-of-date idea of what is safe to delete on your machine.",
   "update.current": "Installed",
   "update.new": "New version",
   "update.published": "Published",
@@ -362,7 +362,7 @@ export function kindLabel(locale: Locale, kind: SourceKind): string {
 
 /** Byte counts, in the reader's locale conventions. */
 export function formatBytes(locale: Locale, bytes: number | undefined): string {
-  if (bytes === undefined || bytes === 0) return "—";
+  if (bytes === undefined || bytes === 0) return "-";
   const units = ["B", "KB", "MB", "GB", "TB"];
   let value = bytes;
   let unit = 0;
@@ -377,7 +377,7 @@ export function formatBytes(locale: Locale, bytes: number | undefined): string {
 }
 
 export function formatDateTime(locale: Locale, iso: string | undefined): string {
-  if (!iso) return "—";
+  if (!iso) return "-";
   const date = new Date(iso);
   if (Number.isNaN(date.getTime())) return iso;
   return new Intl.DateTimeFormat(locale === "vi" ? "vi-VN" : "en-US", {

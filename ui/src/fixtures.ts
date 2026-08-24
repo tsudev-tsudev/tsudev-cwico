@@ -1,8 +1,8 @@
 /**
  * Browser fixtures.
  *
- * When the UI runs outside the Tauri window — `npm run dev` in a browser, or
- * a screenshot build in CI — there is no engine behind it. These fixtures
+ * When the UI runs outside the Tauri window - `npm run dev` in a browser, or
+ * a screenshot build in CI - there is no engine behind it. These fixtures
  * stand in, and they deliberately mirror the Rust `MockBackend`: one item of
  * every safety class and every source kind, so the confirmation gate and the
  * hard block on Critical items are exercised during ordinary UI work rather
@@ -179,8 +179,8 @@ const ITEMS: SoftwareItem[] = [
       command: "C:\\Users\\demo\\AppData\\Roaming\\Spotify\\Spotify.exe --autostart",
     },
     safetyReason: {
-      en: "Not in the safety database — third-party or uncommon software. Review before removing.",
-      vi: "Chưa có trong cơ sở dữ liệu an toàn — phần mềm bên thứ ba hoặc ít gặp. Hãy xem kỹ trước khi gỡ.",
+      en: "Not in the safety database - third-party or uncommon software. Review before removing.",
+      vi: "Chưa có trong cơ sở dữ liệu an toàn - phần mềm bên thứ ba hoặc ít gặp. Hãy xem kỹ trước khi gỡ.",
     },
   }),
   item({
@@ -227,8 +227,8 @@ const ITEMS: SoftwareItem[] = [
     uninstallString: "C:\\Program Files\\Acme\\Ledger\\uninstall.exe",
     executables: ["AcmeLedger.exe"],
     safetyReason: {
-      en: "Not in the safety database — third-party or uncommon software. Review before removing.",
-      vi: "Chưa có trong cơ sở dữ liệu an toàn — phần mềm bên thứ ba hoặc ít gặp. Hãy xem kỹ trước khi gỡ.",
+      en: "Not in the safety database - third-party or uncommon software. Review before removing.",
+      vi: "Chưa có trong cơ sở dữ liệu an toàn - phần mềm bên thứ ba hoặc ít gặp. Hãy xem kỹ trước khi gỡ.",
     },
   }),
   item({
@@ -394,7 +394,7 @@ export async function buildPlan(
     }
     // Mirrors `RemovalPlan::leaves_residue`: services, tasks and autostart
     // entries are reversible state changes, not installations, so there is
-    // nothing to sweep — and their registry key *is* the thing itself.
+    // nothing to sweep - and their registry key *is* the thing itself.
     const leavesResidue =
       found.source === "registry_uninstall" ||
       found.source === "appx_package" ||
@@ -558,8 +558,8 @@ export async function checkForUpdate(): Promise<UpdateStatus> {
       newRelease: "tsudev-cwico-v26.8.25",
       newVersion: "26.8.2501",
       publishedAt: "2026-08-25T09:14:00Z",
-      // Deliberately the shape a real CHANGELOG section produces — blockquote,
-      // fenced code, bullets, inline code — so the dialog is designed against
+      // Deliberately the shape a real CHANGELOG section produces - blockquote,
+      // fenced code, bullets, inline code - so the dialog is designed against
       // what it will actually receive rather than against clean prose.
       notes: [
         "> **Read this before updating.** This release changes what the tool",

@@ -1,8 +1,8 @@
 /**
  * The about panel.
  *
- * Beyond version numbers, it reports how much protection is actually loaded —
- * how many Safe, Caution and Critical rules the safety database contains — so
+ * Beyond version numbers, it reports how much protection is actually loaded -
+ * how many Safe, Caution and Critical rules the safety database contains - so
  * a user can tell at a glance whether the guard rails are in place, and where
  * the rollback artefacts for their last run were written.
  */
@@ -30,7 +30,7 @@ export function AboutView({
     ["Architecture", info.platform.arch],
     [
       t("about.safetyDb"),
-      `v${info.safetyDbVersion} (${info.safetyDbUpdated}) — ${info.safetyRules} ${t(
+      `v${info.safetyDbVersion} (${info.safetyDbUpdated}) - ${info.safetyRules} ${t(
         "about.rules",
       )}`,
     ],

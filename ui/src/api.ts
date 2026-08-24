@@ -4,7 +4,7 @@
  * Every call the front end makes to the engine goes through this module, and
  * nothing else imports `@tauri-apps/api` directly. That gives one place to
  * translate errors, and one place to fall back to fixtures when the UI runs
- * in a plain browser — which is how the interface gets developed and reviewed
+ * in a plain browser - which is how the interface gets developed and reviewed
  * without a Windows machine in the loop.
  */
 
@@ -137,7 +137,7 @@ export async function relaunchAsAdmin(): Promise<void> {
  * Ask whether a newer release exists.
  *
  * Never throws: a check that could not run comes back with `checked: false`
- * and the app carries on. Failing open is deliberate — a server outage must
+ * and the app carries on. Failing open is deliberate - a server outage must
  * not lock every user out of the tool at once.
  */
 export async function checkForUpdate(): Promise<UpdateStatus> {

@@ -1,0 +1,15 @@
+# Bổ sung cho project Python - đặt SAU nội dung base.gitignore
+*.pyd
+*.whl
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+.ipynb_checkpoints/
+profile_default/
+ipython_config.py
+celerybeat-schedule
+celerybeat.pid
+instance/
+.webassets-cache
+.pdm.toml
+__pypackages__/

@@ -1,4 +1,4 @@
-//! The process termination allow-list — or rather, deny-list.
+//! The process termination allow-list - or rather, deny-list.
 //!
 //! Step one of the uninstall flow terminates the processes belonging to the
 //! software being removed. Two classes of process must never be included,

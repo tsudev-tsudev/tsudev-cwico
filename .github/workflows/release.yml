@@ -29,7 +29,7 @@ jobs:
           cache-dependency-path: ui/package-lock.json
 
       # Tagging without bumping the manifests would ship a build that reports
-      # the previous version — and the updater compares exactly that number,
+      # the previous version - and the updater compares exactly that number,
       # so every user would be told they are already current.
       - name: Check the tag matches the version in the manifests
         if: startsWith(github.ref, 'refs/tags/')
@@ -86,7 +86,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # Signs the update payload so installed copies will accept it.
-          # Not the same as Authenticode — see docs/SIGNING.md.
+          # Not the same as Authenticode - see docs/SIGNING.md.
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         with:
@@ -142,7 +142,7 @@ jobs:
           if (-not (Test-Path $bundle)) { $bundle = "target/release/bundle" }
           $sigs = Get-ChildItem -Recurse -Filter *.sig $bundle
           if (-not $sigs) {
-            Write-Error ("no .sig files were produced — TAURI_SIGNING_PRIVATE_KEY " +
+            Write-Error ("no .sig files were produced - TAURI_SIGNING_PRIVATE_KEY " +
                          "is probably missing, and installed copies would reject " +
                          "this update")
             exit 1

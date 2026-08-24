@@ -3,8 +3,8 @@
  *
  * This dialog exists because a debloater's worst outcome is a user who did
  * not realise what they had selected. So it shows, in order: what will be
- * backed up first, exactly which items go and by which steps, and — most
- * importantly — what the engine *refused* to do and why. A silently dropped
+ * backed up first, exactly which items go and by which steps, and - most
+ * importantly - what the engine *refused* to do and why. A silently dropped
  * selection would teach users that the checkbox is a suggestion.
  */
 

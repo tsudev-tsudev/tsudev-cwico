@@ -148,7 +148,7 @@ fn describe_failure(status: STATEMGRSTATUS) -> String {
         5 => " (the process needs to run as Administrator)",
         // ERROR_SERVICE_DISABLED
         1058 => " (the Volume Shadow Copy or System Restore service is disabled)",
-        // ERROR_INVALID_FUNCTION — typical on systems with protection off
+        // ERROR_INVALID_FUNCTION - typical on systems with protection off
         1 => " (System Protection is not enabled for the system drive)",
         _ if code == ERROR_SUCCESS => " (the call reported failure with no error code)",
         _ => "",

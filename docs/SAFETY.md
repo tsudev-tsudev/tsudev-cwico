@@ -22,7 +22,7 @@ They are independent on purpose. Any one of them failing still leaves two.
                 │
    ┌────────────▼─────────────┐
    │ 1. SafetyDatabase        │  classify: Safe / Caution / Critical / Unknown
-   │    safety.rs             │  fails closed — unmatched is Unknown, not Safe
+   │    safety.rs             │  fails closed - unmatched is Unknown, not Safe
    └────────────┬─────────────┘
                 │
    ┌────────────▼─────────────┐
@@ -42,7 +42,7 @@ They are independent on purpose. Any one of them failing still leaves two.
              execute
 ```
 
-## Layer 1 — classification
+## Layer 1 - classification
 
 `data/safety-db.json` holds 58 rules. Each carries a class, matching criteria,
 a bilingual reason, and optional knowledge about the product's processes,
@@ -60,7 +60,7 @@ services, tasks and residue.
 ### Two invariants
 
 **Fail closed.** An item that matches nothing is `Unknown`. It is tempting to
-default unmatched third-party software to `Safe` — most of it is — but the one
+default unmatched third-party software to `Safe` - most of it is - but the one
 time it is a line-of-business application, the user finds out afterwards.
 
 **Severity beats specificity.** If an item matches a broad `Safe` rule and a
@@ -75,12 +75,12 @@ The question is not "does this break anything" but **"what does the user lose,
 and would they have predicted it?"**
 
 * Microsoft Edge is `caution`, not `safe`: Windows renders PDF previews, help
-  pages and some Settings panes with it. It is also not `critical` — the
+  pages and some Settings panes with it. It is also not `critical` - the
   machine boots and works fine, and people remove it deliberately every day.
 * Windows Camera is `caution`: other apps still reach the webcam, but Windows
   Hello enrolment stops working. That is a surprise worth one dialog.
 * The Xbox Game Bar is `safe`, but the Xbox **Identity Provider** is `caution`
-  — Game Pass titles fail to sign in without it. Splitting a product family
+  - Game Pass titles fail to sign in without it. Splitting a product family
   across two classes is normal and correct.
 * Shared runtimes (VC++, .NET, WebView2) are `critical` even though removing
   one does not stop the machine booting. They break *other* software, silently
@@ -89,12 +89,12 @@ and would they have predicted it?"**
 When in doubt, classify one step stricter. A wrong `caution` costs the user a
 click. A wrong `safe` costs them something they never agreed to lose.
 
-## Layer 2 — the planning gate
+## Layer 2 - the planning gate
 
 `RemovalPlan::build` is the only way to produce a plan, and it is where
 selections become work. Three things happen there:
 
-1. **`Critical` items are dropped.** Not warned about — dropped, with a
+1. **`Critical` items are dropped.** Not warned about - dropped, with a
    `protected_component` rejection the UI displays. There is no flag, no CLI
    switch and no confirmation that overrides this. `assert_no_protected_items`
    re-checks the invariant immediately before execution, so a future refactor
@@ -108,7 +108,7 @@ selections become work. Three things happen there:
 ### Services are disabled, never deleted
 
 A service's registry key *is* the service. `Uninstall` on a service means stop
-and set `StartType = Disabled` — one call to undo. Deep clean deliberately
+and set `StartType = Disabled` - one call to undo. Deep clean deliberately
 does not apply to services, scheduled tasks or autostart entries; the guard
 also refuses `HKLM\SYSTEM\CurrentControlSet\Services` at every depth, so the
 two layers cover each other.
@@ -120,20 +120,20 @@ run. Sweeping a product's folders after a failed uninstall is how a machine
 ends up with a half-removed application that can neither run nor be
 reinstalled.
 
-## Layer 3 — the deletion guard
+## Layer 3 - the deletion guard
 
 Residue paths come from the registry, which means they come from vendors,
 which means some of them are wrong. `InstallLocation = C:\` ships in real
 products. `guard::validate_delete_path` runs on every path immediately before
 deletion and rejects:
 
-* drive roots and the system directories — `C:\Windows`, `System32`,
+* drive roots and the system directories - `C:\Windows`, `System32`,
   `SysWOW64`, `WinSxS`, `Program Files`, `ProgramData`, `WindowsApps`
 * **any path that is a parent of a protected directory**, which catches
   intermediates nobody thought to list
 * user profile roots, and everything under `Documents`, `Desktop`,
   `Downloads`, `Pictures`, `OneDrive`
-* shared containers — `AppData`, `AppData\Local`, `Packages`, `Temp`,
+* shared containers - `AppData`, `AppData\Local`, `Packages`, `Temp`,
   `Start Menu\Programs`
 * anything with an unexpanded `%VARIABLE%`, a `..` traversal, a wildcard, or a
   UNC prefix
@@ -151,7 +151,7 @@ C:\Users\me\AppData\Local\Microsoft\OneDrive    <- the client's own state: yes
 ```
 
 A folder *named* OneDrive is not the thing to protect; a known folder directly
-under a profile is. Getting this wrong in either direction is a real bug — too
+under a profile is. Getting this wrong in either direction is a real bug - too
 strict and deep clean does nothing useful, too loose and it deletes someone's
 documents.
 
@@ -159,17 +159,17 @@ documents.
 
 Before the first destructive step:
 
-1. **System Restore Point** — `SRSetRestorePointW` with
+1. **System Restore Point** - `SRSetRestorePointW` with
    `APPLICATION_UNINSTALL`, bracketed by `BEGIN_`/`END_SYSTEM_CHANGE`.
    If it fails and `require_restore_point` is set (the default), the run is
    **cancelled**. Windows also throttles restore points to one per 24 hours by
    default; a throttled call returns success with sequence number 0, which the
    code detects and reports rather than treating as protection.
 2. **`.reg` export** of every key the run will touch, in both registry views,
-   via `reg.exe export` — a text file the user can read and re-import from
+   via `reg.exe export` - a text file the user can read and re-import from
    Explorer, rather than a binary hive only this tool understands. A generated
    `restore-registry.cmd` re-imports them all.
-3. **Transaction log** — JSON, one file per run, recording every step, its
+3. **Transaction log** - JSON, one file per run, recording every step, its
    status, its duration and the artefacts it touched.
 
 ## Processes that are never terminated
@@ -177,11 +177,11 @@ Before the first destructive step:
 Step one of removal terminates the software's processes. Two groups are exempt
 regardless of what any rule says:
 
-* **Shared hosts** — `svchost.exe`, `dllhost.exe`, `RuntimeBroker.exe`,
+* **Shared hosts** - `svchost.exe`, `dllhost.exe`, `RuntimeBroker.exe`,
   `taskhostw.exe`. Killing `svchost.exe` stops a dozen unrelated services.
-* **Boot and session critical** — `lsass.exe`, `csrss.exe`, `wininit.exe`,
+* **Boot and session critical** - `lsass.exe`, `csrss.exe`, `wininit.exe`,
   `winlogon.exe`, `services.exe`, `smss.exe`, `dwm.exe`, `explorer.exe`.
-* **Security** — `MsMpEng.exe`, `SecurityHealthService.exe`. Terminating these
+* **Security** - `MsMpEng.exe`, `SecurityHealthService.exe`. Terminating these
   disables protection mid-run.
 
 A telemetry service running inside `svchost.exe` is stopped through the

@@ -1,0 +1,16 @@
+# .standards-allow - miễn trừ CÓ GHI CHÉP cho cổng kiểm file nhạy cảm.
+#
+# Chỉ dùng khi một file khớp mẫu nhạy cảm nhưng THẬT SỰ không chứa secret.
+# Không dùng để tắt cảnh báo cho file có secret thật - việc đó phải xử lý theo
+# docs/SECURITY_BASELINE.md mục 9.2 (thu hồi khóa trước, dọn lịch sử sau).
+#
+# Định dạng, đủ BA cột, phân cách bằng dấu |
+#   <đường dẫn tính từ gốc repo> | <lý do> | <hết hiệu lực DD/MM/YYYY hoặc điều kiện>
+#
+# Thiếu lý do hoặc thiếu hạn thì cổng kiểm VẪN CHẶN. Ngoại lệ vô thời hạn không
+# phải ngoại lệ - đó là quy ước ngầm chưa được viết ra.
+# Mỗi lần chạy cổng kiểm, dòng miễn trừ được in ra dưới dạng LƯU Ý, để nó không
+# bao giờ trở nên vô hình.
+
+# Ví dụ:
+# apps/web/.env.production | Chỉ chứa NEXT_PUBLIC_*, Next.js biên dịch vào bundle trình duyệt nên vốn đã công khai | 31/12/2026

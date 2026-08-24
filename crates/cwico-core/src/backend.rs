@@ -119,7 +119,7 @@ impl<T: EventSink + ?Sized> EventSink for std::sync::Arc<T> {
 #[serde(rename_all = "lowercase")]
 pub enum StepStatus {
     Succeeded,
-    /// Nothing to do — the process was not running, the key did not exist.
+    /// Nothing to do - the process was not running, the key did not exist.
     /// Not a failure, and reported separately so the log is honest.
     Skipped,
     Failed,
@@ -304,7 +304,7 @@ pub trait PlatformBackend: Send + Sync {
         sink: &dyn EventSink,
     ) -> Result<ScanReport>;
 
-    /// Measure or refresh a single item — used by the details pane.
+    /// Measure or refresh a single item - used by the details pane.
     fn refresh_item(&self, item: &SoftwareItem) -> Result<Option<SoftwareItem>> {
         Ok(Some(item.clone()))
     }

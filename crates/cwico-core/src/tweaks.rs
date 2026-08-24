@@ -81,7 +81,7 @@ pub enum TweakEffect {
     /// Activate a power scheme by GUID or well-known alias.
     SetPowerScheme { scheme: String },
     /// Run a short, well-known command. Restricted to an allow-list in the
-    /// backend — this is not a general shell escape.
+    /// backend - this is not a general shell escape.
     RunCommand {
         program: String,
         #[serde(default)]
@@ -121,7 +121,7 @@ pub struct Tweak {
     pub title: LocalizedText,
     pub description: LocalizedText,
     /// What it costs. `Safe` tweaks lose nothing; `Caution` tweaks trade a
-    /// feature for the benefit; `Critical` is not used here — a tweak that
+    /// feature for the benefit; `Critical` is not used here - a tweak that
     /// dangerous does not belong in the catalogue at all.
     pub safety: SafetyClass,
     /// `true` when the change only takes effect after a restart or a shell
