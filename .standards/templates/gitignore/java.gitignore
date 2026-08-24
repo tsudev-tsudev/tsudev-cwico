@@ -1,0 +1,57 @@
+# Bổ sung cho project Java - đặt SAU nội dung base.gitignore
+# base.gitignore đã có target/ , build/ , out/ , bin/ , *.log ; phần dưới là
+# những thứ riêng của Java, Maven, Gradle và Spring Boot.
+
+# --- Tạo phẩm biên dịch và đóng gói ---
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+# Thư viện phụ thuộc tải về, KHÔNG phải mã nguồn của mình
+!**/src/main/resources/**/*.jar
+
+# --- Maven ---
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+# mvnw và .mvn/wrapper/maven-wrapper.properties MUST commit - chúng ghim đúng
+# phiên bản Maven cho mọi máy và cho CI.
+
+# --- Gradle ---
+.gradle/
+gradle-app.setting
+!gradle-wrapper.jar
+!gradle-wrapper.properties
+.gradletasknamecache
+
+# --- Spring Boot ---
+# Cấu hình có secret cho môi trường thật, MUST NOT commit
+# (SECURITY_BASELINE.md mục 4). Bản mẫu application-*.example.yml thì commit.
+src/main/resources/application-local.*
+src/main/resources/application-dev.*
+src/main/resources/application-prod.*
+!src/main/resources/application-*.example.*
+
+# --- Máy ảo Java ---
+hs_err_pid*
+replay_pid*
+*.hprof
+
+# --- IDE riêng của hệ Java ---
+# Eclipse
+.classpath
+.project
+.settings/
+.apt_generated/
+# NetBeans
+nbproject/private/
+nbbuild/
+nbdist/
+.nb-gradle/

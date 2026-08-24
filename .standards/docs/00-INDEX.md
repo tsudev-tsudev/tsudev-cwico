@@ -21,6 +21,7 @@
 2. [`DESIGN_SYSTEM.md`](DESIGN_SYSTEM.md) - token, không hard-code giao diện
 3. [`TESTING_QUALITY.md`](TESTING_QUALITY.md) - ngưỡng chất lượng và kiểm thử
 4. [`ACCESSIBILITY.md`](ACCESSIBILITY.md) - WCAG 2.1 AA
+5. [`BRAND_ASSETS.md`](BRAND_ASSETS.md) - khi đụng logo, favicon, icon ứng dụng
 
 **Bạn sắp commit hoặc mở PR:**
 1. [`GIT_WORKFLOW.md`](GIT_WORKFLOW.md) - nhánh, commit, PR
@@ -50,6 +51,7 @@
 | [`SYNC.md`](SYNC.md) | Đồng bộ quy ước xuống repo con | Bất khả xâm phạm |
 | [`PROJECT_STRUCTURE.md`](PROJECT_STRUCTURE.md) | Cây thư mục chuẩn | Bất khả xâm phạm |
 | [`DESIGN_SYSTEM.md`](DESIGN_SYSTEM.md) | Giao diện, token, component | Bất khả xâm phạm |
+| [`BRAND_ASSETS.md`](BRAND_ASSETS.md) | Logo, wordmark, favicon, icon ứng dụng | Bất khả xâm phạm |
 | [`ACCESSIBILITY.md`](ACCESSIBILITY.md) | WCAG 2.1 AA | Bất khả xâm phạm |
 | [`TESTING_QUALITY.md`](TESTING_QUALITY.md) | Kiểm thử và chất lượng mã | Bất khả xâm phạm |
 | [`LANGUAGE_SELECTION.md`](LANGUAGE_SELECTION.md) | Chọn ngôn ngữ theo loại project | Bất khả xâm phạm |

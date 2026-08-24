@@ -20,7 +20,7 @@
 
 Tại `Settings -> Branches -> Add rule` cho `main`:
 
-- [x] Require a pull request before merging (tối thiểu 1 người duyệt)
+- [x] Require a pull request before merging - **số người duyệt theo mục 4.4**
 - [x] Require status checks to pass - chọn cổng kiểm quy ước và test
 - [x] Require branches to be up to date before merging
 - [x] Require conversation resolution before merging
@@ -95,6 +95,27 @@ Theo mẫu `.github/pull_request_template.md`. Tối thiểu phải trả lời 
 4. **Rủi ro và đường lùi**.
 
 ### 4.4. Rà soát
+
+**Số người duyệt bắt buộc, theo quy mô đội:**
+
+| Repo có bao nhiêu người ghi được | `required_approving_review_count` | Vì sao |
+| --- | --- | --- |
+| Từ 2 người trở lên | **1** | Luôn có người khác đọc được diễn biến |
+| Một người | **0** | GitHub `MUST NOT` cho tự duyệt PR của chính mình. Đặt 1 ở repo một người là tự khóa hoàn toàn: PR không bao giờ đủ điều kiện merge |
+
+Đặt `0` **KHÔNG** phải bỏ rà soát. Ở repo một người, những thứ sau vẫn `MUST`
+giữ nguyên - chúng mới là phần chặn thật:
+
+- Bắt buộc mở PR, `MUST NOT` đẩy thẳng vào `main`.
+- Bắt buộc cổng kiểm xanh (`Require status checks to pass`).
+- Bắt buộc giải quyết hết thảo luận.
+- Bắt buộc áp cả với admin (`Do not allow bypassing the above settings`).
+- Người mở PR tự đọc lại toàn bộ diễn biến của mình theo mục 4.1.
+
+Khi repo có người thứ hai ghi được, `MUST` nâng lại thành `1` **ngay trong ngày
+cấp quyền** - đây là bước dễ quên nhất khi mở rộng đội.
+
+**Cách rà soát:**
 
 - Người duyệt `MUST` thực sự chạy thử khi PR đụng luồng người dùng.
 - Góp ý `MUST` nói rõ mức: `Bắt buộc sửa` / `Nên sửa` / `Góp ý thêm`. Người mở

@@ -6,6 +6,7 @@
 > `node scripts/build-tokens.mjs`.
 > Cấm hard-code màu/cỡ chữ/radius trong source code - chỉ dùng token.
 > Quy tắc khả năng truy cập đầy đủ: [`ACCESSIBILITY.md`](ACCESSIBILITY.md).
+> Logo, wordmark, favicon, icon ứng dụng: [`BRAND_ASSETS.md`](BRAND_ASSETS.md).
 
 ## 1. Hệ màu & 3 chế độ nền (Adaptive Light)
 
