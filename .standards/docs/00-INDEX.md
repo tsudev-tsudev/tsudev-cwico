@@ -67,6 +67,7 @@
 
 | Đường dẫn | Nội dung |
 | --- | --- |
+| `assets/brand/tsudev-logo.png` | Bản gốc chính thức của dấu hiệu (`BRAND_ASSETS.md` mục 1) |
 | `tokens/design-tokens.json` | Nguồn chân lý duy nhất của giao diện |
 | `tokens/tokens.css` | Bản CSS sinh ra từ JSON, không sửa tay |
 | `templates/gitignore/` | Bản `.gitignore` chuẩn theo nền tảng |
