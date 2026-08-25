@@ -1,4 +1,4 @@
-# AGENTS.md - Bộ quy ước dùng chung tsudev (v2.0.0)
+# AGENTS.md - Bộ quy ước dùng chung tsudev (v3.0.0)
 
 > **ĐÂY LÀ NGUỒN CHÂN LÝ.** Bộ quy ước được biên tập tại repo
 > `tsudev-tsudev/tsudev-standards`. Repo con mang một BẢN SAO CHỈ-ĐỌC tại
@@ -43,8 +43,11 @@ chuyên đề. Bản đồ đầy đủ: [`docs/00-INDEX.md`](docs/00-INDEX.md).
 | Nhánh, commit, PR, phát hành | [`docs/GIT_WORKFLOW.md`](docs/GIT_WORKFLOW.md) |
 | Hạ tầng 0 đồng | [`docs/FREE_TIER_STACK.md`](docs/FREE_TIER_STACK.md) |
 | Chọn ngôn ngữ, framework | [`docs/LANGUAGE_SELECTION.md`](docs/LANGUAGE_SELECTION.md) |
+| **Đăng nhập, đăng ký, xác minh tài khoản** | [`docs/AUTH_AND_ACCOUNT.md`](docs/AUTH_AND_ACCOUNT.md) |
 | Giao diện, token, component | [`docs/DESIGN_SYSTEM.md`](docs/DESIGN_SYSTEM.md) |
+| Bảng bản ghi, bộ chọn số bản ghi | [`docs/DATA_TABLE.md`](docs/DATA_TABLE.md) |
 | Logo, favicon, icon ứng dụng | [`docs/BRAND_ASSETS.md`](docs/BRAND_ASSETS.md) |
+| tsudev.com, ảnh đại diện, trang hồ sơ | [`docs/ECOSYSTEM_IDENTITY.md`](docs/ECOSYSTEM_IDENTITY.md) |
 | Cấu trúc thư mục | [`docs/PROJECT_STRUCTURE.md`](docs/PROJECT_STRUCTURE.md) |
 | Khả năng truy cập | [`docs/ACCESSIBILITY.md`](docs/ACCESSIBILITY.md) |
 | Kiểm thử và chất lượng mã | [`docs/TESTING_QUALITY.md`](docs/TESTING_QUALITY.md) |
@@ -133,16 +136,56 @@ Khi (a) hàng đợi trong `logs/STATE.md` cạn, (b) được yêu cầu bàn g
 
 ## 7. Quy ước giao diện và văn bản
 
+### 7.1. Gạch ngang: chỉ dùng `-`
+
+**Mọi lập trình viên và mọi agent AI bắt buộc đọc-hiểu-tuân thủ-thực hiện mục
+này.** Đây là quy tắc mức `MUST`, không phải khuyến nghị.
+
+- **Chỉ dùng gạch ngang ngắn `-` (hyphen, U+002D)** trong MỌI văn bản do người
+  hoặc agent sinh ra: mã nguồn, comment, chuỗi hiển thị, tài liệu, log, commit
+  message, tiêu đề PR, nội dung issue, phiếu bàn giao, tên file, tên nhánh, tên
+  khóa cấu hình, và **cả câu trả lời của agent trong hội thoại**.
+- **`MUST NOT` dùng em-dash (U+2014)** ở bất kỳ đâu. Nó phá tính thống nhất của
+  giao diện, khó gõ trên bàn phím Việt, và hiển thị sai ở một số phông đơn cách.
+  Nơi cần ngắt ý, dùng `-` có khoảng trắng hai bên, hoặc tách thành hai câu.
+- **En-dash (U+2013)** `SHOULD NOT` dùng. Khoảng số viết `3-5`, `14-15px`.
+- Quy tắc này áp cho cả **agent AI sinh văn bản tự do**. Model quen sinh em-dash
+  theo thói quen huấn luyện; ở hệ sinh thái này, thói quen đó `MUST` bị ghi đè.
+  Nghi ngờ thì gõ `-`.
+
+**Hai ngoại lệ, chỉ hai:**
+
+1. **File migration đã áp dụng là bất biến** - không sửa kể cả gạch ngang trong
+   comment, vì sửa làm lệch checksum của công cụ di trú.
+2. **Dòng trích dẫn chính ký tự này để định nghĩa quy tắc** thì `MUST` ghi kèm mã
+   điểm `U+2014` trên cùng dòng - cổng kiểm nhận diện miễn trừ theo đúng dấu này.
+
+Ngoài hai ca trên, không có ngoại lệ nào khác. Comment trong mã **không** là
+ngoại lệ: agent đọc comment cũng đọc `-` tốt như đọc bất kỳ ký tự nào khác, nên
+lý do "dùng em-dash cho agent dễ đọc" không đứng vững.
+
+**Cổng kiểm:** mục 4 của `scripts/check-standards.sh` quét toàn bộ file được git
+theo dõi thuộc mọi đuôi văn bản và mã nguồn. Vi phạm = cổng kiểm đỏ = không merge
+được. Sửa nhanh toàn repo:
+
+```bash
+# Xem truoc pham vi anh huong
+git grep -lP '\x{2014}' -- . | grep -v '^migrations/'
+```
+
+### 7.2. Các quy ước khác
+
 - Mọi thay đổi giao diện phải dùng token trong `tokens/` - **cấm hard-code màu,
   cỡ chữ, radius**. Chi tiết: [`docs/DESIGN_SYSTEM.md`](docs/DESIGN_SYSTEM.md).
-- **Chỉ dùng gạch ngang ngắn `-` (hyphen, U+002D)** trong MỌI văn bản: mã,
-  comment, chuỗi hiển thị, tài liệu, log, commit message. **Không dùng em-dash
-  (U+2014)** - nó phá tính thống nhất của giao diện và khó gõ. En-dash (U+2013)
-  chỉ chấp nhận cho khoảng số (`3-5`, `14-15px`) và cũng nên ưu tiên `-`.
-  - Ngoại lệ 1: file migration đã áp dụng là bất biến, không sửa kể cả gạch
-    ngang trong comment (lệch checksum).
-  - Ngoại lệ 2: dòng nào trích dẫn chính ký tự này để định nghĩa quy tắc thì
-    phải ghi kèm mã điểm `U+2014` trên cùng dòng - cổng kiểm nhận diện theo dấu này.
+- Mọi vùng hiển thị danh sách bản ghi phải có bộ chọn số bản ghi đúng vị trí và
+  đúng các mốc `10/20/50/100/200`, mặc định `10`. Chi tiết:
+  [`docs/DATA_TABLE.md`](docs/DATA_TABLE.md).
+- Mọi sản phẩm có tài khoản phải đủ ba lối vào (Google, GitHub, tài khoản tsudev)
+  và cơ chế Xác minh tài khoản. Chi tiết:
+  [`docs/AUTH_AND_ACCOUNT.md`](docs/AUTH_AND_ACCOUNT.md).
+- Mọi sản phẩm phải đủ bộ logo/favicon/icon và siêu dữ liệu nối về `tsudev.com`.
+  Chi tiết: [`docs/BRAND_ASSETS.md`](docs/BRAND_ASSETS.md) mục 12 và
+  [`docs/ECOSYSTEM_IDENTITY.md`](docs/ECOSYSTEM_IDENTITY.md).
 - Ngày hiển thị dạng số `DD/MM/YYYY`, ngày giờ `HH:mm DD/MM/YYYY`.
 - Tên bản phát hành app/tool theo [`docs/VERSIONING.md`](docs/VERSIONING.md) mục 2.
 - Tạo file mới phải đặt đúng vị trí theo

@@ -1,4 +1,4 @@
-# BẢN ĐỒ BỘ QUY ƯỚC TSUDEV (v2.0.0)
+# BẢN ĐỒ BỘ QUY ƯỚC TSUDEV (v3.0.0)
 
 > Đọc theo nhu cầu, không cần đọc tuần tự. Bắt đầu từ
 > [`../AGENTS.md`](../AGENTS.md) - đó là điểm vào bắt buộc của mọi phiên.
@@ -22,6 +22,21 @@
 3. [`TESTING_QUALITY.md`](TESTING_QUALITY.md) - ngưỡng chất lượng và kiểm thử
 4. [`ACCESSIBILITY.md`](ACCESSIBILITY.md) - WCAG 2.1 AA
 5. [`BRAND_ASSETS.md`](BRAND_ASSETS.md) - khi đụng logo, favicon, icon ứng dụng
+
+**Bạn đang làm chức năng đăng nhập, đăng ký, tài khoản:**
+1. [`AUTH_AND_ACCOUNT.md`](AUTH_AND_ACCOUNT.md) - kiến trúc, ba lối vào, xác minh, ma trận quyền
+2. [`SECURITY_BASELINE.md`](SECURITY_BASELINE.md) mục 6 - ngưỡng mật khẩu, phiên, phân quyền
+3. [`ECOSYSTEM_IDENTITY.md`](ECOSYSTEM_IDENTITY.md) mục 6 và 7 - ảnh đại diện, trang hồ sơ
+
+**Bạn đang làm bảng, danh sách, modal có bản ghi:**
+1. [`DATA_TABLE.md`](DATA_TABLE.md) - bộ chọn số bản ghi, vị trí, hành vi
+2. [`SEARCH_AND_FILTER.md`](SEARCH_AND_FILTER.md) mục 7 - tham số API và trần `page_size`
+3. [`DESIGN_SYSTEM.md`](DESIGN_SYSTEM.md) mục 5 - kiểu dáng bảng và modal
+
+**Bạn sắp phát hành một sản phẩm mới:**
+1. [`ECOSYSTEM_IDENTITY.md`](ECOSYSTEM_IDENTITY.md) mục 2 - siêu dữ liệu bắt buộc
+2. [`BRAND_ASSETS.md`](BRAND_ASSETS.md) mục 12 - bộ tài sản nhận diện bắt buộc
+3. [`VERSIONING.md`](VERSIONING.md) - đặt tên bản phát hành
 
 **Bạn sắp commit hoặc mở PR:**
 1. [`GIT_WORKFLOW.md`](GIT_WORKFLOW.md) - nhánh, commit, PR
@@ -50,8 +65,11 @@
 | [`VERSIONING.md`](VERSIONING.md) | Ba khuôn phiên bản | Bất khả xâm phạm |
 | [`SYNC.md`](SYNC.md) | Đồng bộ quy ước xuống repo con | Bất khả xâm phạm |
 | [`PROJECT_STRUCTURE.md`](PROJECT_STRUCTURE.md) | Cây thư mục chuẩn | Bất khả xâm phạm |
+| [`AUTH_AND_ACCOUNT.md`](AUTH_AND_ACCOUNT.md) | Đăng nhập, đăng ký, xác minh tài khoản | Bất khả xâm phạm |
 | [`DESIGN_SYSTEM.md`](DESIGN_SYSTEM.md) | Giao diện, token, component | Bất khả xâm phạm |
+| [`DATA_TABLE.md`](DATA_TABLE.md) | Vùng bản ghi, bộ chọn số bản ghi | Bất khả xâm phạm |
 | [`BRAND_ASSETS.md`](BRAND_ASSETS.md) | Logo, wordmark, favicon, icon ứng dụng | Bất khả xâm phạm |
+| [`ECOSYSTEM_IDENTITY.md`](ECOSYSTEM_IDENTITY.md) | tsudev.com, ảnh đại diện, trang hồ sơ | Bất khả xâm phạm |
 | [`ACCESSIBILITY.md`](ACCESSIBILITY.md) | WCAG 2.1 AA | Bất khả xâm phạm |
 | [`TESTING_QUALITY.md`](TESTING_QUALITY.md) | Kiểm thử và chất lượng mã | Bất khả xâm phạm |
 | [`LANGUAGE_SELECTION.md`](LANGUAGE_SELECTION.md) | Chọn ngôn ngữ theo loại project | Bất khả xâm phạm |

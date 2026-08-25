@@ -1,4 +1,4 @@
-# QUY ƯỚC GIAO DIỆN TOÀN PROJECT (DESIGN SYSTEM) - v2.0.0
+# QUY ƯỚC GIAO DIỆN TOÀN PROJECT (DESIGN SYSTEM) - v3.0.0
 
 > Áp dụng cho MỌI website, tool, phần mềm desktop (Electron/C#/Python/C++), app trong hệ sinh thái.
 > Nguồn giá trị duy nhất: `tokens/design-tokens.json`.
@@ -69,13 +69,13 @@ Viền luôn **phẳng 1px solid** màu `border` (viền được focus/hover d�
 - Lưới spacing bội số **4px** (`--sp-1..12`). Layout vuông vắn, căn theo cột; không đặt phần tử lệch lưới.
 - Mật độ 2 mức: **Comfortable** (mặc định, hàng table cao 44px, padding cell 12px 16px) và **Compact** (tool desktop nhiều dữ liệu, hàng 36px, padding 8px 12px).
 - Chiều rộng khối văn bản dài tối đa **72ch** để mắt đảo dòng không mỏi.
-- Modal: padding `24px`, cách nhau giữa field trong form `16px`, giữa section `32px`. Modal nhỏ rộng 400–480px, modal lớn 640–800px, luôn căn giữa màn hình trên lớp `overlay`.
+- Modal: padding `24px`, cách nhau giữa field trong form `16px`, giữa section `32px`. Modal nhỏ rộng 400-480px, modal lớn 640-800px, luôn căn giữa màn hình trên lớp `overlay`.
 - Đổ bóng tối giản: `shadow-sm` (button/input) → `shadow-md` (dropdown/toast) → `shadow-lg` (modal). Không dùng bóng màu.
 
 ## 4. Typography (chuẩn tiếng Việt, chống mỏi mắt)
 
 - Font thống nhất: **Inter** (hỗ trợ đầy đủ dấu tiếng Việt), fallback: `'SF Pro Text', 'Segoe UI', 'Roboto', system-ui, sans-serif`. Font code: `JetBrains Mono` → `Cascadia Code` → `Consolas`.
-- Body text: Desktop Tools **14–15px**, Web **15–16px**. Không bao giờ nhỏ hơn 12px (kể cả caption).
+- Body text: Desktop Tools **14-15px**, Web **15-16px**. Không bao giờ nhỏ hơn 12px (kể cả caption).
 - Line-height: heading `1.3`, body `1.55`, văn bản dài `1.6`.
 - Thang cỡ chữ: 12 / 13 / 14 / 15 / 16 / 18(H4) / 20(H3) / 24(H2) / 30(H1).
 - Weight: 400 body, 500 label/menu, 600 heading & button, 700 chỉ dùng nhấn mạnh số liệu. Không dùng weight 300 (mảnh, khó đọc tiếng Việt có dấu).
@@ -111,6 +111,10 @@ Viền luôn **phẳng 1px solid** màu `border` (viền được focus/hover d�
 - **Table**: container radius-lg viền `border`; header nền `bg-subtle` chữ 600, phân cách hàng bằng viền dưới 1px `border`, hover hàng `bg-hover`, số căn phải, ngày hiển thị `DD/MM/YYYY`.
 - **Tree View**: thụt cấp 20px, mũi tên xoay 16px, node đang chọn nền `bg-subtle` + viền trái 2px `primary`.
 - **List View**: item cao 40px (compact 32px), phân cách viền 1px `border`, chọn = nền `bg-subtle`.
+- **Vùng bản ghi**: mọi Table/List View có thể vượt 10 dòng `MUST` có chân vùng bản ghi
+  cao 48px chia ba - **bộ chọn số bản ghi ở góc dưới bên trái** (mốc `10/20/50/100/200`,
+  mặc định `10`), dòng tóm tắt ở giữa, phân trang bên phải. Quy ước đầy đủ và bắt buộc:
+  [`DATA_TABLE.md`](DATA_TABLE.md). Áp cho cả bảng nằm trong Modal.
 
 ## 6. Quy ước tên phiên bản phát hành (app/tool/phần mềm - KHÔNG áp dụng website)
 
