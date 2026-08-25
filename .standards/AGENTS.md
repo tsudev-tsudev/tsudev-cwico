@@ -1,4 +1,4 @@
-# AGENTS.md - Bộ quy ước dùng chung tsudev (v3.0.0)
+# AGENTS.md - Bộ quy ước dùng chung tsudev (v3.1.1)
 
 > **ĐÂY LÀ NGUỒN CHÂN LÝ.** Bộ quy ước được biên tập tại repo
 > `tsudev-tsudev/tsudev-standards`. Repo con mang một BẢN SAO CHỈ-ĐỌC tại
@@ -202,3 +202,12 @@ Mọi repo `MUST` chạy được và chạy đạt:
 
 CI `MUST` chặn merge khi cổng kiểm thất bại. Không tắt cổng kiểm để merge cho
 kịp - cổng kiểm đỏ nghĩa là chưa xong.
+
+`scripts/check-standards.sh` **thuộc bộ quy ước**, không phải file riêng của repo
+con: mỗi lần đồng bộ nó được ghi đè theo bản trung tâm, và `--check` bắt lỗi nếu
+nó đã cũ đi. Sửa cổng kiểm thì sửa ở trung tâm. Chi tiết:
+[`docs/SYNC.md`](docs/SYNC.md) mục 1 và mục 5.
+
+`--check` đối chiếu với **nhãn repo đang ghim**, không phải với `main`. Nó trả
+lời "bản sao của tôi có bị sửa trộm không", không trả lời "tôi đã nâng cấp
+chưa" - câu sau là việc của PR định kỳ ở `docs/SYNC.md` mục 5.2.

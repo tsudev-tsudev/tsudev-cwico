@@ -1,4 +1,4 @@
-# ĐỒNG BỘ BỘ QUY ƯỚC - repo con luôn ở trạng thái mới nhất (v2.0.0)
+# ĐỒNG BỘ BỘ QUY ƯỚC - repo con luôn ở trạng thái mới nhất (v3.1.1)
 
 > Quy ước chỉ có giá trị khi mọi repo thực sự đang chạy cùng một bản. Tài liệu
 > này mô tả cơ chế bắt buộc để repo con biết mình đang ở bản nào, và biết ngay
@@ -14,6 +14,16 @@
     tsudev-web/.standards/   swico/.standards/   <repo khác>/.standards/
         (bản sao chỉ-đọc, ĐƯỢC COMMIT vào repo con)
 ```
+
+**Gói đồng bộ gồm những gì:** `AGENTS.md`, `VERSION`, `SECURITY.md`,
+`MANIFEST.sha256`, `docs/`, `tokens/`, `templates/`, và **`scripts/`** với hai
+script `check-standards.sh` + `sync-standards.sh`.
+
+Cổng kiểm nằm trong gói **từ `v3.1.0`**. Trước đó nó đứng ngoài, và hậu quả đã
+xảy ra thật: bản `v3.0.0` mở cổng kiểm gạch ngang từ 10 lên 47 đuôi file, nhưng
+cải tiến đó không tự đến được repo con nào - chúng đồng bộ xong vẫn chạy script
+cũ, thấy xanh và tưởng mình đạt chuẩn. Cổng kiểm là **một phần của quy ước**,
+không phải file riêng của repo con.
 
 **Một chiều duy nhất.** Sửa quy ước thì sửa ở trung tâm rồi đồng bộ xuống. Không
 bao giờ sửa `.standards/` ở repo con - mọi thay đổi ở đó sẽ bị lần đồng bộ sau
@@ -58,14 +68,13 @@ cp .standards/templates/logs/LOCKS.md logs/LOCKS.md
 chmod u+w logs/STATE.md logs/LOCKS.md
 touch logs/handover/.gitkeep
 
-# 5. Lấy script cổng kiểm
-curl -fsSL https://raw.githubusercontent.com/tsudev-tsudev/tsudev-standards/main/scripts/check-standards.sh \
-  -o scripts/check-standards.sh
-chmod +x scripts/check-standards.sh
+# 5. Cổng kiểm: KHÔNG cần tải riêng nữa.
+# Bước 2 đã đặt sẵn scripts/check-standards.sh từ gói đồng bộ, và mỗi lần đồng
+# bộ sau nó tự cập nhật theo bản trung tâm.
 
 # 6. Commit toàn bộ
 git add .standards .standards-version .gitignore logs scripts
-git commit -m "chore(standards): đồng bộ bộ quy ước tsudev v2.0.0"
+git commit -m "chore(standards): đồng bộ bộ quy ước tsudev v3.1.0"
 ```
 
 Sau bước này, repo con `MUST` có `AGENTS.md` ở gốc trỏ về `.standards/AGENTS.md`
@@ -94,9 +103,24 @@ dung công việc, và người ta bắt đầu học cách bỏ qua nó.
 
 ```bash
 ./scripts/sync-standards.sh              # lấy bản mới nhất của nhánh main
-./scripts/sync-standards.sh --ref v2.1.0 # hoặc ghim theo nhãn phát hành
-git add .standards .standards-version
-git commit -m "chore(standards): nâng lên quy ước v2.1.0"
+./scripts/sync-standards.sh --ref v3.1.0 # hoặc ghim theo nhãn phát hành
+git add .standards .standards-version scripts/check-standards.sh
+git commit -m "chore(standards): nâng lên quy ước v3.1.0"
+```
+
+`scripts/check-standards.sh` **được lần đồng bộ ghi đè** theo bản trung tâm, nên
+nhớ `git add` cả nó. Đồng bộ có sửa file này thì nó in ra một dòng báo.
+
+**Ca một lần, chỉ gặp khi repo con còn ở bản trước `v3.1.0`:** bản vá đưa cổng
+kiểm vào gói đồng bộ nằm bên trong chính `sync-standards.sh`, nên script cũ không
+mang gói mới về được - nó chép đúng gói mà nó biết. Triệu chứng: `.standards-version`
+lên bản mới nhưng `ls .standards/scripts/` ra rỗng. Nhìn số bản không phát hiện
+được. Làm một lần rồi thôi:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/tsudev-tsudev/tsudev-standards/v3.1.1/scripts/sync-standards.sh \
+  -o scripts/sync-standards.sh
+chmod +x scripts/sync-standards.sh
 ```
 
 `MUST` đọc `CHANGELOG.md` của bản mới trước khi commit. Nếu là thay đổi phá vỡ
@@ -105,9 +129,26 @@ trước khi merge.
 
 ## 5. Phát hiện lệch tự động
 
+> **Hai câu hỏi khác nhau, đừng trộn vào một cổng.**
+>
+> | Câu hỏi | Trả lời ở đâu | Đỏ thì có chặn merge không |
+> | --- | --- | --- |
+> | Bản sao của tôi có bị sửa trộm không? | `--check` ở mục 5.1 | **Có** |
+> | Đã có bản mới hơn bản tôi ghim chưa? | PR định kỳ ở mục 5.2 | Không |
+>
+> Trước `v3.1.0`, `--check` đối chiếu với nhánh `main` của trung tâm, tức là nó
+> trả lời **câu thứ hai** trong khi đứng ở vị trí cổng chặn merge. Hệ quả: mỗi
+> lần trung tâm phát hành, CI trên `main` của **mọi** repo con đỏ ngay lập tức
+> dù chúng không làm gì sai, và việc ghim theo nhãn ở mục 7 trở thành vô nghĩa.
+> Chuyện này xảy ra thật ngày 25/08/2026 với repo `tsudev`.
+>
+> Từ `v3.1.0`, `--check` **mặc định đối chiếu với đúng nhãn ghi trong
+> `.standards-version`**. Muốn hỏi câu thứ hai thì truyền tay `--ref main`.
+
 ### 5.1. Trên CI của repo con (bắt buộc)
 
-Chặn merge khi repo con đã lệch bản quy ước:
+Chặn merge khi bản sao quy ước của repo con bị sửa trộm, hoặc khi cổng kiểm ở
+`scripts/` đã cũ hơn bản đang ghim:
 
 ```yaml
 # .github/workflows/standards.yml
@@ -125,8 +166,18 @@ jobs:
       - name: Kiểm quy ước cục bộ
         run: ./scripts/check-standards.sh
       - name: Đối chiếu với bộ quy ước trung tâm
+        # Không truyền --ref: mặc định đối chiếu với đúng nhãn repo này đang
+        # ghim. Thêm `--ref main` vào đây là biến cổng này thành cổng "đã nâng
+        # cấp chưa", và nó sẽ đỏ mỗi lần trung tâm phát hành.
         run: ./scripts/sync-standards.sh --check
 ```
+
+Bước này bắt ba loại lệch:
+
+1. File trong `.standards/` khác bản trung tâm - có người sửa bản sao chỉ-đọc.
+2. `scripts/check-standards.sh` khác bản trung tâm - cổng kiểm đã cũ đi. Đây là
+   lỗ hổng mà `v3.1.0` vá; trước đó không ai bắt được ca này.
+3. `.standards/VERSION` khác `VERSION` của nhãn đang ghim - file bị sửa tay.
 
 ### 5.2. Tự mở PR nâng cấp hằng tuần (khuyến nghị)
 
@@ -180,11 +231,16 @@ sao (`./scripts/sync-standards.sh`), rồi đưa thay đổi đó lên trung tâ
 Repo phục vụ người dùng thật `SHOULD` ghim theo nhãn phát hành thay vì `main`:
 
 ```bash
-./scripts/sync-standards.sh --ref v2.0.0
+./scripts/sync-standards.sh --ref v3.1.0
 ```
 
 Ghi lựa chọn này vào `.env.example` qua biến `TSUDEV_STANDARDS_REF` để người sau
 biết repo cố ý đứng ở bản nào, chứ không phải quên nâng.
+
+Ghim chỉ thật sự có tác dụng nhờ hành vi mặc định của `--check` mô tả ở mục 5:
+repo ghim `v3.1.0` vẫn xanh khi trung tâm đã lên `v3.2.0`. Muốn biết mình đang
+đứng sau bao xa thì để PR định kỳ ở mục 5.2 trả lời, đó là việc của người, không
+phải của cổng chặn merge.
 
 ## 8. Xử lý sự cố
 
@@ -194,6 +250,10 @@ biết repo cố ý đứng ở bản nào, chứ không phải quên nâng.
 | `bản tải về không khớp MANIFEST.sha256` | Bản trung tâm quên chạy `make-manifest.sh`, hoặc gói bị can thiệp trên đường truyền | **Không dùng bản đó.** Báo ngay theo `SECURITY.md` mục 3 |
 | `LỆCH: .standards/... khác bản trung tâm` | Có người sửa bản sao chỉ-đọc | Chạy `./scripts/sync-standards.sh`, đưa thay đổi lên `proposals/` |
 | `thiếu .standards-version` | Chép tay thay vì chạy script | Chạy `./scripts/sync-standards.sh` |
+| `LỆCH: scripts/check-standards.sh khác bản trung tâm` | Cổng kiểm ở gốc repo đã cũ hơn bản đang ghim | Chạy `./scripts/sync-standards.sh` - từ `v3.1.0` nó tự ghi đè file này |
+| `LƯU Ý: .standards/scripts/... chưa có` | Repo đang ghim bản cũ hơn `v3.1.0`, khi đó gói đồng bộ chưa mang cổng kiểm | Không phải lỗi, không chặn merge. Nâng lên `v3.1.0` trở lên thì hết |
+| `.standards-version` lên bản mới nhưng `ls .standards/scripts/` ra rỗng | Đồng bộ bằng `sync-standards.sh` cũ hơn `v3.1.0`, script cũ chép gói cũ | Lấy script mới bằng `curl` ở mục 4, rồi đồng bộ lại. Chỉ gặp một lần |
+| `CẢNH BÁO: scripts/sync-standards.sh khác bản trung tâm` | Script bootstrap đã cũ. Nó **không** tự ghi đè chính mình, vì đổi công cụ ngay giữa lúc nó đang chạy là rủi ro không đáng | Chép tay đúng một lần theo lệnh script in ra |
 | Không ghi được vào `.standards/` | File đã bị đặt chỉ-đọc sau khi đồng bộ | Đúng như thiết kế. Đừng `chmod` để sửa, hãy sửa ở trung tâm |
 | Cổng kiểm CI đỏ ngay sau khi chạy công cụ định dạng | Prettier hoặc tương đương đã sửa file trong `.standards/`, làm lệch băm | Thêm `.standards/` vào `.prettierignore` và `.eslintignore` theo mục 3.1, rồi `./scripts/sync-standards.sh` để khôi phục |
 | `Permission denied` khi agent ghi `logs/STATE.md` | File được `cp` từ `.standards/templates/` nên thừa hưởng quyền chỉ-đọc | `chmod u+w logs/STATE.md logs/LOCKS.md` |

@@ -52,8 +52,8 @@ biết ngay khi lệch.
 │   ├── LOCKS.md
 │   └── handover/
 ├── scripts/
-│   ├── sync-standards.sh
-│   └── check-standards.sh
+│   ├── sync-standards.sh       # lấy một lần lúc cài đặt, tự cảnh báo khi cũ
+│   └── check-standards.sh      # thuộc bộ quy ước, mỗi lần đồng bộ ghi đè lại
 └── src/
 ```
 
