@@ -30,7 +30,7 @@
   <Properties>
     <DisplayName>tsudev-cwico</DisplayName>
     <PublisherDisplayName>tsudev</PublisherDisplayName>
-    <Description>Deep Windows debloater and software removal toolkit. Scan installed programs, UWP packages, services, scheduled tasks and autostart entries, then remove what you do not need — with a safety database that hard-blocks critical system components, a System Restore Point before every run, and .reg backups you can re-import yourself.</Description>
+    <Description>Deep Windows debloater and software removal toolkit. Scan installed programs, UWP packages, services, scheduled tasks and autostart entries, then remove what you do not need - with a safety database that hard-blocks critical system components, a System Restore Point before every run, and .reg backups you can re-import yourself.</Description>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 

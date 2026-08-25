@@ -183,33 +183,70 @@ fi
 
 # ------------------------------------------------------------------
 echo
-echo "4. Quy ước gạch ngang (AGENTS.md mục 6)"
+echo "4. Quy ước gạch ngang (AGENTS.md mục 7.1)"
 # ------------------------------------------------------------------
 if git rev-parse --git-dir >/dev/null 2>&1; then
-  # Dựng ký tự em-dash từ mã byte thay vì viết literal, để chính script này
-  # không vi phạm quy tắc mà nó đang canh.
+  # Dựng ký tự em-dash và en-dash từ mã byte thay vì viết literal, để chính
+  # script này không vi phạm quy tắc mà nó đang canh.
   EM_DASH="$(printf '\xe2\x80\x94')"   # U+2014
-  emdash="$(git ls-files -- '*.md' '*.json' '*.css' '*.ts' '*.tsx' '*.js' '*.mjs' '*.sh' '*.yml' '*.yaml' 2>/dev/null \
-    | grep -v '^migrations/' \
-    | xargs -r grep -lF -- "$EM_DASH" 2>/dev/null || true)"
-  # Miễn trừ: dòng nào trích dẫn chính ký tự này để định nghĩa quy tắc thì phải
-  # ghi kèm mã điểm "U+2014" trên cùng dòng. Nhờ vậy quy ước tự mô tả được mình
-  # mà cổng kiểm vẫn chặn được mọi trường hợp dùng thật.
-  if [[ -n "$emdash" ]]; then
+  EN_DASH="$(printf '\xe2\x80\x93')"   # U+2013
+
+  # Phạm vi quét: MỌI đuôi file văn bản và mã nguồn của hệ sinh thái, không chỉ
+  # riêng web. Bản trước chỉ quét 10 đuôi nên em-dash lọt tự do vào .py, .cs,
+  # .html, .sql, .toml - đúng những nơi tsudev-swico và tsudev-cwico sống.
+  DASH_GLOBS=(
+    '*.md' '*.mdx' '*.txt' '*.rst' '*.adoc'
+    '*.json' '*.jsonc' '*.yml' '*.yaml' '*.toml' '*.ini' '*.cfg' '*.conf' '*.env.example'
+    '*.css' '*.scss' '*.sass' '*.less' '*.html' '*.htm' '*.xml' '*.svg'
+    '*.js' '*.mjs' '*.cjs' '*.jsx' '*.ts' '*.tsx' '*.vue' '*.svelte'
+    '*.py' '*.rb' '*.php' '*.go' '*.rs' '*.java' '*.kt' '*.kts' '*.swift'
+    '*.cs' '*.c' '*.h' '*.cpp' '*.hpp' '*.cc'
+    '*.sh' '*.bash' '*.zsh' '*.ps1' '*.bat'
+    '*.sql' '*.graphql' '*.proto' '*.gradle' '*.tf'
+  )
+  # Miễn trừ theo AGENTS.md mục 7.1:
+  #   1. migrations/ - file đã áp dụng là bất biến (lệch checksum).
+  #   2. dòng trích dẫn chính ký tự này để định nghĩa quy tắc, nhận diện bằng
+  #      mã điểm "U+2014" hoặc "U+2013" ghi trên cùng dòng.
+  DASH_SKIP='^(migrations/|.*/migrations/|assets/brand/)'
+
+  scan_dash() {
+    # $1 = ký tự cần bắt, $2 = mã điểm dùng làm dấu miễn trừ
+    local ch="$1" code="$2" hits kept f
+    hits="$(git ls-files -- "${DASH_GLOBS[@]}" 2>/dev/null \
+      | grep -Ev "$DASH_SKIP" \
+      | xargs -r grep -lF -- "$ch" 2>/dev/null || true)"
+    [[ -z "$hits" ]] && return 0
     kept=""
     while IFS= read -r f; do
-      if grep -F -- "$EM_DASH" "$f" | grep -qvF 'U+2014'; then
+      [[ -z "$f" ]] && continue
+      if grep -F -- "$ch" "$f" | grep -qvF "$code"; then
         kept+="$f"$'\n'
       fi
-    done <<< "$emdash"
-    emdash="$(printf '%s' "$kept")"
-  fi
+    done <<< "$hits"
+    printf '%s' "$kept"
+  }
+
+  emdash="$(scan_dash "$EM_DASH" 'U+2014')"
   if [[ -n "$emdash" ]]; then
     while IFS= read -r f; do
+      [[ -z "$f" ]] && continue
       fail "còn em-dash (U+2014) trong: $f"
+      grep -nF -- "$EM_DASH" "$f" | grep -vF 'U+2014' | head -3 | sed 's/^/        /' >&2
     done <<< "$emdash"
+    echo "        Thay bằng gạch ngang ngắn - theo AGENTS.md mục 7.1." >&2
   else
-    pass "không còn em-dash trong file văn bản"
+    pass "không còn em-dash trong file văn bản và mã nguồn"
+  fi
+
+  # En-dash ở mức SHOULD NOT: cảnh báo chứ không chặn merge.
+  endash="$(scan_dash "$EN_DASH" 'U+2013')"
+  if [[ -n "$endash" ]]; then
+    n_en="$(printf '%s\n' "$endash" | grep -c . || true)"
+    warn "có en-dash (U+2013) trong $n_en file - nên thay bằng - (AGENTS.md mục 7.1)"
+    printf '%s' "$endash" | head -5 | sed 's/^/        /' >&2
+  else
+    pass "không có en-dash trong file văn bản và mã nguồn"
   fi
 fi
 

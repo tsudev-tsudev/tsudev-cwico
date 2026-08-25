@@ -16,7 +16,11 @@ Bản quy ước repo này đang dùng: xem [`.standards-version`](.standards-ve
 | Bảo mật bắt buộc | `.standards/docs/SECURITY_BASELINE.md` |
 | Quy tắc `.gitignore` | `.standards/docs/GITIGNORE_POLICY.md` |
 | Nhánh, commit, PR, phát hành | `.standards/docs/GIT_WORKFLOW.md` |
+| Đăng nhập, đăng ký, xác minh tài khoản | `.standards/docs/AUTH_AND_ACCOUNT.md` |
 | Giao diện và token | `.standards/docs/DESIGN_SYSTEM.md` |
+| Bảng bản ghi, bộ chọn số bản ghi | `.standards/docs/DATA_TABLE.md` |
+| Logo, favicon, icon ứng dụng | `.standards/docs/BRAND_ASSETS.md` |
+| tsudev.com, ảnh đại diện, trang hồ sơ | `.standards/docs/ECOSYSTEM_IDENTITY.md` |
 | Cấu trúc thư mục | `.standards/docs/PROJECT_STRUCTURE.md` |
 | Chọn ngôn ngữ, framework | `.standards/docs/LANGUAGE_SELECTION.md` |
 | Hạ tầng 0 đồng | `.standards/docs/FREE_TIER_STACK.md` |

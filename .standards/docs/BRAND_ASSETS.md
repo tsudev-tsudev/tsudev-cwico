@@ -1,4 +1,4 @@
-# TÀI SẢN THƯƠNG HIỆU (v2.8.0)
+# TÀI SẢN THƯƠNG HIỆU (v3.0.0)
 
 > Logo, dấu hiệu thu gọn, wordmark, favicon và icon ứng dụng của hệ sinh thái
 > tsudev: bản gốc nằm ở đâu, sinh ra bằng gì, dùng dấu hiệu nào ở cỡ nào.
@@ -181,7 +181,7 @@ Hai bản cài đặt tham chiếu, dùng cho hai loại sản phẩm:
 
 | Việc | Ở đâu | Ghi chú |
 | --- | --- | --- |
-| Nguồn sinh icon dưới chuẩn | `tsudev-cwico/assets/brand/tsudev-logo.png` | Chỉ `222x280`, trong khi `gen_icons.py` sinh icon tới **512**. Phải xuất lại dấu hiệu thu gọn từ bản gốc `2048x2048` |
+| (không còn) | | Món nợ nguồn sinh icon dưới chuẩn đã trả ở `v2.7.0`; món nợ bản logo cho nền tối đã trả ở `v2.8.0` |
 
 ## 11. Biến thể không dùng cho sản phẩm
 
@@ -202,7 +202,91 @@ Muốn chuyển hệ sinh thái sang biến thể này thì đó là một cuộ
 đổi lẻ một repo. Chi phí thật nằm ở chỗ mọi bản in, mọi ảnh chụp màn hình trong
 tài liệu, và mọi icon đã phát hành đều phải làm lại.
 
-## 12. Checklist trước khi thêm hoặc đổi tài sản thương hiệu
+## 12. Bộ tài sản BẮT BUỘC cho mọi project
+
+> Thêm ở `v3.0.0`. Trước bản này, tài liệu mô tả **có những tài sản nào**; nó
+> không nói **project nào phải có cái gì**. Khoảng trống đó là lý do một sản phẩm
+> phát hành ra mà tab trình duyệt trống trơn.
+
+**Quy tắc cứng:** không sản phẩm nào của hệ sinh thái được phát hành khi còn
+thiếu một dòng nào trong bảng dưới đây. Đây là điều kiện phát hành, không phải
+việc để dành làm sau.
+
+### 12.1. Bảng bắt buộc theo loại sản phẩm
+
+| Tài sản | Web | Desktop | Nguồn |
+| --- | --- | --- | --- |
+| `favicon.ico` nhiều lớp `16/24/32/48/64/128/256` | `MUST` | - | mục 6 |
+| `favicon-96x96.png` | `MUST` | - | mục 6 |
+| `apple-touch-icon.png` `180x180`, nền đặc | `MUST` | - | mục 6 |
+| Icon PWA `192x192`, `512x512`, kèm bản `maskable` | `MUST` khi có `manifest` | - | mục 6 |
+| `og-image.png` `1200x630` | `MUST` | - | mục 1 |
+| Dấu hiệu thu gọn trong giao diện | `MUST` | `MUST` | mục 2 |
+| Bản cho nền tối | `MUST` khi có chế độ Tối | `MUST` khi có chế độ Tối | mục 4 |
+| Icon ứng dụng theo nền tảng (`.ico`, `.icns`, PNG bộ Linux) | - | `MUST` | mục 7 |
+| Icon khay hệ thống `16/32` | - | `MUST` khi có khay | mục 6 |
+| Ảnh mở đầu bản cài | - | `MUST` khi có bộ cài | mục 2 |
+| Ảnh đại diện tổ chức/repo trên GitHub | `MUST` | `MUST` | dấu hiệu thu gọn |
+
+- Toàn bộ `MUST` sinh từ **bản gốc chính thức** ở mục 1, qua đúng một trong hai
+  dây chuyền ở mục 7. `MUST NOT` cắt tay, `MUST NOT` sao chép tài sản đã sinh từ
+  repo khác rồi phóng to.
+- Siêu dữ liệu khai báo các tài sản này (`<link rel="icon">`, `manifest`,
+  Open Graph) `MUST` theo [`ECOSYSTEM_IDENTITY.md`](ECOSYSTEM_IDENTITY.md) mục 2.
+- Thiếu tài sản nào thì `MUST` mở việc trong `logs/STATE.md` của repo đó **trước**
+  khi phát hành, không phải sau.
+
+### 12.2. Cổng kiểm
+
+Repo con `MUST` để cổng kiểm CI chặn khi thiếu tài sản bắt buộc. Bản kiểm tối
+thiểu, thêm vào `.github/workflows/standards.yml`:
+
+```yaml
+- name: Kiem tra tai san nhan dien
+  run: |
+    set -e
+    for f in favicon.ico favicon-96x96.png apple-touch-icon.png og-image.png; do
+      find . -path ./node_modules -prune -o -name "$f" -print | grep -q . \
+        || { echo "Thieu tai san bat buoc: $f (BRAND_ASSETS.md muc 12)"; exit 1; }
+    done
+```
+
+Sản phẩm desktop thay danh sách trên bằng danh sách icon của nền tảng mình.
+
+### 12.3. Nhận diện là MỘT, không nhân bản
+
+- `MUST NOT` mỗi sản phẩm tự vẽ một logo riêng, một bảng màu riêng, hay một biến
+  thể "cho hợp với sản phẩm này".
+- Sản phẩm cần dấu hiệu riêng để phân biệt trong khay hệ thống thì `MAY` thêm một
+  **huy hiệu phụ nhỏ ở góc** dấu hiệu chung, `MUST NOT` thay dấu hiệu chung.
+- Chữ "tsudev" dựng bằng text `MUST` lấy màu từ bảng ở mục 5. Hai sản phẩm ra hai
+  màu khác nhau là lỗi, không phải phong cách - xem việc `TS-8` trong
+  `logs/STATE.md`.
+
+---
+
+## 13. Kho lưu và kho dùng
+
+Hai kho, đừng lẫn:
+
+| Kho | Đường dẫn | Dùng được trong sản phẩm? |
+| --- | --- | --- |
+| **Kho dùng** | Tài sản sinh ra bởi dây chuyền ở mục 1 và mục 7 | Có, và chỉ những thứ này |
+| **Kho lưu** | `assets/brand/variants/` ở repo quy ước | **Không**, xem mục 11 |
+
+Ai đó đưa cho bạn một file ảnh logo rời và bảo "dùng cái này": việc đầu tiên
+`MUST` là đối chiếu chuỗi băm với bản gốc ở mục 1. Không khớp thì nó là **biến
+thể**, thuộc kho lưu, và `MUST NOT` đi vào sản phẩm cho tới khi có quyết định đổi
+nhận diện được ghi vào `logs/STATE.md` mục "Quyết định quan trọng".
+
+Đã xảy ra thật: file `logo-tsudev.png` đặt ở thư mục làm việc, tên nghe như bản
+chính thức, thực chất là **bản sao đúng từng byte** của
+`assets/brand/variants/tsudev-badge-cyan.png` - biến thể `MUST NOT` dùng. Tên file
+không phải bằng chứng. Chuỗi băm mới là bằng chứng.
+
+---
+
+## 14. Checklist trước khi thêm hoặc đổi tài sản thương hiệu
 
 1. Sửa ở `packages/brand/source/`, không sửa file trong `public/`.
 2. Chạy lại dây chuyền, không cắt tay.
@@ -212,3 +296,5 @@ tài liệu, và mọi icon đã phát hành đều phải làm lại.
 6. Không hard-code màu dấu hiệu vào chỗ lẽ ra phải dùng token.
 7. Ảnh có `alt` đúng vai trò theo mục 9.
 8. File ảnh lớn không cần lúc chạy `MUST` vào `.gitignore`.
+9. Bộ tài sản bắt buộc ở mục 12 đã đủ, và cổng kiểm CI của repo đã canh nó.
+10. File ảnh nhận được từ bên ngoài đã đối chiếu chuỗi băm theo mục 13.

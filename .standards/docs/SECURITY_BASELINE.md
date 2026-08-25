@@ -1,4 +1,4 @@
-# CHUẨN BẢO MẬT BẮT BUỘC - mọi project/tool/phần mềm tsudev (v2.0.0)
+# CHUẨN BẢO MẬT BẮT BUỘC - mọi project/tool/phần mềm tsudev (v3.0.0)
 
 > **Bất khả xâm phạm.** File này là chuẩn tối thiểu, không phải danh sách gợi ý.
 > Repo con mang bản sao chỉ-đọc, đồng bộ xuống từ `tsudev-standards`, không sửa ngược.
@@ -210,6 +210,12 @@ Phần lớn mã chạy trong sản phẩm là mã của người khác. Đối 
 ---
 
 ## 6. Xác thực, phiên và phân quyền
+
+> Mục này là **ngưỡng kỹ thuật tối thiểu**. Kiến trúc tài khoản của hệ sinh thái
+> (ba lối vào Google/GitHub/tsudev, gộp danh tính, cơ chế Xác minh tài khoản,
+> trạng thái và ma trận quyền) nằm ở
+> [`AUTH_AND_ACCOUNT.md`](AUTH_AND_ACCOUNT.md). Làm chức năng đăng nhập thì
+> `MUST` đọc cả hai: tài liệu này cho ngưỡng, tài liệu kia cho kiến trúc.
 
 ### 6.1. Mật khẩu
 
@@ -453,6 +459,9 @@ kỳ repo tsudev nào `MUST`:
 
 ## 13. Tài liệu liên quan
 
+- [`AUTH_AND_ACCOUNT.md`](AUTH_AND_ACCOUNT.md) - kiến trúc tài khoản, ba lối vào, xác minh
+- [`ECOSYSTEM_IDENTITY.md`](ECOSYSTEM_IDENTITY.md) mục 6 - xử lý ảnh tải lên an toàn
+- [`DATA_TABLE.md`](DATA_TABLE.md) mục 8.4 - trần `page_size` và chống lạm dụng
 - [`../SECURITY.md`](../SECURITY.md) - chính sách và kênh báo cáo lỗ hổng
 - [`GITIGNORE_POLICY.md`](GITIGNORE_POLICY.md) - quy tắc duy trì `.gitignore`
 - [`GIT_WORKFLOW.md`](GIT_WORKFLOW.md) - nhánh, commit, PR, phát hành

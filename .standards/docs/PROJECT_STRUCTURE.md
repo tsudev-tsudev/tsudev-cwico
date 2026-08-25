@@ -1,4 +1,4 @@
-# CẤU TRÚC THƯ MỤC CHUẨN - mọi repo trong hệ sinh thái tuân theo (v2.0.0)
+# CẤU TRÚC THƯ MỤC CHUẨN - mọi repo trong hệ sinh thái tuân theo (v3.0.0)
 
 Mục tiêu: bất kỳ lập trình viên hoặc agent AI nào mở repo đều biết ngay file,
 biến, hàm nằm ở đâu - không phải suy đoán.
@@ -145,6 +145,11 @@ phần B.
 | Tài liệu riêng của repo | `docs/` ở gốc repo |
 | Sản phẩm build | Trong `.gitignore`, không bao giờ commit |
 | Secret | `.env` cục bộ hoặc kho secret của nền tảng - không bao giờ trong repo |
+| Tài sản nhận diện của repo | `assets/brand/` ở gốc repo (bản gốc và biến thể) |
+| Tài sản nhận diện đã sinh, web | `public/` của từng app - **sản phẩm sinh ra**, `MUST NOT` sửa tay |
+| Luồng xác thực | `src/features/auth/` (hình trạng A) hoặc `packages/auth/` (hình trạng B) |
+| Trang tài khoản, hồ sơ | `src/app/tai-khoan/` theo đường dẫn ở [`AUTH_AND_ACCOUNT.md`](AUTH_AND_ACCOUNT.md) mục 13.1 |
+| Component bảng dùng chung | `packages/ui/src/components/DataTable/` theo [`DATA_TABLE.md`](DATA_TABLE.md) mục 11 |
 
 ---
 

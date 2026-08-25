@@ -1,4 +1,4 @@
-# CHUẨN TÌM KIẾM VÀ LỌC TỐI ƯU TIẾNG VIỆT - v2.0.0
+# CHUẨN TÌM KIẾM VÀ LỌC TỐI ƯU TIẾNG VIỆT - v3.0.0
 
 > **Bắt buộc** với mọi chức năng tìm kiếm hoặc lọc nội dung trong hệ sinh thái
 > tsudev, ở cả trang quản trị lẫn trang người dùng.
@@ -285,7 +285,7 @@ Phản hồi `MUST` kèm thông tin phân trang và (khi áp dụng) số đếm
   "meta": {
     "total": 128,
     "page": 1,
-    "page_size": 20,
+    "page_size": 10,
     "query_normalized": "giao duc"
   },
   "facets": {
@@ -295,9 +295,19 @@ Phản hồi `MUST` kèm thông tin phân trang và (khi áp dụng) số đếm
 }
 ```
 
-- `MUST` `page_size` có **giá trị trần cứng ở phía máy chủ** (đề xuất tối đa
-  100). Không đặt trần là mở cửa cho tấn công cạn tài nguyên bằng
-  `page_size=1000000`.
+- `MUST` `page_size` chỉ nhận các mốc chuẩn `{10, 20, 50, 100, 200}` với mặc
+  định `10`, và có **trần cứng ở phía máy chủ là `200`**. Bộ mốc, vị trí bộ chọn
+  trên giao diện và hành vi khi đổi mốc quy định ở
+  [`DATA_TABLE.md`](DATA_TABLE.md). Không đặt trần là mở cửa cho tấn công cạn
+  tài nguyên bằng `page_size=1000000`.
+- Trần `200` đi kèm hai ràng buộc bù, `MUST` có đủ cả hai:
+  1. `page_size` từ `100` trở lên có **giới hạn tần suất riêng, chặt hơn** (đề
+     xuất 10 yêu cầu / phút / tài khoản).
+  2. Tập dữ liệu vượt **100.000 bản ghi** `MUST` chuyển sang **phân trang con
+     trỏ**, xem [`DATA_TABLE.md`](DATA_TABLE.md) mục 8.3. `OFFSET` lớn buộc cơ
+     sở dữ liệu quét rồi bỏ đi từng dòng một.
+- Cần nhiều hơn 200 bản ghi cùng lúc thì `MUST` dùng chức năng xuất tệp chạy
+  nền, `MUST NOT` nới trần API.
 - `MUST` bỏ qua, chứ không báo lỗi, với tham số lọc không hợp lệ - trừ khi tham
   số đó ảnh hưởng tới quyền, khi đó `MUST` từ chối.
 - `MUST` gắn phiên bản vào đường dẫn theo [`VERSIONING.md`](VERSIONING.md) mục 4.
