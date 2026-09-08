@@ -44,4 +44,4 @@ features = [
 ]
 
 [target.'cfg(windows)'.dependencies.windows-core]
-version = "0.62"
+version = "0.100"
