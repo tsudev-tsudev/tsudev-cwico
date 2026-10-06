@@ -16,7 +16,7 @@
     "prebuild": "npm run sync:data"
   },
   "dependencies": {
-    "@tauri-apps/api": "^2.11.1",
+    "@tauri-apps/api": "^2.12.1",
     "@tauri-apps/plugin-opener": "^2.5.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
