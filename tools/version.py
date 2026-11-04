@@ -46,6 +46,12 @@ PRODUCT = "tsudev-cwico"
 CARGO_TOML = ROOT / "Cargo.toml"
 TAURI_CONF = ROOT / "app" / "src-tauri" / "tauri.conf.json"
 UI_PACKAGE = ROOT / "ui" / "package.json"
+# npm rewrites this file's version from package.json on any `npm install`, so
+# leaving it out of a bump makes the next install dirty the working tree. That
+# is not cosmetic: on 04/11/2026 it aborted a `git pull` on a second machine
+# with "Your local changes would be overwritten by merge", for a file nobody
+# had edited by hand.
+UI_LOCK = ROOT / "ui" / "package-lock.json"
 
 SEMVER_RE = re.compile(r"^(\d+)\.(\d+)\.(\d+)$")
 NAME_RE = re.compile(
@@ -138,6 +144,18 @@ def read_ui() -> str:
     return json.loads(UI_PACKAGE.read_text())["version"]
 
 
+def read_ui_lock() -> str:
+    data = json.loads(UI_LOCK.read_text())
+    top = data["version"]
+    root_pkg = data.get("packages", {}).get("", {}).get("version")
+    if root_pkg != top:
+        raise VersionError(
+            f"ui/package-lock.json disagrees with itself: {top} at the top, "
+            f"{root_pkg} in packages[\"\"]"
+        )
+    return top
+
+
 def write_cargo(semver: str) -> None:
     text = CARGO_TOML.read_text()
     new, count = re.subn(
@@ -172,10 +190,26 @@ def write_ui(semver: str) -> None:
     UI_PACKAGE.write_text(new)
 
 
+def write_ui_lock(semver: str) -> None:
+    # The root package's version appears twice and must stay in step: once at the
+    # top of the file and once in `packages[""]`. They are the first two
+    # "version" keys in the file; every later one belongs to a dependency and
+    # must not be touched, hence count=2 rather than a blanket substitution.
+    text = UI_LOCK.read_text()
+    new, count = re.subn(r'("version"\s*:\s*")[^"]+(")', rf"\g<1>{semver}\g<2>", text, count=2)
+    if count != 2:
+        raise VersionError("could not rewrite both versions in ui/package-lock.json")
+    data = json.loads(new)  # fail loudly rather than writing broken JSON
+    if data["version"] != semver or data["packages"][""]["version"] != semver:
+        raise VersionError("rewrote the wrong keys in ui/package-lock.json")
+    UI_LOCK.write_text(new)
+
+
 SOURCES = [
     ("Cargo.toml", read_cargo, write_cargo),
     ("app/src-tauri/tauri.conf.json", read_tauri, write_tauri),
     ("ui/package.json", read_ui, write_ui),
+    ("ui/package-lock.json", read_ui_lock, write_ui_lock),
 ]
 
 
